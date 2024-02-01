@@ -85,6 +85,7 @@ export const generateReferalIncome = async (userId,id, capitalAmount,transaction
   if(sponserData){
     const totalRaferal = sponserData.referalIncome + referalIncome;
     sponserData.referalIncome=totalRaferal;
+    sponserData.walletAmount=sponserData.walletAmount+referalIncome;
     sponserData.referalHistory.push({
       reportName:"DirectIncome",
       userID:userData.ownSponserId,
@@ -182,15 +183,15 @@ export const addUser = async (req, res, next) => {
       userStatus,
     });
     if (user) {    
-          await sendMail(
-            user.email,
-            // packageChosen,
-            // packageAmount,
-            user.username,
-            user.ownSponserId,
-            transactionPassword,
-            password
-          );
+          // await sendMail(
+          //   user.email,
+          //   // packageChosen,
+          //   // packageAmount,
+          //   user.username,
+          //   user.ownSponserId,
+          //   transactionPassword,
+          //   password
+          // );
         
 
         res.json({
@@ -364,10 +365,10 @@ export const viewUserProfile = async (req, res, next) => {
   try {
     const userData = await User.findById(userId).populate("packageChosen");
     let packageName;
-    const dailyBonus = Math.floor(userData.dailyROI);
-    const directIncome=Math.floor(userData.referalIncome)
+    const dailyBonus = (userData.dailyROI).toFixed(2);
+    const directIncome=M(userData.referalIncome).toFixed(2)
     const packageData=userData.packageChosen;
-    const totalIncome=Math.floor(userData.walletAmount)
+    const totalIncome=(userData.walletAmount).toFixed(2)
     if(packageData){
     packageName=packageData.name;
     }else{
@@ -377,7 +378,7 @@ export const viewUserProfile = async (req, res, next) => {
     const countFirstChild=userData.childLevel1.length;
     const countSecondChild=userData.childLevel1.length;
     const countThreeChild=userData.childLevel1.length;
-    const totalLevelRoi=Math.floor(userData.level1ROI+userData.level2ROI+userData.level3ROI);
+    const totalLevelRoi=(userData.level1ROI+userData.level2ROI+userData.level3ROI).toFixed(2);
 
 
     // .select(
@@ -492,46 +493,53 @@ export const viewAllTransactions = async (req, res) => {
 
 
 
-//view child 
+
 
 export const viewChilds = async (req, res, next) => {
-  const userId = req.query.id || req.user._id;
-  try { 
+  try {
+    const userId = req.query.id || req.user._id;
 
-    const userChilds = await User.findById(userId).populate([
-      {
-        path: "childLevel1",
-        select: "username ownSponserId phone address email userStatus packageAmount packageName",
-      },
-      {
-        path: "childLevel2",
-        select: "username ownSponserId phone address email userStatus packageAmount packageName",
-      },
-      {
-        path: "childLevel3",
-        select: "username ownSponserId phone address email userStatus packageAmount packageName",
-      }
-    ]);
-    const userStatus=userChilds.userStatus
-    console.log(userStatus);
+    // Fetch the user document by its ID and populate its child documents
+    const user = await User.findById(userId)
+      .select('childLevel1 childLevel2 childLevel3 ownSponserId userStatus')
+      .populate([
+        {
+          path: 'childLevel1',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        },
+        {
+          path: 'childLevel2',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        },
+        {
+          path: 'childLevel3',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        }
+      ]);
 
-    const sponserId=userChilds.ownSponserId;
-    const child1 = userChilds?.childLevel1;
-    const child2 = userChilds?.childLevel2;
-    const child3 = userChilds?.childLevel3;
-
-
-
-    if (child1) {
-      
-      res.status(200).json({ child1,child2,child3,sponserId,userStatus, sts: "01", msg: "Success" });
-    } else {
-      next(errorHandler("No child Found"));
+    // If user document is not found, return an error
+    if (!user) {
+      return next(errorHandler('User not found'));
     }
+
+    // Destructure relevant fields from the user document
+    const { childLevel1, childLevel2, childLevel3, ownSponserId, userStatus } = user;
+
+    // Send the response with child documents and other relevant information
+    res.status(200).json({
+      child1:childLevel1,
+      child2:childLevel2,
+      child3:childLevel3,
+      ownSponserId,
+      userStatus,
+      sts: '01',
+      msg: 'Success'
+    });
   } catch (error) {
-    next(error);
+    next(error); // Pass any caught errors to the error handling middleware
   }
 };
+
 
 
 

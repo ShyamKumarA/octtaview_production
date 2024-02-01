@@ -11,25 +11,36 @@ import { findPackage, generateRandomString, generateReferalIncome } from "./user
 
 //Dashboard data
 
-export const dashboardData=async(req,res)=>{
+export const dashboardData = async (req, res, next) => {
   try {
     const today = new Date();
-    const userData=await User.find();
-    const totalMembers=userData.length;
+    const userData = await User.find();
+    const totalMembers = userData.length;
+
     const todaysUsers = userData.filter(user => {
       const userCreatedAt = new Date(user.createdAt);
       return userCreatedAt >= today;
     });
-    const todaysUserCount=todaysUsers.length;
+    const todaysUserCount = todaysUsers.length;
+
     const totalDailyROI = userData.reduce((total, user) => {
       return total + user.dailyROI;
     }, 0);
 
+    // Filter users with 'userStatus' equal to 'pending'
+    const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
 
-  } catch (error) {
     
-  }
 
+    res.status(200)({
+      totalMembers,
+      todaysUserCount,
+      totalDailyROI,
+      pendingUsersCount
+    });
+  } catch (error) {
+    next(error);
+  }
 }
 
 //add admin Api
