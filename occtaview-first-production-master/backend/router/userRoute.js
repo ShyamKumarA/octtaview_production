@@ -1,7 +1,7 @@
 import express from "express"
 import {  addPackageByUser, addReferalUser, addUser, capitalWithdraw, changePassword, changeTxnPassword, editProfile, getaddPackageByUser, userLogin, verifyUser, viewAddFundPending, viewAllPackage, viewAllTransactions, viewChilds, viewUserPackageDetails, viewUserProfile, walletWithdraw } from "../controller/userController.js"
 import { protectUser } from "../middleware/authMiddleware.js"
-import { addFundHistory, capitalWithdrawReport, dailyROIReport, directIncomeReport, level1IncomeReport,level2IncomeReport,level3IncomeReport, walletWithdrawReport } from "../controller/reportController.js"
+import { ROIHistory, addFundHistory, capitalWithdrawReport, dailyROIReport, directIncomeReport, level1IncomeReport,level2IncomeReport,level3IncomeReport, walletWithdrawReport } from "../controller/reportController.js"
 
 
 const router=express.Router()
@@ -30,6 +30,8 @@ router.get("/view-ROIIncome-Report",protectUser,dailyROIReport)
 router.get("/wallet-Withdraw-Report",protectUser,walletWithdrawReport)
 router.get("/capital-Withdraw-Report",protectUser,capitalWithdrawReport)
 router.get("/addfundHistory",protectUser,addFundHistory)
+router.get("/ROI-History",protectUser,ROIHistory)
+
 router.get("/view-addfund-pending",protectUser,viewAddFundPending)
 
 

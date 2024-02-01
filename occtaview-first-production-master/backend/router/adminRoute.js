@@ -1,6 +1,6 @@
 import express from "express"
 import { protectUser } from "../middleware/authMiddleware.js"
-import { acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending } from "../controller/adminController.js"
+import { totalAddFundHistory, acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending, totalCapitalWithdrawHistory, totalWalletWithdrawHistory } from "../controller/adminController.js"
 import { allUserCommissionSplit } from "../controller/commissionSplit.js"
 import { directIncomeReport } from "../controller/reportController.js"
 
@@ -34,6 +34,16 @@ adminRouter.get("/view-addPackageFund-pending",protectUser,viewAddPackageFundPen
 adminRouter.get("/reject-users",protectUser,rejectUser)
 adminRouter.get("/view-withdraw-pending",protectUser,viewWithdrawPending)
 adminRouter.get("/view-wallet-withdraw-pending",protectUser,viewWalletWithdrawPending)
+
+
+//Reports
+
+adminRouter.get("/view-users-fundHistory",protectUser,totalAddFundHistory)
+adminRouter.get("/view-users-capitalWithdrawHistory",protectUser,totalCapitalWithdrawHistory)
+adminRouter.get("/view-users-walletWithdrawHistory",protectUser,totalWalletWithdrawHistory)
+
+
+
 
 
 

@@ -1,18 +1,6 @@
 import mongoose from 'mongoose'
 import Package from './packageModel.js';
 
-const transactionSchema = new mongoose.Schema(
-    {
-      referenceID: String,
-      amount: Number,
-      TDSAmount: Number,
-      lastAmount: Number,
-      status: String,
-    },
-    {
-      timestamps: true,
-    }
-  );
 
   const allTransactionSchema = new mongoose.Schema(
     {
@@ -68,6 +56,7 @@ const transactionSchema = new mongoose.Schema(
   )
   const withdrawSchema = new mongoose.Schema(
     {
+      name:String,
       reportName:String,
       ownID:String,
       packageName:String,
@@ -235,7 +224,6 @@ const userSchema=new mongoose.Schema({
         type: String,
         enum: ["pending", "readyToApprove", "approved"],
       },
-      transactions: [transactionSchema],
       allTransactions: [allTransactionSchema],
       childLevel1:[{type:mongoose.Schema.Types.ObjectId,
         ref:"User"}],

@@ -152,8 +152,9 @@ export const viewAllUsers = async (req, res, next) => {
 //View Profile by params userId
 
 export const viewUserDetails = async (req, res, next) => {
-
+console.log("hlo");
   const {id}=req.params;
+  console.log(id);
   const adminId = req.user._id;
   try {
     const userData = await User.findById(id).populate("packageChosen");
@@ -321,7 +322,7 @@ export const rejectUser = async (req, res, next) => {
         const userData = await User.find({
           addFundStatus: { $eq: "pending" },
           isSuperAdmin: { $ne: true } 
-        }).select("username email phone userStatus createdAt topUpAmount");
+        }).select("username email phone userStatus createdAt topUpAmount transactionCode");
         res.status(200).json({
           userData,
           sts: "01",
@@ -346,7 +347,7 @@ export const rejectUser = async (req, res, next) => {
           const userData = await User.find({
             addPackageStatus: { $eq: "pending" },
             isSuperAdmin: { $ne: true } 
-          }).select("username email phone userStatus createdAt topUpAmount");
+          }).select("username email phone  userStatus createdAt topUpAmount transactionCode");
           res.status(200).json({
             userData,
             sts: "01",
@@ -437,6 +438,7 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
         userData.transactionCode="";
         userData.transactionID="";
         userData.capitalWithdrawHistory.push({
+          name:userData.username,
           reportName:"capitalWithdrawReport",
           ownID:userData.ownSponserId,
           packageName:userData.packageName,
@@ -486,6 +488,7 @@ export const approveWalletWithdrawal = async (req, res, next) => {
         userData.transactionID="";
         userData.walletWithdrawHistory.push({
           reportName:"walletWithdrawReport",
+          name:userData.username,
           ownID:userData.ownSponserId,
           packageName:userData.packageName,
           tnxID:tnxID,
@@ -529,6 +532,7 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
         userData.transactionID="";
         userData.capitalWithdrawHistory.push({
           reportName:"walletwithdrawReject",
+          name:userData.username,
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
           walletUrl:transactionCode,
@@ -560,7 +564,7 @@ export const viewWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         withdrawStatus: { $eq: "pending" },
-      }).select("username email phone withdrawStatus withdrawAmount");
+      }).select("username email phone withdrawStatus createdAt withdrawAmount");
       res.status(200).json({
         userData,
         sts: "01",
@@ -584,7 +588,7 @@ export const viewWalletWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         walletWithdrawStatus: { $eq: "pending" },
-      }).select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      }).select("username email phone walletWithdrawStatus createdAt walletWithdrawAmount");
       res.status(200).json({
         userData,
         sts: "01",
@@ -618,6 +622,7 @@ export const rejectCapitalwithdrawal = async (req, res, next) => {
         userData.transactionCode="";
         userData.transactionID="";
         userData.capitalWithdrawHistory.push({
+          name:userData.username,
           reportName:"rejectCapitalwithdraw",
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
@@ -781,4 +786,144 @@ console.log("reached here");
   }
 
 }
+
+
+
+//Admin Reports
+
+
+// add fund history
+
+
+export const totalAddFundHistory = async (req, res, next) => {
+  const userId = req.user._id;
+  const adminData = await User.findById(userId);
+
+  try {
+    if (adminData.isSuperAdmin) {
+      const aggregateQuery = [
+        {
+          $unwind: "$addFundHistory"
+        },
+        {
+          $sort: {
+            "addFundHistory.createdAt": -1
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            name: "$addFundHistory.name",
+            topUpAmount: "$addFundHistory.topUpAmount",
+            transactionCode: "$addFundHistory.transactionCode",
+            status: "$addFundHistory.status",
+            _id: "$addFundHistory._id",
+            createdAt: "$addFundHistory.createdAt",
+            updatedAt: "$addFundHistory.updatedAt"
+          }
+        }
+      ];
+
+      const result = await User.aggregate(aggregateQuery);
+
+      if (result) {
+        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+      }
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+// add Capital withdraw history
+
+export const totalCapitalWithdrawHistory = async (req, res, next) => {
+  const userId = req.user._id;
+  const adminData = await User.findById(userId);
+
+  try {
+    if (adminData.isSuperAdmin) {
+      const aggregateQuery = [
+        {
+          $unwind: "$capitalWithdrawHistory"
+        },
+        {
+          $sort: {
+            "capitalWithdrawHistory.createdAt": -1
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            name: "$capitalWithdrawHistory.name",
+            topUpAmount: "$capitalWithdrawHistory.withdrawAmount",
+            walletUrl: "$capitalWithdrawHistory.walletUrl",
+            status: "$capitalWithdrawHistory.status",
+           transactionID:"$capitalWithdrawHistory.tnxID",
+            createdAt: "$capitalWithdrawHistory.createdAt",
+          }
+        }
+      ];
+
+      const result = await User.aggregate(aggregateQuery);
+
+      if (result) {
+        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+      }
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
+export const totalWalletWithdrawHistory = async (req, res, next) => {
+  const userId = req.user._id;
+  const adminData = await User.findById(userId);
+
+  try {
+    if (adminData.isSuperAdmin) {
+      const aggregateQuery = [
+        {
+          $unwind: "$walletWithdrawHistory"
+        },
+        {
+          $sort: {
+            "walletWithdrawHistory.createdAt": -1
+          }
+        },
+        {
+          $project: {
+            _id: 0,
+            name: "$walletWithdrawHistory.name",
+            topUpAmount: "$walletWithdrawHistory.withdrawAmount",
+            walletUrl: "$walletWithdrawHistory.walletUrl",
+            status: "$walletWithdrawHistory.status",
+           transactionID:"$walletWithdrawHistory.tnxID",
+            createdAt: "$walletWithdrawHistory.createdAt",
+          }
+        }
+      ];
+
+      const result = await User.aggregate(aggregateQuery);
+
+      if (result) {
+        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+      }
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+
+
+
 

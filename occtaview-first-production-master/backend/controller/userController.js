@@ -8,26 +8,6 @@ import sendMail from "../config/mailer.js";
 
 
 
-//User signUp
-export const signup = async (req, res, next) => {
-  const { password, username, email, address, phone } = req.body;
-  const ownSponserId = generateRandomString();
-  const hashedPassword = bcryptjs.hashSync(password, 10);
-  const newUser = new User({
-    password: hashedPassword,
-    username,
-    email,
-    address,
-    ownSponserId,
-    phone,
-  });
-  try {
-    const user = await newUser.save();
-    res.status(201).json(user);
-  } catch (error) {
-    next(error);
-  }
-};
 
 
 // user login
@@ -52,6 +32,7 @@ export const userLogin = async (req, res, next) => {
       {
           id: validUser._id,
           firstName: validUser.username,
+          status:validUser.userStatus,
           email: validUser.email,
           token_type: "Bearer",
           access_token: token,
@@ -133,6 +114,7 @@ export const viewAddFundPending = async (req, res, next) => {
   const userData = await User.findById(userId);
   try {
     if(userData){
+      //const userStatus=userData.userStatus;
       if (userData.addFundStatus=="pending"||userData.addPackageStatus=="pending") {
         res.status(200).json({
           userData,
@@ -174,6 +156,7 @@ export const addUser = async (req, res, next) => {
     const ownSponserId = generateRandomString();
 
     const { username, email, phone, address,transactionPassword, password } = req.body;
+    console.log(username);
     // const packageChosen = findPackage(packageAmount);
     // const packageData = await Package.findOne({ name: packageChosen });
     //console.log(packageData);
@@ -475,6 +458,7 @@ export const viewAllTransactions = async (req, res) => {
     ]);
 
     if (userData) {
+      const userStatus=userData.userStatus;
       const referalHistory = userData.referalHistory || [];
       const level1ROIHistory = userData.level1ROIHistory || [];
       const level2ROIHistory = userData.level2ROIHistory || [];
@@ -496,7 +480,7 @@ export const viewAllTransactions = async (req, res) => {
       // Filter objects based on reportName
       const filteredTransactions = allTransactions.filter(transaction => transaction.reportName === reportName);
 
-      res.status(200).json({ allTransactions: filteredTransactions, sts: "01", msg: "Successfully Updated" });
+      res.status(200).json({ allTransactions: filteredTransactions,userStatus, sts: "01", msg: "Successfully Updated" });
     } else {
       next(errorHandler("User not found, Please Login first"));
     }
@@ -528,7 +512,9 @@ export const viewChilds = async (req, res, next) => {
         select: "username ownSponserId phone address email userStatus packageAmount packageName",
       }
     ]);
-    
+    const userStatus=userChilds.userStatus
+    console.log(userStatus);
+
     const sponserId=userChilds.ownSponserId;
     const child1 = userChilds?.childLevel1;
     const child2 = userChilds?.childLevel2;
@@ -538,7 +524,7 @@ export const viewChilds = async (req, res, next) => {
 
     if (child1) {
       
-      res.status(200).json({ child1,child2,child3,sponserId, sts: "01", msg: "Success" });
+      res.status(200).json({ child1,child2,child3,sponserId,userStatus, sts: "01", msg: "Success" });
     } else {
       next(errorHandler("No child Found"));
     }

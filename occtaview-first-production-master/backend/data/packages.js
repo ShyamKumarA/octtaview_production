@@ -1,6 +1,21 @@
+const dailyROIPercentageSchema = new mongoose.Schema(
+    {
+     percentage:Number,
+      totalROI: Number,
+    },
+    {
+      timestamps: true,
+    }
+  )
+
+
+
+dailyROIPercentage
+
+
 const packages=[
 {
-    name:"Bronza",
+name:"Bronza",
 minAmount:50,
 maxAmount:999,
 stage1:8,
@@ -37,6 +52,8 @@ minMembers:30
 },
 {
     name:"Platinum",
+dailyROIPercentageHistory:[dailyROIPercentageSchema],
+
 minAmount:30001,
 maxAmount:100000,
 stage1:16,
