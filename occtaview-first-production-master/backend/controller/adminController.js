@@ -30,7 +30,7 @@ export const dashboardData = async (req, res, next) => {
     // Filter users with 'userStatus' equal to 'pending'
     const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
 
-    
+
 
     res.status(200)({
       totalMembers,
@@ -936,5 +936,47 @@ export const totalWalletWithdrawHistory = async (req, res, next) => {
 };
 
 
+// edit user profile by admin
 
+export const editProfileByAdmin = async (req, res, next) => {
+  const adminId = req.user._id;
+  const userId=req.params;
+  const adminData = await User.findById(adminId);
+  try {
+    if (adminData.isSuperAdmin) {
+    const userData = await User.findById(userId);
+    if (userData) {
+      const { username,email,password,transactionPassword, phone, address } = req.body;
+      
+      userData.username = username || userData.username;
+      userData.address = address || userData.address;
+      userData.phone = phone || userData.phone;
+      userData.email = email || userData.email;
+
+
+      if (password) {
+        const hashedPassword = bcryptjs.hashSync(password, 10);
+        userData.password = hashedPassword;
+      }
+
+      if (transactionPassword) {
+        const hashedPassword = bcryptjs.hashSync(transactionPassword, 10);
+        userData.transactionPassword = hashedPassword;
+      }
+
+      const updatedUser = await userData.save();
+
+      res
+        .status(200)
+        .json({ updatedUser, sts: "01", msg: "Successfully Updated" });
+    } else {
+      next(errorHandler("User not found, Please Login first"));
+    }
+  } else {
+    return next(errorHandler(401, "Admin Login Failed"));
+  }
+  } catch (error) {
+    next(error);
+  }
+};
 

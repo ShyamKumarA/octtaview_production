@@ -366,7 +366,7 @@ export const viewUserProfile = async (req, res, next) => {
     const userData = await User.findById(userId).populate("packageChosen");
     let packageName;
     const dailyBonus = (userData.dailyROI).toFixed(2);
-    const directIncome=M(userData.referalIncome).toFixed(2)
+    const directIncome=(userData.referalIncome).toFixed(2)
     const packageData=userData.packageChosen;
     const totalIncome=(userData.walletAmount).toFixed(2)
     if(packageData){
@@ -630,7 +630,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
         const {newPassword,confirmPassword}=req.body;
       if (newPassword) {
           const hashedPassword = bcryptjs.hashSync(newPassword, 10);
-          userData.password = hashedPassword;
+          userData.transactionPassword = hashedPassword;
         }
        const updatedUser = await userData.save();
 

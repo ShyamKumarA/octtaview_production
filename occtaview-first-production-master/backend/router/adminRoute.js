@@ -1,6 +1,6 @@
 import express from "express"
 import { protectUser } from "../middleware/authMiddleware.js"
-import { totalAddFundHistory, acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending, totalCapitalWithdrawHistory, totalWalletWithdrawHistory } from "../controller/adminController.js"
+import { totalAddFundHistory, acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending, totalCapitalWithdrawHistory, totalWalletWithdrawHistory, editProfileByAdmin } from "../controller/adminController.js"
 import { allUserCommissionSplit } from "../controller/commissionSplit.js"
 import { directIncomeReport } from "../controller/reportController.js"
 
@@ -18,6 +18,7 @@ adminRouter.post("/user-capitalWithdraw-approval/:id",protectUser,approveCapital
 adminRouter.post("/user-capitalWithdraw-reject/:id",protectUser,rejectCapitalwithdrawal)
 adminRouter.post("/user-walletWithdraw-approval/:id",protectUser,approveWalletWithdrawal)
 adminRouter.post("/user-walletWithdraw-reject/:id",protectUser,rejectWalletWithdrawal)
+adminRouter.post("/edit-profile-admin/:id",protectUser,editProfileByAdmin)  
 
 
 
