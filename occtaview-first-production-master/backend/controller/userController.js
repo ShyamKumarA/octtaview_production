@@ -678,7 +678,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
   export const addPackageByUser=async(req,res,next)=>{
     const userId=req.user._id;
     try {
-    const {amount,transactionCode}=req.body;
+    const {amount,transactionCode,addFundUrl}=req.body;
       const userData=await User.findById(userId)
       if(userData){
         if(userData.addPackageStatus=="approved"){
@@ -688,6 +688,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
           userData.addPackageStatus ="pending";
         }
           userData.topUpAmount=amount;
+          userData.addFundUrl=addFundUrl;
           userData.transactionCode=transactionCode;
           
 
@@ -751,7 +752,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
       try {
          const transactionID = generateTnxString();
          const userId=req.user._id;
-         const {amount,transactionPassword,walletUrl}=req.body;
+         const {amount,transactionPassword,capitalWithdrawUrl}=req.body;
          const userData=await User.findById(userId);
          if(userData){
   
@@ -761,7 +762,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
           } else {
             userData.withdrawStatus ="pending";
             userData.withdrawAmount=amount;
-            userData.transactionCode=walletUrl;
+            userData.capitalWithdrawUrl=capitalWithdrawUrl;
             userData.transactionID=transactionID;
     
           const updatedUser = await userData.save();
@@ -791,7 +792,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
     try {
       const transactionID = generateTnxString();
          const userId=req.user._id;
-         const {amount,transactionPassword,walletUrl}=req.body;
+         const {amount,transactionPassword,walletWithdrawUrl}=req.body;
          const userData=await User.findById(userId);
          if(userData){
           const validPassword = bcryptjs.compareSync(transactionPassword, userData.transactionPassword);
@@ -800,7 +801,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
           } else {
             userData.walletWithdrawStatus ="pending";
             userData.walletWithdrawAmount=amount;
-            userData.walletTransactionCode=walletUrl;
+            userData.walletWithdrawUrl=walletWithdrawUrl;
             userData.transactionID=transactionID;
     
           const updatedUser = await userData.save();

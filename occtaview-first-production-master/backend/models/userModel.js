@@ -48,6 +48,7 @@ import Package from './packageModel.js';
       name: String,
       topUpAmount: Number,
       transactionCode:String,
+      addFundUrl:String,
       status: String
     },
     {
@@ -207,8 +208,14 @@ const userSchema=new mongoose.Schema({
     transactionCode:{
       type:String,
     },
-    walletTransactionCode:{
+    capitalWithdrawUrl:{
       type:String,
+    },
+    walletWithdrawUrl:{
+      type:String,
+    },
+    addFundUrl:{
+      type:String
     },
     referalStatus:{
       type: String,

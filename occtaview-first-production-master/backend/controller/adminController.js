@@ -247,7 +247,7 @@ export const getReadyToApproveUsers = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         userStatus: { $eq: "readyToApprove" },
-      }).select("username email phone userStatus createdAt");
+      }).select("username email phone userStatus aadhaar createdAt");
       res.status(200).json({
         userData,
         sts: "01",
@@ -298,10 +298,12 @@ export const acceptUser = async (req, res, next) => {
 export const rejectUser = async (req, res, next) => {
     try {
       const adminId = req.user._id;
-      const { userId } = req.params;
+      
+      const { id} = req.params;
+      console.log(id);
       const adminData = await User.findById(adminId);
       if (adminData.isSuperAdmin) {
-        const userData = await User.findById(userId);
+        const userData = await User.findById(id);
         if (userData) {
           userData.userStatus = "pending";
             
@@ -333,7 +335,7 @@ export const rejectUser = async (req, res, next) => {
         const userData = await User.find({
           addFundStatus: { $eq: "pending" },
           isSuperAdmin: { $ne: true } 
-        }).select("username email phone userStatus createdAt topUpAmount transactionCode");
+        }).select("username email phone userStatus addFundUrl createdAt topUpAmount transactionCode");
         res.status(200).json({
           userData,
           sts: "01",
@@ -358,7 +360,7 @@ export const rejectUser = async (req, res, next) => {
           const userData = await User.find({
             addPackageStatus: { $eq: "pending" },
             isSuperAdmin: { $ne: true } 
-          }).select("username email phone  userStatus createdAt topUpAmount transactionCode");
+          }).select("username email phone addFundUrl  userStatus createdAt topUpAmount transactionCode");
           res.status(200).json({
             userData,
             sts: "01",
@@ -385,6 +387,7 @@ export const approveFundAdd = async (req, res, next) => {
       const packageAmount=userData.packageAmount;
       if(packageAmount) previousPackage = findPackage(packageAmount);
       const amountToAdd=userData.topUpAmount;
+      const addFundUrl=userData.addFundUrl;
       const newPackageAmount=packageAmount+amountToAdd;
       const transactionCode=userData.transactionCode;
       const packageChosen = findPackage(newPackageAmount);
@@ -401,6 +404,7 @@ export const approveFundAdd = async (req, res, next) => {
           topUpAmount:amountToAdd,
           status:"approved",
           name:userData.username,
+          addFundUrl:addFundUrl,
           transactionCode:transactionCode
         })
         userData.topUpAmount=0;
@@ -435,7 +439,7 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
       previousPackage = findPackage(packageAmount);
       const withdrawAmount=userData.withdrawAmount;
       const newPackageAmount=packageAmount-withdrawAmount;
-      const transactionCode=userData.transactionCode;
+      const capitalWithdrawUrl=userData.capitalWithdrawUrl;
       const tnxID=userData.transactionID;
       const packageChosen = findPackage(newPackageAmount);
       const packageData = await Package.findOne({ name: packageChosen });
@@ -455,7 +459,7 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
           packageName:userData.packageName,
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:transactionCode,
+          walletUrl:capitalWithdrawUrl,
           status:"Approved"
         })
         const updatedUser = await userData.save();
@@ -489,13 +493,13 @@ export const approveWalletWithdrawal = async (req, res, next) => {
       const walletAmount=userData.walletAmount;
       const withdrawAmount=userData.walletWithdrawAmount;
       const newWalletAmount=walletAmount-withdrawAmount;
-      const transactionCode=userData.walletTransactionCode;
+      const walletWithdrawUrl=userData.walletWithdrawUrl;
       const tnxID=userData.transactionID;
       if (userData) {
         userData.walletWithdrawStatus = "approved";
         userData.walletAmount=newWalletAmount;
         userData.walletWithdrawAmount=0;
-        userData.walletTransactionCode="";
+        userData.walletWithdrawUrl="";
         userData.transactionID="";
         userData.walletWithdrawHistory.push({
           reportName:"walletWithdrawReport",
@@ -504,7 +508,7 @@ export const approveWalletWithdrawal = async (req, res, next) => {
           packageName:userData.packageName,
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:transactionCode,
+          walletUrl:walletWithdrawUrl,
           status:"Approved"
         })
         const updatedUser = await userData.save();
@@ -534,19 +538,19 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
       const withdrawAmount=userData.walletWithdrawAmount;
-      const transactionCode=userData.walletTransactionCode;
+      const walletWithdrawUrl=userData.walletWithdrawUrl;
       const tnxID=userData.transactionID;
       if (userData) {
         userData.walletWithdrawStatus = ""; 
         userData.walletWithdrawAmount=0;
-        userData.walletTransactionCode="";
+        userData.walletWithdrawUrl="";
         userData.transactionID="";
         userData.capitalWithdrawHistory.push({
           reportName:"walletwithdrawReject",
           name:userData.username,
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:transactionCode,
+          walletUrl:walletWithdrawUrl,
           status:"Rejected"
         })
         const updatedUser = await userData.save();
@@ -575,7 +579,7 @@ export const viewWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         withdrawStatus: { $eq: "pending" },
-      }).select("username email phone withdrawStatus createdAt withdrawAmount");
+      }).select("username email phone withdrawStatus capitalWithdrawUrl createdAt withdrawAmount");
       res.status(200).json({
         userData,
         sts: "01",
@@ -599,7 +603,7 @@ export const viewWalletWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         walletWithdrawStatus: { $eq: "pending" },
-      }).select("username email phone walletWithdrawStatus createdAt walletWithdrawAmount");
+      }).select("username email phone walletWithdrawStatus walletWithdrawUrl createdAt walletWithdrawAmount");
       res.status(200).json({
         userData,
         sts: "01",
@@ -625,19 +629,19 @@ export const rejectCapitalwithdrawal = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
       const withdrawAmount=userData.withdrawAmount;
-      const transactionCode=userData.transactionCode;
+      const capitalWithdrawUrl=userData.capitalWithdrawUrl;
       const tnxID=userData.transactionID;
       if (userData) {
         userData.withdrawStatus = "";
         userData.withdrawAmount=0;
-        userData.transactionCode="";
+        userData.capitalWithdrawUrl="";
         userData.transactionID="";
         userData.capitalWithdrawHistory.push({
           name:userData.username,
           reportName:"rejectCapitalwithdraw",
           tnxID:tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:transactionCode,
+          walletUrl:capitalWithdrawUrl,
           status:"Rejected"
         })
         const updatedUser = await userData.save();
@@ -685,6 +689,7 @@ export const userPackageApproval=async(req,res,next)=>{
       const packageAmount=userData.packageAmount;
       const amountToAdd=userData.topUpAmount;
       const transactionCode=userData.transactionCode;
+      const addFundUrl=userData.addFundUrl;
       const newPackageAmount=packageAmount+amountToAdd
       const packageChosen = findPackage(newPackageAmount);
       console.log(packageChosen);
@@ -695,11 +700,11 @@ export const userPackageApproval=async(req,res,next)=>{
         userData.packageName=packageChosen;
         userData.packageAmount=newPackageAmount;
         userData.packageChosen=packageData._id; 
-        userData.transactionCode=transactionCode
         userData.addFundHistory.push({
           topUpAmount:amountToAdd,
           status:"approved",
           name:userData.username,
+          addFundUrl:addFundUrl,
           transactionCode:transactionCode
         })
         userData.topUpAmount=0;
@@ -746,7 +751,7 @@ export const userPackageApproval=async(req,res,next)=>{
 //admin Reject initial package
 
 export const userPackageReject=async(req,res,next)=>{
-console.log("reached here");
+console.log("hello");
 
   try{
     const adminId = req.user._id;
@@ -758,6 +763,7 @@ console.log("reached here");
       // const sponserId=userData.sponser;
       const amountToAdd=userData.topUpAmount;
       const transactionCode=userData.transactionCode;
+      const addFundUrl=userData.addFundUrl;
       // const newPackageAmount=packageAmount+amountToAdd
       // const packageChosen = findPackage(newPackageAmount);
       // const packageData = await Package.findOne({ name: packageChosen });
@@ -775,6 +781,7 @@ console.log("reached here");
           topUpAmount:amountToAdd,
           status:"Rejected",
           name:userData.username,
+          addFundUrl:addFundUrl,
           transactionCode:transactionCode
         })
         userData.topUpAmount=0;

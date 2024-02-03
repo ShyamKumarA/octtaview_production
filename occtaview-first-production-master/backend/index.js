@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/user", userRoute);
-app.use("/api/admin", adminRouter);
+app.use("/api/admin", adminRouter); 
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -31,6 +31,9 @@ app.use((err, req, res, next) => {
   });
 });
 const __dirname = path.resolve();
+
+app.use("/verify_images", express.static("/var/www/seclob/octtaview/backend/public/verify_images"));
+
 
 if (NODE_ENV == "production") {
   // app.use(express.static(__dirname + "/frontend/dist"));

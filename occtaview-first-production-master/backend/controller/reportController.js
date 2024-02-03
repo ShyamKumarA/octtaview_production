@@ -92,6 +92,55 @@ export const level3IncomeReport=async(req,res,next)=>{
 }
 
 
+//view all level Report
+
+
+export const viewAllLevelReport = async (req, res, next) => {
+  try {
+    const userId = req.query.id || req.user._id;
+
+    // Fetch the user document by its ID and populate its child documents
+    const user = await User.findById(userId)
+      .select('level1ROIHistory level2ROIHistory level3ROIHistory ownSponserId userStatus')
+      .populate([
+        {
+          path: 'level1ROIHistory',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        },
+        {
+          path: 'level2ROIHistory',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        },
+        {
+          path: 'level3ROIHistory',
+          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+        }
+      ]);
+
+    // If user document is not found, return an error
+    if (!user) {
+      return next(errorHandler('User not found'));
+    }
+
+    // Destructure relevant fields from the user document
+    const { level1ROIHistory, level2ROIHistory, level3ROIHistory, ownSponserId, userStatus } = user;
+
+    // Send the response with child documents and other relevant information
+    res.status(200).json({
+      level1ROIHistory,
+      level2ROIHistory,
+      level3ROIHistory,
+      ownSponserId,
+      userStatus,
+      sts: '01',
+      msg: 'Success'
+    });
+  } catch (error) {
+    next(error); // Pass any caught errors to the error handling middleware
+  }
+};
+
+
 //daily ROI report
 
 export const dailyROIReport=async(req,res,next)=>{

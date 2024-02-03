@@ -36,11 +36,7 @@ allUsers.forEach(async (user) => {
  const level1ROI= await user.calculateLevel1ROI();
   const level2ROI=await user.calculateLevel2ROI();
   const level3ROI=await user.calculateLevel3ROI();
-console.log("level1ROI",level1ROI);
-console.log("level2ROI",level2ROI);
-console.log("level3ROI",level3ROI);
-console.log("walletAmount",user.walletAmount);
-console.log("walletAmount",user.walletAmount);
+
 
 
 

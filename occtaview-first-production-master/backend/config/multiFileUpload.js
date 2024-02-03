@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    let dir = join(__dirname, "../public/verify_images"); // Use 'join' here
+    let dir = join(__dirname, "/var/www/seclob/octtaview/verify_image"); // Use 'join' here
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }
@@ -22,7 +22,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage: storage }).fields([
   { name: "aadhaar", maxCount: 1 },
-  { name: "pancard", maxCount: 1 },
 ]);
 
 export default upload;
