@@ -34,6 +34,8 @@ import IconMenuPages from '../Icon/Menu/IconMenuPages';
 import IconMenuMore from '../Icon/Menu/IconMenuMore';
 import imglogo from '../../components/Icon/logo/octtaview.png';
 import { logout } from '../../Slice/authSlice';
+import IconShare from '../Icon/IconShare';
+
 const Header = () => {
     const location = useLocation();
     const dispatch = useAppDispatch();
@@ -63,6 +65,8 @@ const Header = () => {
 
         if (!userInfo) navigate('/login');
     }, [location, userInfo]);
+
+    // console.log(userInfo.id);
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -94,7 +98,9 @@ const Header = () => {
                             <IconMenu className="w-5 h-5" />
                         </button>
                     </div>
+                    {/*  */}
 
+                    {/*  */}
                     <div className="ltr:mr-2 rtl:ml-2 hidden sm:block">
                         <ul className="flex items-center space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                             {/* <li>
@@ -114,8 +120,24 @@ const Header = () => {
                             </li> */}
                         </ul>
                     </div>
+                    {/* <div>
+                        <p>userid:{userInfo.id}</p>
+                    </div> */}
+                    {/*  */}
+
+                    {/*  */}
                     <div className="sm:flex-1 ltr:sm:ml-0 ltr:ml-auto sm:rtl:mr-0 rtl:mr-auto flex items-center space-x-1.5 lg:space-x-2 rtl:space-x-reverse dark:text-[#d0d2d6]">
                         <div className="sm:ltr:mr-auto sm:rtl:ml-auto"></div>
+                        {/* --------------------------------------------------------- */}
+
+                        <div>
+                            <Link to={`/register/${userInfo && userInfo.id}`} className="dark:hover:text-white">
+                                <IconShare className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
+                            </Link>
+                        </div>
+
+                        {/* ------------------------------------------------------------------------- */}
+
                         <div>
                             {themeConfig.theme === 'light' ? (
                                 <button
@@ -132,6 +154,7 @@ const Header = () => {
                             ) : (
                                 ''
                             )}
+
                             {themeConfig.theme === 'dark' && (
                                 <button
                                     className={`${
@@ -159,6 +182,7 @@ const Header = () => {
                                 </button>
                             )}
                         </div>
+
                         <div className="dropdown shrink-0 flex">
                             <Dropdown
                                 offset={[0, 8]}
@@ -276,9 +300,9 @@ const Header = () => {
                             </div>
                         </button>
                         <ul className="sub-menu">
-                            <li>
+                            {/* <li>
                                 <NavLink to="/direct-team">{t('Direct Team')}</NavLink>
-                            </li>
+                            </li> */}
                             <li>
                                 <NavLink to="/my-downline">{t('My DownLine')}</NavLink>
                             </li>
@@ -335,201 +359,6 @@ const Header = () => {
                         </ul>
                     </li>
                     {/* ------------------- */}
-                    {/* <li className="menu nav-item relative">
-                        <button type="button" className="nav-link">
-                            <div className="flex items-center">
-                                <IconMenuPages className="shrink-0" />
-                                <span className="px-1">{t('pages')}</span>
-                            </div>
-                            <div className="right_arrow">
-                                <IconCaretDown />
-                            </div>
-                        </button>
-                        <ul className="sub-menu">
-                            <li className="relative">
-                                <button type="button">
-                                    {t('users')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/users/profile">{t('profile')}</NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/users/user-account-settings">{t('account_settings')}</NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/knowledge-base">{t('knowledge_base')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/contact-us-boxed" target="_blank">
-                                    {t('contact_us_boxed')}
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/contact-us-cover" target="_blank">
-                                    {t('contact_us_cover')}
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/faq">{t('faq')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/coming-soon-boxed" target="_blank">
-                                    {t('coming_soon_boxed')}
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/coming-soon-cover" target="_blank">
-                                    {t('coming_soon_cover')}
-                                </NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/pages/maintenence" target="_blank">
-                                    {t('maintenence')}
-                                </NavLink>
-                            </li>
-                            <li className="relative">
-                                <button type="button">
-                                    {t('error')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/pages/error404" target="_blank">
-                                            {t('404')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/pages/error500" target="_blank">
-                                            {t('500')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/pages/error503" target="_blank">
-                                            {t('503')}
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="relative">
-                                <button type="button">
-                                    {t('login')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/auth/cover-login" target="_blank">
-                                            {t('login_cover')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/auth/boxed-signin" target="_blank">
-                                            {t('login_boxed')}
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="relative">
-                                <button type="button">
-                                    {t('register')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/auth/cover-register" target="_blank">
-                                            {t('register_cover')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/auth/boxed-signup" target="_blank">
-                                            {t('register_boxed')}
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="relative">
-                                <button type="button">
-                                    {t('password_recovery')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/auth/cover-password-reset" target="_blank">
-                                            {t('recover_id_cover')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/auth/boxed-password-reset" target="_blank">
-                                            {t('recover_id_boxed')}
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                            <li className="relative">
-                                <button type="button">
-                                    {t('lockscreen')}
-                                    <div className="ltr:ml-auto rtl:mr-auto rtl:rotate-90 -rotate-90">
-                                        <IconCaretDown />
-                                    </div>
-                                </button>
-                                <ul className="rounded absolute top-0 ltr:left-[95%] rtl:right-[95%] min-w-[180px] bg-white z-[10] text-dark dark:text-white-dark dark:bg-[#1b2e4b] shadow p-0 py-2 hidden">
-                                    <li>
-                                        <NavLink to="/auth/cover-lockscreen" target="_blank">
-                                            {t('unlock_cover')}
-                                        </NavLink>
-                                    </li>
-                                    <li>
-                                        <NavLink to="/auth/boxed-lockscreen" target="_blank">
-                                            {t('unlock_boxed')}
-                                        </NavLink>
-                                    </li>
-                                </ul>
-                            </li>
-                        </ul>
-                    </li> */}
-                    {/* <li className="menu nav-item relative">
-                        <button type="button" className="nav-link">
-                            <div className="flex items-center">
-                                <IconMenuMore className="shrink-0" />
-                                <span className="px-1">{t('more')}</span>
-                            </div>
-                            <div className="right_arrow">
-                                <IconCaretDown />
-                            </div>
-                        </button>
-                        <ul className="sub-menu">
-                            <li>
-                                <NavLink to="/dragndrop">{t('drag_and_drop')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/charts">{t('charts')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/font-icons">{t('font_icons')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/widgets">{t('widgets')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="https://vristo.sbthemes.com" target="_blank">
-                                    {t('documentation')}
-                                </NavLink>
-                            </li>
-                        </ul>
-                    </li> */}
                 </ul>
             </div>
         </header>

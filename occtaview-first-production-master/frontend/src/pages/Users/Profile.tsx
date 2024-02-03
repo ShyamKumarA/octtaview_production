@@ -34,7 +34,7 @@ const Profile = () => {
     useEffect(() => {
         dispatch(fetchUserProfile());
     }, [dispatch]);
-    console.log('User Profile:', userProfile);
+    // console.log('User Profile:', userProfile);
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -128,6 +128,7 @@ const Profile = () => {
                                             <th>PackageName</th>
                                             <th>levelRoi</th>
                                             <th className="text-center">capital amount</th>
+                                            <th className="text-center">Total Income</th>
                                         </tr>
                                     </thead>
                                     <tbody className="dark:text-white-dark">
@@ -147,6 +148,7 @@ const Profile = () => {
                                             {<td>{userProfile && userProfile.packageName}</td>}
                                             <td className="text-success"> {userProfile && userProfile.levelRoi}</td>
                                             <td className="text-center">{userProfile && userProfile.capitalAmount}</td>
+                                            <td className="text-center">{userProfile && userProfile.totalIncome}</td>
                                         </tr>
                                         {/* <tr>
                                             <td>Flutter App</td>

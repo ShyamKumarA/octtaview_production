@@ -4,7 +4,7 @@ import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
 import { IRootState } from '../Slice';
 import { setPageTitle } from '../Slice/themeConfigSlice';
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import IconHorizontalDots from '../components/Icon/IconHorizontalDots';
 import IconEye from '../components/Icon/IconEye';
 import IconBitcoin from '../components/Icon/IconBitcoin';
@@ -15,12 +15,30 @@ import IconTether from '../components/Icon/IconTether';
 import IconSolana from '../components/Icon/IconSolana';
 import IconCircleCheck from '../components/Icon/IconCircleCheck';
 import IconInfoCircle from '../components/Icon/IconInfoCircle';
+import { fetchUserProfile } from '../../src/Slice/userSlice';
+import { useAppDispatch, useAppSelector } from '../../src/Slice/index';
+import { log } from 'console';
 
 const Finance = () => {
-    const dispatch = useDispatch();
+    const dispatch = useAppDispatch();
+    const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
+
+    useEffect(() => {
+        dispatch(setPageTitle('Profile'));
+    });
+
+    useEffect(() => {
+        dispatch(fetchUserProfile());
+    }, [dispatch]);
+
+    console.log('User Profile:', userProfile);
+
+    // const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
+
     useEffect(() => {
         dispatch(setPageTitle('OCTTAVIEW'));
     });
+
     //bitcoinoption
     const bitcoin: any = {
         series: [
@@ -388,25 +406,48 @@ const Finance = () => {
     };
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
+    //   ----------------------
+    const [copied, setCopied] = useState(false);
+    const userProfileId = userProfile && userProfile.id;
+
+    const handleCopyClick = () => {
+        // Create a text area element to temporarily hold the URL
+        const textArea = document.createElement('textarea');
+        textArea.value = `https://octtaview.com/register/${userProfileId}`;
+        document.body.appendChild(textArea);
+
+        // Select and copy the text
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        // Set copied to true
+        setCopied(true);
+
+        // Reset copied state after a short delay
+        setTimeout(() => {
+            setCopied(false);
+        }, 2000);
+    };
 
     return (
         <div>
             <ul className="flex space-x-2 rtl:space-x-reverse">
                 <li>
-                    <Link to="#" className="text-primary hover:underline">
-                        Dashboard
-                    </Link>
+                    <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
+                        {copied ? 'Copied!' : 'Copy'}
+                    </button>
                 </li>
                 <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Octtaview</span>
+                    <span>{`https://octtaview.com/register/${userProfileId}`}</span>
                 </li>
             </ul>
             <div className="pt-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6 text-white">
                     <div className="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
                         <div className="flex justify-between">
-                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Users Visit</div>
-                            <div className="dropdown">
+                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">PACKAGE</div>
+                            {/* <div className="dropdown">
                                 <Dropdown
                                     offset={[0, 5]}
                                     placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
@@ -415,30 +456,30 @@ const Finance = () => {
                                 >
                                     <ul className="text-black dark:text-white-dark">
                                         <li>
-                                            <button type="button">View Report</button>
+                                            <button type="button"> </button>
                                         </li>
                                         <li>
                                             <button type="button">Edit Report</button>
                                         </li>
                                     </ul>
                                 </Dropdown>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex items-center mt-5">
-                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> $170.46 </div>
-                            <div className="badge bg-white/30">+ 2.35% </div>
+                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3">{} </div>
+                            <div className="badge bg-white/30">{} </div>
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            Last Week 44,700
+                            {userProfile && userProfile.packageName}
                         </div>
                     </div>
 
                     {/* Sessions */}
                     <div className="panel bg-gradient-to-r from-violet-500 to-violet-400">
                         <div className="flex justify-between">
-                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Sessions</div>
-                            <div className="dropdown">
+                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Capital Amount</div>
+                            {/* <div className="dropdown">
                                 <Dropdown
                                     offset={[0, 5]}
                                     placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
@@ -447,31 +488,31 @@ const Finance = () => {
                                 >
                                     <ul className="text-black dark:text-white-dark">
                                         <li>
-                                            <button type="button">View Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                         <li>
-                                            <button type="button">Edit Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                     </ul>
                                 </Dropdown>
-                            </div>
+                            </div> */}
                         </div>
                         <div className="flex items-center mt-5">
-                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 74,137 </div>
-                            <div className="badge bg-white/30">- 2.35% </div>
+                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> {} </div>
+                            <div className="badge bg-white/30">{}</div>
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            Last Week 84,709
+                            {userProfile && userProfile.capitalAmount}
                         </div>
                     </div>
 
                     {/*  Time On-Site */}
                     <div className="panel bg-gradient-to-r from-blue-500 to-blue-400">
                         <div className="flex justify-between">
-                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Time On-Site</div>
+                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Wallet Amount</div>
                             <div className="dropdown">
-                                <Dropdown
+                                {/* <Dropdown
                                     offset={[0, 5]}
                                     placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                     btnClassName="hover:opacity-80"
@@ -479,29 +520,29 @@ const Finance = () => {
                                 >
                                     <ul className="text-black dark:text-white-dark">
                                         <li>
-                                            <button type="button">View Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                         <li>
-                                            <button type="button">Edit Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                     </ul>
-                                </Dropdown>
+                                </Dropdown> */}
                             </div>
                         </div>
                         <div className="flex items-center mt-5">
-                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 38,085 </div>
-                            <div className="badge bg-white/30">+ 1.35% </div>
+                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> {} </div>
+                            <div className="badge bg-white/30">{} </div>
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            Last Week 37,894
+                            {userProfile && userProfile.totalIncome}
                         </div>
                     </div>
 
                     {/* Bounce Rate */}
                     <div className="panel bg-gradient-to-r from-fuchsia-500 to-fuchsia-400">
                         <div className="flex justify-between">
-                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Bounce Rate</div>
+                            <div className="ltr:mr-1 rtl:ml-1 text-md font-semibold">Direct Income</div>
                             <div className="dropdown">
                                 <Dropdown
                                     offset={[0, 5]}
@@ -511,22 +552,22 @@ const Finance = () => {
                                 >
                                     <ul className="text-black dark:text-white-dark">
                                         <li>
-                                            <button type="button">View Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                         <li>
-                                            <button type="button">Edit Report</button>
+                                            <button type="button">{}</button>
                                         </li>
                                     </ul>
                                 </Dropdown>
                             </div>
                         </div>
                         <div className="flex items-center mt-5">
-                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> 49.10% </div>
-                            <div className="badge bg-white/30">- 0.35% </div>
+                            <div className="text-3xl font-bold ltr:mr-3 rtl:ml-3"> {}</div>
+                            <div className="badge bg-white/30">{} </div>
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            Last Week 50.01%
+                            {userProfile && userProfile.directIncome}
                         </div>
                     </div>
                 </div>
@@ -535,7 +576,7 @@ const Finance = () => {
                     {/*  Favorites  */}
                     <div>
                         <div className="flex items-center mb-5 font-bold">
-                            <span className="text-lg">Favorites</span>
+                            <span className="text-lg">Profile</span>
                             <button type="button" className="ltr:ml-auto rtl:mr-auto text-primary hover:text-black dark:hover:text-white-dark">
                                 See All
                             </button>
@@ -544,55 +585,44 @@ const Finance = () => {
                             {/*  Bitcoin  */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">
-                                        <IconBitcoin />
-                                    </div>
+                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconBitcoin /> */}</div>
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">BTC</h6>
-                                        <p className="text-white-dark text-xs">Bitcoin</p>
+                                        <h6 className="text-dark dark:text-white-light">SponserID</h6>
+                                        <p className="text-white-dark text-xs">{userProfile && userProfile.ownSponserId}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
-                                    <ReactApexChart series={bitcoin.series} options={bitcoin.options} type="line" height={45} />
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={bitcoin.series} options={bitcoin.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">
-                                    $20,000 <span className="text-success font-normal text-sm">+0.25%</span>
+                                    {}
+                                    <span className="text-success font-normal text-sm">{}</span>
                                 </div>
                             </div>
                             {/*  Ethereum*/}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 bg-warning rounded-full grid place-content-center p-2">
+                                    {/* <div className="shrink-0 w-10 h-10 bg-warning rounded-full grid place-content-center p-2">
                                         <IconEthereum />
-                                    </div>
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">ETH</h6>
-                                        <p className="text-white-dark text-xs">Ethereum</p>
+                                        <h6 className="text-dark dark:text-white-light">DailyBonus</h6>
+                                        <p className="text-white-dark text-xs"> {userProfile && userProfile.dailyBonus}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
-                                    <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} />
-                                </div>
-                                <div className="flex justify-between items-center font-bold text-base">
-                                    $21,000 <span className="text-danger font-normal text-sm">-1.25%</span>
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
+                                <div className="flex justify-between items-center font-bold text-base">{/* $21,000 <span className="text-danger font-normal text-sm">-1.25%</span> */}</div>
                             </div>
-                            {/*  Litecoin*/}
+                            {/* Litecoin */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">
-                                        <IconLitecoin />
-                                    </div>
+                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconLitecoin /> */}</div>
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">LTC</h6>
-                                        <p className="text-white-dark text-xs">Litecoin</p>
+                                        <h6 className="text-dark dark:text-white-light">Level ROI</h6>
+                                        <p className="text-white-dark text-xs">{userProfile && userProfile.levelRoi}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
-                                    <ReactApexChart series={litecoin.series} options={litecoin.options} type="line" height={45} />
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={litecoin.series} options={litecoin.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">
-                                    $11,657 <span className="text-success font-normal text-sm">+0.25%</span>
+                                    {} <span className="text-success font-normal text-sm">{}</span>
                                 </div>
                             </div>
                         </div>
@@ -600,161 +630,65 @@ const Finance = () => {
                     {/*  Prices  */}
                     <div>
                         <div className="flex items-center mb-5 font-bold">
-                            <span className="text-lg">Live Prices</span>
-                            <button type="button" className="ltr:ml-auto rtl:mr-auto text-primary hover:text-black dark:hover:text-white-dark">
-                                See All
-                            </button>
+                            <span className="text-lg">Profile</span>
+                            <button type="button" className="ltr:ml-auto rtl:mr-auto text-primary hover:text-black dark:hover:text-white-dark"></button>
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
                             {/*  Binance */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">
+                                    {/* <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">
                                         <IconBinance />
-                                    </div>
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">BNB</h6>
-                                        <p className="text-white-dark text-xs">Binance</p>
+                                        <h6 className="text-dark dark:text-white-light">Name</h6>
+                                        <p className="text-white-dark text-xs">{userProfile && userProfile.name}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
+                                {/* <div className="mb-5 overflow-hidden">
                                     <ReactApexChart series={binance.series} options={binance.options} type="line" height={45} />
-                                </div>
-                                <div className="flex justify-between items-center font-bold text-base">
+                                </div> */}
+                                {/* <div className="flex justify-between items-center font-bold text-base">
                                     $21,000 <span className="text-danger font-normal text-sm">-1.25%</span>
-                                </div>
+                                </div> */}
                             </div>
                             {/*  Tether  */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">
-                                        <IconTether />
-                                    </div>
+                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconTether /> */}</div>
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">USDT</h6>
-                                        <p className="text-white-dark text-xs">Tether</p>
+                                        <h6 className="text-dark dark:text-white-light">Email</h6>
+                                        <p className="text-white-dark text-xs"> {userProfile && userProfile.email}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
-                                    <ReactApexChart series={tether.series} options={tether.options} type="line" height={45} />
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={tether.series} options={tether.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">
-                                    $20,000 <span className="text-success font-normal text-sm">+0.25%</span>
+                                    {} <span className="text-success font-normal text-sm">{}</span>
                                 </div>
                             </div>
                             {/*  Solana */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 bg-warning rounded-full p-2 grid place-content-center">
+                                    {/* <div className="shrink-0 w-10 h-10 bg-warning rounded-full p-2 grid place-content-center">
                                         <IconSolana />
-                                    </div>
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
-                                        <h6 className="text-dark dark:text-white-light">SOL</h6>
-                                        <p className="text-white-dark text-xs">Solana</p>
+                                        <h6 className="text-dark dark:text-white-light">Phone</h6>
+                                        <p className="text-white-dark text-xs">{userProfile && userProfile.phone}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">
-                                    <ReactApexChart series={solana.series} options={solana.options} type="line" height={45} />
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={solana.series} options={solana.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">
-                                    $21,000 <span className="text-danger font-normal text-sm">-1.25%</span>
+                                    {} <span className="text-danger font-normal text-sm">{}</span>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </div>
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
-                    <div className="grid gap-6 xl:grid-flow-row">
-                        {/*  Previous Statement  */}
-                        <div className="panel overflow-hidden">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="text-lg font-bold">Previous Statement</div>
-                                    <div className="text-success"> Paid on June 27, 2022 </div>
-                                </div>
-                                <div className="dropdown">
-                                    <Dropdown
-                                        offset={[0, 5]}
-                                        placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
-                                        btnClassName="hover:opacity-80"
-                                        button={<IconHorizontalDots className="hover:opacity-80 opacity-70" />}
-                                    >
-                                        <ul>
-                                            <li>
-                                                <button type="button">View Report</button>
-                                            </li>
-                                            <li>
-                                                <button type="button">Edit Report</button>
-                                            </li>
-                                        </ul>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                            <div className="relative mt-10">
-                                <div className="absolute -bottom-12 ltr:-right-12 rtl:-left-12 w-24 h-24">
-                                    <IconCircleCheck className="text-success opacity-20 w-full h-full" />
-                                </div>
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                    <div>
-                                        <div className="text-primary">Card Limit</div>
-                                        <div className="mt-2 font-semibold text-2xl">$50,000.00</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-primary">Spent</div>
-                                        <div className="mt-2 font-semibold text-2xl">$15,000.00</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-primary">Minimum</div>
-                                        <div className="mt-2 font-semibold text-2xl">$2,500.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                        {/*  Current Statement */}
-                        <div className="panel overflow-hidden">
-                            <div className="flex items-center justify-between">
-                                <div>
-                                    <div className="text-lg font-bold">Current Statement</div>
-                                    <div className="text-danger"> Must be paid before July 27, 2022 </div>
-                                </div>
-                                <div className="dropdown">
-                                    <Dropdown offset={[0, 5]} placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`} button={<IconHorizontalDots className="hover:opacity-80 opacity-70" />}>
-                                        <ul>
-                                            <li>
-                                                <button type="button">View Report</button>
-                                            </li>
-                                            <li>
-                                                <button type="button">Edit Report</button>
-                                            </li>
-                                        </ul>
-                                    </Dropdown>
-                                </div>
-                            </div>
-                            <div className="relative mt-10">
-                                <div className="absolute -bottom-12 ltr:-right-12 rtl:-left-12 w-24 h-24">
-                                    <IconInfoCircle className="text-danger opacity-20 w-24 h-full" />
-                                </div>
+                    <div className="grid gap-6 xl:grid-flow-row"></div>
 
-                                <div className="grid grid-cols-2 md:grid-cols-3 gap-6">
-                                    <div>
-                                        <div className="text-primary">Card Limit</div>
-                                        <div className="mt-2 font-semibold text-2xl">$50,000.00</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-primary">Spent</div>
-                                        <div className="mt-2 font-semibold text-2xl">$30,500.00</div>
-                                    </div>
-                                    <div>
-                                        <div className="text-primary">Minimum</div>
-                                        <div className="mt-2 font-semibold text-2xl">$8,000.00</div>
-                                    </div>
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-
-                    {/*  Recent Transactions  */}
-                    <div className="panel">
+                    {/* <div className="panel">
                         <div className="mb-5 text-lg font-bold">Recent Transactions</div>
                         <div className="table-responsive">
                             <table>
@@ -825,7 +759,7 @@ const Finance = () => {
                                 </tbody>
                             </table>
                         </div>
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

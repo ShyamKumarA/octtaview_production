@@ -1,4 +1,5 @@
 import { lazy } from 'react';
+import SharedRegister from '../pages/Authentication/SharedRegister';
 
 const Index = lazy(() => import('../pages/Index'));
 const Analytics = lazy(() => import('../pages/Analytics'));
@@ -142,6 +143,11 @@ const routes = [
     {
         path: '/apps/notes',
         element: <Notes />,
+    },
+    {
+        path: '/register/:id',
+        element: <SharedRegister />,
+        layout: 'blank',
     },
     {
         path: '/apps/contacts',
