@@ -32,22 +32,22 @@ app.use((err, req, res, next) => {
 });
 const __dirname = path.resolve();
 
-app.use("/verify_images", express.static("/var/www/seclob/octtaview/backend/public/verify_images"));
+app.use("/uploads", express.static("../uploads"));
 
 
-if (NODE_ENV == "production") {
+ if (NODE_ENV == "production") {
   // app.use(express.static(__dirname + "/frontend/dist"));
-  app.use(express.static("/var/www/seclob/octtaview/frontend/dist"));
+   app.use(express.static("/var/www/seclob/octtaview/frontend/dist"));
 
   app.get("*", (req, res) => {
     // res.sendFile(__dirname + "/frontend/dist/index.html");
     res.sendFile("/var/www/seclob/octtaview/frontend/dist/index.html");
   });
-} else {
+ } else {
   app.get("/", (req, res) => {
     res.status(201).json("Running");
   });
-}
+ }
 
 app.listen(port, () => {
   console.log(`Server connected ${port}`);

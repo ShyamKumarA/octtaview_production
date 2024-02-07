@@ -6,6 +6,7 @@ const users = [
     username: "Super Admin",
     email: "octtaview@gmail.com",
           address:"octtaview-cyber",
+          packageAmount:10000,
     password: bcrypt.hashSync("123456", 10),
     isSuperAdmin: true,
          transactionPassword:bcrypt.hashSync("123456",10),

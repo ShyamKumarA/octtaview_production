@@ -7,7 +7,7 @@ export const allUserCommissionSplit=async(req,res,next)=>{
     const {percentage}=req.body;
     console.log("percentage:",percentage);
     try {
-        const userData = await User.find({ isSuperAdmin: { $ne: true }, packageAmount: { $ne: 0 } });
+        const userData = await User.find({ packageAmount: { $ne: 0 } });
 
         if(userData){
             userData.forEach(async(user)=>{

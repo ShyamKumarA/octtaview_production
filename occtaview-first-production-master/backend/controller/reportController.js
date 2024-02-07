@@ -154,7 +154,7 @@ export const dailyROIReport=async(req,res,next)=>{
       res.status(200).json({
         dailyROIHistory,userStatus,
         sts: "01",
-        msg: "get level 1 ROI income report users Success",
+        msg: "get level ROI History income report users Success",
       });
     } else {
       return next(errorHandler(401, "User Login Failed"));
@@ -252,14 +252,6 @@ export const ROIHistory = async (req, res, next) => {
 
   try {
     const userData = await User.findById(userId).populate("dailyROIHistory");
-    const arrayOfUsers=[];
-    const newUserData={
-      "name":userData.username,
-      "topUpAmount":userData.topUpAmount,
-      "transactionCode":userData.transactionCode,
-      "status":userData.addPackageStatus
-    }
-    arrayOfUsers.push(newUserData);
     if (userData) {
       const dailyROIHistory = userData.dailyROIHistory || [];
 

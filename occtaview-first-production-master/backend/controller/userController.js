@@ -218,12 +218,14 @@ export const addUser = async (req, res, next) => {
 // add user by Referal link
 export const addReferalUser = async (req, res, next) => {
   try {
-    const sponser = req.query.id;
     const userStatus = "pending";
 
     const ownSponserId = generateRandomString();
 
-    const { username, email, phone, address,transactionPassword, password } = req.body;
+    const { userId,username, email, phone, address,transactionPassword, password } = req.body;
+
+    const sponser = userId;
+
     // const packageChosen = findPackage(packageAmount);
     // const packageData = await Package.findOne({ name: packageChosen });
     //console.log(packageData);

@@ -1,6 +1,6 @@
 import express from "express"
 import { protectUser } from "../middleware/authMiddleware.js"
-import { totalAddFundHistory, acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending, totalCapitalWithdrawHistory, totalWalletWithdrawHistory, editProfileByAdmin } from "../controller/adminController.js"
+import { totalAddFundHistory, acceptUser, addAdmin, addPackage, adminLogin, approveCapitalwithdrawal, approveFundAdd, approveWalletWithdrawal, getApprovedUsers, getReadyToApproveUsers, rejectCapitalwithdrawal, rejectUser, rejectWalletWithdrawal, userPackageApproval, userPackageReject, viewAddFundPending, viewAddPackageFundPending, viewAllUsers, viewUserDetails, viewWalletWithdrawPending, viewWithdrawPending, totalCapitalWithdrawHistory, totalWalletWithdrawHistory, editProfileByAdmin, dashboardData } from "../controller/adminController.js"
 import { allUserCommissionSplit } from "../controller/commissionSplit.js"
 import { directIncomeReport } from "../controller/reportController.js"
 
@@ -28,7 +28,7 @@ adminRouter.post("/edit-profile-admin/:id",protectUser,editProfileByAdmin)
 
 adminRouter.get("/view-all-users",protectUser,viewAllUsers)
 adminRouter.get("/view-users-details/:id",protectUser,viewUserDetails)
-
+adminRouter.get("/dashboard-data",protectUser,dashboardData)
 adminRouter.get("/view-approved-users",protectUser,getApprovedUsers)
 adminRouter.get("/view-ready-to-approved-users",protectUser,getReadyToApproveUsers)
 adminRouter.get("/view-addFund-pending",protectUser,viewAddFundPending)

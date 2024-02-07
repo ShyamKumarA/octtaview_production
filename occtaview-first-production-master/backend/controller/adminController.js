@@ -12,7 +12,12 @@ import { findPackage, generateRandomString, generateReferalIncome } from "./user
 //Dashboard data
 
 export const dashboardData = async (req, res, next) => {
+  
+  const adminId = req.user._id;
+  const adminData = await User.findById(adminId);
   try {
+    if (adminData.isSuperAdmin) {
+
     const today = new Date();
     const userData = await User.find();
     const totalMembers = userData.length;
@@ -32,15 +37,18 @@ export const dashboardData = async (req, res, next) => {
 
 
 
-    res.status(200)({
+    res.status(200).json({
       totalMembers,
       todaysUserCount,
       totalDailyROI,
       pendingUsersCount
     });
-  } catch (error) {
-    next(error);
+  } else {
+    return next(errorHandler(401, "Admin Login Failed"));
   }
+} catch (error) {
+  next(error);
+}
 }
 
 //add admin Api
@@ -947,13 +955,14 @@ export const totalWalletWithdrawHistory = async (req, res, next) => {
 
 export const editProfileByAdmin = async (req, res, next) => {
   const adminId = req.user._id;
-  const userId=req.params;
+  const {id}=req.params;
+  console.log(id);
   const adminData = await User.findById(adminId);
   try {
     if (adminData.isSuperAdmin) {
-    const userData = await User.findById(userId);
+    const userData = await User.findById(id);
     if (userData) {
-      const { username,email,password,transactionPassword, phone, address } = req.body;
+      const { username,email,password,txnPassword, phone, address } = req.body;
       
       userData.username = username || userData.username;
       userData.address = address || userData.address;
@@ -966,8 +975,8 @@ export const editProfileByAdmin = async (req, res, next) => {
         userData.password = hashedPassword;
       }
 
-      if (transactionPassword) {
-        const hashedPassword = bcryptjs.hashSync(transactionPassword, 10);
+      if (txnPassword) {
+        const hashedPassword = bcryptjs.hashSync(txnPassword, 10);
         userData.transactionPassword = hashedPassword;
       }
 
