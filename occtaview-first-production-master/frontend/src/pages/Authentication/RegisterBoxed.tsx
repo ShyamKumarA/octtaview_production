@@ -18,6 +18,7 @@ import React from 'react';
 import Header from '../../components/Layouts/Header';
 import { useAppDispatch, useAppSelector } from '../../Slice/index';
 import { logout } from '../../Slice/authSlice';
+import IconEye from '../../components/Icon/IconEye';
 
 const RegisterBoxed = () => {
     const dispatch = useAppDispatch();
@@ -28,6 +29,8 @@ const RegisterBoxed = () => {
     const [phone, setPhone] = useState('');
     const [address, setAddress] = useState('');
     const [transactionPassword, setTransactionPassword] = useState('');
+    const [showpassword, setShowPassword] = useState(false);
+    const [showtranspassword, setTransShowPassword] = useState(false);
     const [password, setPassword] = useState('');
 
     const { loading, data: userData, error } = useAppSelector((state: any) => state.getAddNewUserReducer);
@@ -56,6 +59,17 @@ const RegisterBoxed = () => {
         e.preventDefault();
         dispatch(logout());
     };
+
+    useEffect(() => {
+        if (userData) {
+            setUserName('');
+            setEmail('');
+            setPhone('');
+            setAddress('');
+            setTransactionPassword('');
+            setPassword('');
+        }
+    }, [userData]);
 
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -153,14 +167,14 @@ const RegisterBoxed = () => {
                             <div className="relative text-white-dark">
                                 <input
                                     id="transactionPassword"
-                                    type="password"
+                                    type={showpassword ? 'text' : 'password'}
                                     value={transactionPassword}
                                     onChange={(e) => setTransactionPassword(e.target.value)}
                                     placeholder="Enter Txn Password"
                                     className="form-input ps-10 placeholder:text-white-dark"
                                 />
-                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                    <IconLockDots fill={true} />
+                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showpassword)}>
+                                    {showpassword ? <IconLockDots /> : <IconEye />}
                                 </span>
                             </div>
                         </div>
@@ -170,14 +184,14 @@ const RegisterBoxed = () => {
                             <div className="relative text-white-dark">
                                 <input
                                     id="Password"
-                                    type="text"
+                                    type={showtranspassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
-                                    placeholder="Enter Txn Password"
+                                    placeholder="Enter Password"
                                     className="form-input ps-10 placeholder:text-white-dark"
                                 />
-                                <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                    <IconLockDots fill={true} />
+                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setTransShowPassword(!showtranspassword)}>
+                                    {showtranspassword ? <IconLockDots /> : <IconEye />}
                                 </span>
                             </div>
                         </div>

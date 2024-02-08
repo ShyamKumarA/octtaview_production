@@ -17,12 +17,14 @@ import IconGoogle from '../../components/Icon/IconGoogle';
 import React from 'react';
 import Header from '../../components/Layouts/Header';
 import { fetchChangePassword } from '../../Slice/userSlice';
+import IconEye from '../../components/Icon/IconEye';
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('any');
     const { userInfo } = useAppSelector((state: any) => state.addchangePasswordreducer);
-
+    const [showpassword,setShowPassword]=useState(false)
+    const [showconfirmpassword,setConfirmShowPassword]=useState(false)
     const navigate = useNavigate();
 
     const dispatch = useDispatch();
@@ -78,15 +80,17 @@ const ChangePassword = () => {
                                 <div className="relative text-white-dark">
                                     <input
                                         id="newpassword"
-                                        type="Password"
-                                        placeholder="........."
+                                        type={showpassword ? 'text' : 'password'}
+                                        placeholder="Enter your Password"
                                         className="form-input ps-10 placeholder:text-white-dark "
                                         value={password}
                                         onChange={(e) => setPassword(e.target.value)}
                                         required
                                     />
-                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                        <IconMail fill={true} />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2"
+                                                        onClick={() => setShowPassword(!showpassword)}
+                                                        >
+                    {showpassword ? <IconLockDots/>: <IconEye/>}
                                     </span>
                                 </div>
                             </div>
@@ -95,15 +99,17 @@ const ChangePassword = () => {
                                 <div className="relative text-white-dark">
                                     <input
                                         id="confirmpassword"
-                                        type="password"
-                                        placeholder=".........."
+                                        type={showconfirmpassword ? 'text' : 'password'}
+                                        placeholder="Enter your password"
                                         className="form-input ps-10 placeholder:text-white-dark"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}
                                         required
                                     />
-                                    <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                        <IconLockDots fill={true} />
+                                    <span className="absolute start-4 top-1/2 -translate-y-1/2"
+                        onClick={() => setConfirmShowPassword(!showconfirmpassword)}
+                                                                                            >
+                                    {showconfirmpassword ? <IconLockDots/>: <IconEye/>}
                                     </span>
                                 </div>
                             </div>

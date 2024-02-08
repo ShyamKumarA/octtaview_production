@@ -20,7 +20,9 @@ import { useAppDispatch, useAppSelector } from '../../Slice/index';
 import { logout } from '../../Slice/authSlice';
 
 const SharedRegister = () => {
+    
     const { id } = useParams();
+    console.log(id,"id")
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -31,7 +33,7 @@ const SharedRegister = () => {
     const [transactionPassword, setTransactionPassword] = useState('');
     const [password, setPassword] = useState('');
 
-    const { loading, data: userData, error } = useAppSelector((state: any) => state.getAddNewUserReducer);
+    // const { loading, data: userData, error } = useAppSelector((state: any) => state.getAddNewUserReducer);
 
     const { data: registeredData } = useAppSelector((state: any) => state.getNewReferalReducer);
 
@@ -43,6 +45,8 @@ const SharedRegister = () => {
     //     }
     // }, [userInfo]);
 
+    
+
     const submitForm = (e: any) => {
         e.preventDefault();
         console.log(userName, email, phone, address, transactionPassword, password);
@@ -53,10 +57,10 @@ const SharedRegister = () => {
         // if (userData) navigate('/');
     };
 
-    const logoutHandler = (e: any) => {
-        e.preventDefault();
-        dispatch(logout());
-    };
+    // const logoutHandler = (e: any) => {
+    //     e.preventDefault();
+    //     dispatch(logout());
+    // };
 
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
@@ -185,7 +189,7 @@ const SharedRegister = () => {
 
                         {/*  */}
                         <button onClick={submitForm} type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
-                            {loading && <span className="animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle"></span>}
+                            {/* {loading && <span className="animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle"></span>} */}
                             Add Member
                         </button>
                     </form>
@@ -193,16 +197,16 @@ const SharedRegister = () => {
                         {registeredData && (
                             <div>
                                 Registered successfully!&nbsp;
-                                <Link to="/" onClick={logoutHandler} className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                {/* <Link to="/" onClick={logoutHandler} className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
                                     Go to Home
-                                </Link>
+                                </Link> */}
                             </div>
                         )}
-                        {error && <div className="text-red-600">{error}</div>}
+                        {/* {error && <div className="text-red-600">{error}</div>} */}
                     </div>
-                    <div onClick={logoutHandler} className="text-center mt-7 dark:text-white cursor-pointer">
+                    {/* <div onClick={logoutHandler} className="text-center mt-7 dark:text-white cursor-pointer">
                         Logout
-                    </div>
+                    </div> */}
                 </div>
             </div>
         </div>

@@ -33,11 +33,18 @@ const ColumnChooser = () => {
     useEffect(() => {
         setPage(1);
     }, [pageSize]);
+    
     useEffect(() => {
-        const from = (page - 1) * pageSize;
-        const to = from + pageSize;
-        setRecordsData([...initialRecords.slice(from, to)]);
+        if (Array.isArray(initialRecords)) {
+            const from = (page - 1) * pageSize;
+            const to = from + pageSize;
+            
+            setRecordsData([...initialRecords.slice(from, to)]);
+        } else {
+            console.error("initialRecords is not defined or is not an array");
+        }
     }, [page, pageSize, initialRecords]);
+    
     useEffect(() => {
         setInitialRecords(() => {
             return (rowData || []).isArray

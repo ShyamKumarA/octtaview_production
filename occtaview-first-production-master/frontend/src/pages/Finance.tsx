@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Form, Link } from 'react-router-dom';
 import Dropdown from '../components/Dropdown';
 import ReactApexChart from 'react-apexcharts';
 import { useDispatch, useSelector } from 'react-redux';
@@ -18,11 +18,19 @@ import IconInfoCircle from '../components/Icon/IconInfoCircle';
 import { fetchUserProfile } from '../../src/Slice/userSlice';
 import { useAppDispatch, useAppSelector } from '../../src/Slice/index';
 import { log } from 'console';
+import Modals from './Components/Modals';
+import { Dialog, Transition } from '@headlessui/react';
+import {  Fragment } from 'react';
+import IconArrowForward from '../components/Icon/IconArrowForward';
+import IconFolderPlus from '../components/Icon/IconFolderPlus';
+import IconFile from '../components/Icon/IconFile';
 
 const Finance = () => {
     const dispatch = useAppDispatch();
     const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
-
+    const [modal3, setModal3] = useState(false);
+    const [selectedFile, setSelectedFile] = useState(null);
+    console.log(selectedFile,"file")
     useEffect(() => {
         dispatch(setPageTitle('Profile'));
     });
@@ -410,6 +418,15 @@ const Finance = () => {
     const [copied, setCopied] = useState(false);
     const userProfileId = userProfile && userProfile.id;
 
+    
+
+
+    const handleImageUpload2 = (event) => {
+        const file = event.target.files[0];
+        setSelectedFile(file ? file.name : null);
+      };
+      
+
     const handleCopyClick = () => {
         // Create a text area element to temporarily hold the URL
         const textArea = document.createElement('textarea');
@@ -432,16 +449,110 @@ const Finance = () => {
 
     return (
         <div>
-            <ul className="flex space-x-2 rtl:space-x-reverse">
-                <li>
-                    <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
-                        {copied ? 'Copied!' : 'Copy'}
-                    </button>
-                </li>
-                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>{`https://octtaview.com/register/${userProfileId}`}</span>
-                </li>
-            </ul>
+    <div className='flex flex-col '>
+  <div className="flex i">
+    <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
+      {copied ? 'Copied!' : 'Copy'}
+    </button>
+    <span className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
+      {`https://octtaview.com/register/${userProfileId}`}
+    </span>
+  </div>
+
+  
+{userProfile?.userStatus==="pending" &&(
+    <div className="mt-4">
+<div className="flex">
+        <button type="button" onClick={() => setModal3(true)} className="btn btn-secondary text-sm">
+        <IconFile className="ltr:mr-2 rtl:ml-2 shrink-0" />
+          Upload Document
+        </button>
+      </div>
+      <Transition appear show={modal3} as={Fragment}>
+        <Dialog as="div" open={modal3} onClose={() => setModal3(false)}>
+          <Transition.Child
+            as={Fragment}
+            enter="ease-out duration-300"
+            enterFrom="opacity-0"
+            enterTo="opacity-100"
+            leave="ease-in duration-200"
+            leaveFrom="opacity-100"
+            leaveTo="opacity-0"
+          >
+            <div className="fixed inset-0" />
+          </Transition.Child>
+          <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+            <div className="flex items-center justify-center min-h-screen px-4">
+              <Transition.Child
+                as={Fragment}
+                enter="ease-out duration-300"
+                enterFrom="opacity-0 scale-95"
+                enterTo="opacity-100 scale-100"
+                leave="ease-in duration-200"
+                leaveFrom="opacity-100 scale-100"
+                leaveTo="opacity-0 scale-95"
+              >
+                <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-sm my-8 text-black dark:text-white-dark">
+                  <div className="p-5">
+                    {/* Two image upload buttons in two rows */}
+                    <div className="flex flex-col">
+                      
+                      <div>
+                        <label htmlFor="imageUpload2" className="btn btn-outline-primary text-sm p-2">
+                          Select Document
+                          <input
+                            type="file"
+                            id="imageUpload2"
+                            className="hidden"
+                            onChange={handleImageUpload2}
+                            accept="image/*"
+                          />
+                        </label>
+                        {selectedFile && (
+        <div className="flex items-center mt-2">
+          <p className="text-sm text-white mt-2 mr-2">File selected: {selectedFile}</p>
+          <button
+            type="button"
+            onClick={() => setSelectedFile(null)} // Nullify the selected file state
+            className="text-white hover:text-gray-300"
+          >
+            &#10005; {/* Cross symbol */}
+          </button>
+        </div>
+      )}
+                      </div>
+                    </div>
+                    <div className="flex justify-end items-center mt-4">
+                    <button
+  type="button"
+  onClick={() => {
+    setModal3(false);
+    setSelectedFile(null); // Set the selected file to null
+  }}
+  className="btn btn-outline-danger text-sm p-2"
+>
+  Discard
+</button>
+
+                      <button type="button" onClick={() => setModal3(false)} className="btn btn-primary text-sm ltr:ml-2 rtl:mr-2 p-2">
+                        Save
+                      </button>
+                    </div>
+                  </div>
+                </Dialog.Panel>
+              </Transition.Child>
+            </div>
+          </div>
+        </Dialog>
+      </Transition>
+    </div>
+)}
+  
+</div>
+
+
+           
+            
             <div className="pt-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6 text-white">
                     <div className="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
@@ -762,6 +873,11 @@ const Finance = () => {
                     </div> */}
                 </div>
             </div>
+  
+
+     
+
+           
         </div>
     );
 };
