@@ -430,7 +430,7 @@ const Finance = () => {
     const handleCopyClick = () => {
         // Create a text area element to temporarily hold the URL
         const textArea = document.createElement('textarea');
-        textArea.value = `https://octtaview.com/register/${userProfileId}`;
+        textArea.value = `https://admin.octtaview.com/auth/registerformik?id=${userProfileId}`;
         document.body.appendChild(textArea);
 
         // Select and copy the text
