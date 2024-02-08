@@ -183,15 +183,15 @@ export const addUser = async (req, res, next) => {
       userStatus,
     });
     if (user) {    
-          // await sendMail(
-          //   user.email,
-          //   // packageChosen,
-          //   // packageAmount,
-          //   user.username,
-          //   user.ownSponserId,
-          //   transactionPassword,
-          //   password
-          // );
+          await sendMail(
+            user.email,
+            // packageChosen,
+            // packageAmount,
+            user.username,
+            user.ownSponserId,
+            transactionPassword,
+            password
+          );
         
 
         res.json({

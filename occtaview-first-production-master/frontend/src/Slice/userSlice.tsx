@@ -174,6 +174,7 @@ interface UserProfileData {
     ownSponserId: string;
     dailyBonus: number;
     totalIncome: number;
+    userStatus:string;
     // Add other profile-related fields here
 }
 

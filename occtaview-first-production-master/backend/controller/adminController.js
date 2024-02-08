@@ -28,9 +28,10 @@ export const dashboardData = async (req, res, next) => {
     });
     const todaysUserCount = todaysUsers.length;
 
-    const totalDailyROI = userData.reduce((total, user) => {
+    const DailyROI = userData.reduce((total, user) => {
       return total + user.dailyROI;
     }, 0);
+    const totalDailyROI =DailyROI.toFixed(2);
 
     // Filter users with 'userStatus' equal to 'pending'
     const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
@@ -541,7 +542,7 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { id } = req.params;
-
+    console.log(id);
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
@@ -553,7 +554,7 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
         userData.walletWithdrawAmount=0;
         userData.walletWithdrawUrl="";
         userData.transactionID="";
-        userData.capitalWithdrawHistory.push({
+        userData.walletWithdrawHistory.push({
           reportName:"walletwithdrawReject",
           name:userData.username,
           tnxID:tnxID,
@@ -632,7 +633,7 @@ export const rejectCapitalwithdrawal = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { id } = req.params;
-
+    console.log(id);
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);

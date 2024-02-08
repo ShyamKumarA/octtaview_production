@@ -152,8 +152,7 @@ const userSchema=new mongoose.Schema({
       type:Number
     },
     withdrawStatus:{
-      type:String,
-      enum:["pending","approved"]
+      type:String
     },
     transactionID:{
       type:String
@@ -183,8 +182,7 @@ const userSchema=new mongoose.Schema({
       default:0
     },
     walletWithdrawStatus:{
-      type: String,
-      enum: ["pending", "approved"],
+      type: String
     },
     packageAmount:{
       type: Number,

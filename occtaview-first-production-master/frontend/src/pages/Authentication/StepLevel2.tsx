@@ -20,6 +20,7 @@ const StepLevel2 = () => {
     const [page, setPage] = useState(1);
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [initialRecords, setInitialRecords] = useState(levelData || []);
+
     const [recordsData, setRecordsData] = useState(initialRecords);
     const [search, setSearch] = useState('');
 

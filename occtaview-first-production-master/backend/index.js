@@ -32,7 +32,7 @@ app.use((err, req, res, next) => {
 });
 const __dirname = path.resolve();
 
-app.use("/uploads", express.static("../uploads"));
+app.use("/uploads", express.static("/var/www/seclob/octtaview/uploads"));
 
 
  if (NODE_ENV == "production") {

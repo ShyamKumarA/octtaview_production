@@ -42,7 +42,10 @@ const Header = () => {
     const navigate = useNavigate();
 
     const { userInfo } = useAppSelector((state: any) => state.userReducer);
+    const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
+    console.log(userProfile,"userProfile...userProfile")
 
+console.log(userInfo,"user")
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
         if (selector) {
@@ -196,11 +199,10 @@ const Header = () => {
                                             <img className="rounded-md w-10 h-10 object-cover" src="/assets/images/profile-icon.jpeg" alt="userProfile" />
                                             <div className="ltr:pl-4 rtl:pr-4 truncate">
                                                 <h4 className="text-base">
-                                                    John Doe
-                                                    <span className="text-xs bg-success-light rounded text-success px-1 ltr:ml-2 rtl:ml-2">Pro</span>
+                                                    {userInfo?.firstName}
                                                 </h4>
                                                 <button type="button" className="text-black/60 hover:text-primary dark:text-dark-light/60 dark:hover:text-white">
-                                                    johndoe@gmail.com
+                                                   {userInfo?.email}
                                                 </button>
                                             </div>
                                         </div>
@@ -225,6 +227,8 @@ const Header = () => {
 
                 {/* horizontal menu */}
                 <ul className="horizontal-menu hidden py-1.5 font-semibold px-6 lg:space-x-1.5 xl:space-x-8 rtl:space-x-reverse bg-white border-t border-[#ebedf2] dark:border-[#191e3a] dark:bg-black text-black dark:text-white-dark flex justify-around items-center">
+                {userProfile?.userStatus === 'approved' && (
+
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -242,9 +246,12 @@ const Header = () => {
                             <li>
                                 <NavLink to="/register">{t('Join Now')}</NavLink>
                             </li>
+                      
                         </ul>
                     </li>
+                    )}
                     {/* --------------- */}
+                    {userProfile?.userStatus === 'approved' && (
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -267,7 +274,9 @@ const Header = () => {
                             </li>
                         </ul>
                     </li>
+                    )}
                     {/* ------------------------- */}
+                    {userProfile?.userStatus === 'approved' && (
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -287,8 +296,9 @@ const Header = () => {
                             </li>
                         </ul>
                     </li>
+                    )}
                     {/* ---------------------------------- */}
-
+                    {userProfile?.userStatus === 'approved' && (
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -308,8 +318,9 @@ const Header = () => {
                             </li>
                         </ul>
                     </li>
-
+                    )}
                     {/* ---------------------------------- */}
+                    {userProfile?.userStatus === 'approved' && (
                     <li className="menu nav-item relative">
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
@@ -332,32 +343,36 @@ const Header = () => {
                             </li>
                         </ul>
                     </li>
+                    )}
                     {/* ------------------ */}
-                    <li className="menu nav-item relative">
-                        <button type="button" className="nav-link">
-                            <div className="flex items-center">
-                                <IconMenuForms className="shrink-0" />
-                                <span className="px-1">{t('Withdraw')}</span>
-                            </div>
-                            <div className="right_arrow">
-                                <IconCaretDown />
-                            </div>
-                        </button>
-                        <ul className="sub-menu">
-                            <li>
-                                <NavLink to="/withdrawfund">{t('WithDraw Fund')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>
-                            </li>
-                            <li>
-                                <NavLink to="/capitalhistory">{t('Capital History')}</NavLink>
-                            </li>
-                        </ul>
-                    </li>
+                    {userProfile?.userStatus === 'approved' && (
+  <li className="menu nav-item relative">
+    <button type="button" className="nav-link">
+      <div className="flex items-center">
+        <IconMenuForms className="shrink-0" />
+        <span className="px-1">{t('Withdraw')}</span>
+      </div>
+      <div className="right_arrow">
+        <IconCaretDown />
+      </div>
+    </button>
+    <ul className="sub-menu">
+      <li>
+        <NavLink to="/withdrawfund">{t('Withdraw Fund')}</NavLink>
+      </li>
+      <li>
+        <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
+      </li>
+      <li>
+        <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>
+      </li>
+      <li>
+        <NavLink to="/capitalhistory">{t('Capital History')}</NavLink>
+      </li>
+    </ul>
+  </li>
+)}
+
                     {/* ------------------- */}
                 </ul>
             </div>

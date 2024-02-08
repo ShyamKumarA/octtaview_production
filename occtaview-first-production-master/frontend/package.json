@@ -2,7 +2,7 @@
     "name": "vristo-react-vite",
     "private": true,
     "version": "0.0.0",
-    "proxy": "https://octtaview.com",
+    "proxy": "http://localhost:4001",
     "type": "module",
     "scripts": {
         "dev": "vite",
