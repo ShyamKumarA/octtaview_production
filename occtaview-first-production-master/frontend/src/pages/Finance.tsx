@@ -20,7 +20,7 @@ import { useAppDispatch, useAppSelector } from '../../src/Slice/index';
 import { log } from 'console';
 import Modals from './Components/Modals';
 import { Dialog, Transition } from '@headlessui/react';
-import {  Fragment } from 'react';
+import { Fragment } from 'react';
 import IconArrowForward from '../components/Icon/IconArrowForward';
 import IconFolderPlus from '../components/Icon/IconFolderPlus';
 import IconFile from '../components/Icon/IconFile';
@@ -32,15 +32,10 @@ const Finance = () => {
     const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
     const [modal3, setModal3] = useState(false);
     const [selectedFile, setSelectedFile] = useState<File | null>(null);
-    const [hideupload,setHideUpload]=useState(
-        {
-            status:"",
-    
-        }
-    )
-    console.log(hideupload,"hideupload")
-
-   console.log(selectedFile,"selectedFile")
+    const [hideupload, setHideUpload] = useState({
+        status: '',
+    });
+    const [showSelectDocumentMessage, setShowSelectDocumentMessage] = useState(false);
     useEffect(() => {
         dispatch(setPageTitle('Profile'));
     });
@@ -48,8 +43,6 @@ const Finance = () => {
     useEffect(() => {
         dispatch(fetchUserProfile());
     }, [dispatch]);
-
-    console.log('User Profile:', userProfile);
 
     // const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -428,333 +421,237 @@ const Finance = () => {
     const [copied, setCopied] = useState(false);
     const userProfileId = userProfile && userProfile.id;
 
-    
-
-
     const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
         const file = event.target.files?.[0];
         setSelectedFile(file || null);
-      };
+    };
 
-    //   const handleUpload = () => {
-    //     if (selectedFile) {
-    //       console.log("upload sucesss"),
-    //       setSelectedFile(null);
-    //       setHideUpload({
-    //         status:"Pending",
-    //       }) 
-    //     }
-    //   };
-    // const handleUpload = async () => {
-    //     if (selectedFile) {
-    //       try {
-    //         const token: any = localStorage.getItem('userInfo');
-    //         const parsedData = JSON.parse(token);
-        
-    //         const config = {
-    //             headers: {
-    //                 Authorization: `Bearer ${parsedData.access_token}`,
-    //                 'content-type': 'application/json',
-    //             },
-    //         };
-    //         const aadhaar = new FormData();
-    //         aadhaar.append('file', selectedFile);
-    //         console.log('formData success:', aadhaar);
+    const handleUpload = async () => {
+        if (selectedFile) {
+            try {
+                const token: any = localStorage.getItem('userInfo');
+                const parsedData = JSON.parse(token);
 
-      
-    //     const response = await axios.post(`${URL}/api/user/verify-user`, aadhaar, config
-             
-    //         );
-      
-    //         console.log('Upload success:', response.data);
-      
-    //         setSelectedFile(null);
-    //         setHideUpload({
-    //           status: 'Pending',
-    //         });
-    //       } catch (error) {
-    //         console.error('Upload failed:', error);
-    //         // Handle error as needed
-    //       }
-    //     }
-    //   };
-      
-      const handleUpload = async () => {
-  if (selectedFile) {
-    try {
-      const token: any = localStorage.getItem('userInfo');
-      const parsedData = JSON.parse(token);
+                const config = {
+                    headers: {
+                        Authorization: `Bearer ${parsedData.access_token}`,
+                        'content-type': 'multipart/form-data',
+                    },
+                };
 
-      const config = {
-        headers: {
-          Authorization: `Bearer ${parsedData.access_token}`,
-          'content-type': 'multipart/form-data',
-        },
-      };
+                const aadhaar = new FormData();
+                aadhaar.append('aadhaar', selectedFile, selectedFile.name);
 
-      const aadhaar = new FormData();
-      aadhaar.append('aadhaar', selectedFile, selectedFile.name); // Ensure the file is appended with its name
-      console.log('selectedFile.........:', selectedFile.name);
+                const response = await axios.post(`${URL}/api/user/verify-user`, aadhaar, config);
 
-      console.log('formData success.........:', aadhaar);
 
-      const response = await axios.post(
-        `${URL}/api/user/verify-user`,
-        aadhaar, // Pass the FormData directly
-        config
-      );
-
-      console.log('Upload success:', response.data);
-
-      setSelectedFile(null);
-      setHideUpload({
-        status: 'Pending',
-      });
-    } catch (error) {
-      console.error('Upload failed:', error);
-      // Handle error as needed
-    }
-  }
-};
-
+                setSelectedFile(null);
+                setHideUpload({
+                    status: 'Pending',
+                });
+                setModal3(false); 
+                setShowSelectDocumentMessage(false);
+            } catch (error) {
+                console.error('Upload failed:', error);
+            }
+        } else {
+            setShowSelectDocumentMessage(true);
+        }
+    };
 
     const handleCopyClick = () => {
-        // Create a text area element to temporarily hold the URL
         const textArea = document.createElement('textarea');
         textArea.value = `https://octtaview.com/register/${userProfileId}`;
         document.body.appendChild(textArea);
 
-        // Select and copy the text
         textArea.select();
         document.execCommand('copy');
         document.body.removeChild(textArea);
 
-        // Set copied to true
         setCopied(true);
 
-        // Reset copied state after a short delay
         setTimeout(() => {
             setCopied(false);
         }, 2000);
     };
 
-useEffect(()=>{
-    if(userProfile?.userStatus==="pending"){
-        setModal3(true);
-    }
+    useEffect(() => {
+        if (userProfile?.userStatus === 'pending') {
+            setModal3(true);
+        }
+    }, [userProfile]);
 
-},[userProfile])
     return (
         <div>
-    <div className='flex flex-col '>
-  <div className="flex i">
-    <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
-      {copied ? 'Copied!' : 'Copy'}
-    </button>
-    <span className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-      {`https://octtaview.com/register/${userProfileId}`}
-    </span>
-  </div>
-
-  {userProfile?.userStatus === 'pending' && (
-  <div className={`mt-4 ${modal3 ? 'pointer-events-none' : ''}`}>
-    <div className="flex">
-      <button
-        type="button"
-        onClick={() => setModal3(true)}
-        className={`btn btn-secondary text-sm `}
-      >
-        <IconFile className="ltr:mr-2 rtl:ml-2 shrink-0" />
-        {hideupload?.status === 'Pending' ? 'Pending... ' : 'Upload Document'}
-      </button>
-    </div>
-    <Transition appear show={modal3} as={Fragment} static>
-      <Dialog
-        as="div"
-        open={modal3}
-        onClose={() => setModal3(false)}
-        static // Add the static prop to prevent closing by clicking outside
-      >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0" />
-        </Transition.Child>
-        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8 text-black dark:text-white-dark">
-                <div className="p-5">
-                  <div className="flex flex-col">
-                    <div>
-                      <label
-                        htmlFor="imageUpload2"
-                        className="btn btn-outline-primary text-sm p-2"
-                      >
-                        Select Document
-                        <input
-                          type="file"
-                          id="imageUpload2"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                          accept="image/*"
-                        />
-                      </label>
-                      {selectedFile && (
-                        <div className="flex items-center mt-2">
-                          <p className="text-sm text-white mt-2 mr-2">
-                            File selected: {selectedFile?.name}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => setSelectedFile(null)}
-                            className="text-white hover:text-gray-300"
-                          >
-                            &#10005;
-                          </button>
-                        </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex justify-end items-center mt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setModal3(false);
-                        handleUpload(); // Call handleUpload when Save button is clicked
-                      }}
-                      className="btn btn-primary text-sm ltr:ml-2 rtl:mr-2 p-2"
-                    >
-                      Save
+            <div className="flex flex-col ">
+                <div className="flex i">
+                    <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
+                        {copied ? 'Copied!' : 'Copy'}
                     </button>
-                  </div>
+                    <span className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">{`https://octtaview.com/register/${userProfileId}`}</span>
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
-  </div>
-)}
- {userProfile?.userStatus === 'readyToApprove' && (
-  <div className={`mt-4 ${modal3 ? 'pointer-events-none' : ''}`}>
-    <div className="flex">
-      <button
-        type="button"
-        onClick={() => setModal3(true)}
-        className={`btn btn-secondary text-sm `}
-      >
-        <IconFile className="ltr:mr-2 rtl:ml-2 shrink-0" />
-        {hideupload?.status === 'Pending' ? 'Pending... ' : ' Pending...'}
-      </button>
-    </div>
-    <Transition appear show={modal3} as={Fragment} static>
-      <Dialog
-        as="div"
-        open={modal3}
-        onClose={() => setModal3(false)}
-        static // Add the static prop to prevent closing by clicking outside
-      >
-        <Transition.Child
-          as={Fragment}
-          enter="ease-out duration-300"
-          enterFrom="opacity-0"
-          enterTo="opacity-100"
-          leave="ease-in duration-200"
-          leaveFrom="opacity-100"
-          leaveTo="opacity-0"
-        >
-          <div className="fixed inset-0" />
-        </Transition.Child>
-        <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
-          <div className="flex items-center justify-center min-h-screen px-4">
-            <Transition.Child
-              as={Fragment}
-              enter="ease-out duration-300"
-              enterFrom="opacity-0 scale-95"
-              enterTo="opacity-100 scale-100"
-              leave="ease-in duration-200"
-              leaveFrom="opacity-100 scale-100"
-              leaveTo="opacity-0 scale-95"
-            >
-              <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8 text-black dark:text-white-dark">
-                <div className="p-5">
-                  <div className="flex flex-col">
-                    <div>
-                      <label
-                        htmlFor="imageUpload2"
-                        className="btn btn-outline-primary text-sm p-2"
-                      >
-                        Select Document
-                        <input
-                          type="file"
-                          id="imageUpload2"
-                          className="hidden"
-                          onChange={handleImageUpload}
-                          accept="image/*"
-                        />
-                      </label>
-                      {selectedFile && (
-                        <div className="flex items-center mt-2">
-                          <p className="text-sm text-white mt-2 mr-2">
-                            File selected: {selectedFile?.name}
-                          </p>
-                          <button
-                            type="button"
-                            onClick={() => setSelectedFile(null)}
-                            className="text-white hover:text-gray-300"
-                          >
-                            &#10005;
-                          </button>
+
+                <div className="mt-5">
+                    {userProfile?.userStatus === 'pending' && (
+                        <div className="mb-5">
+                            <Transition appear show={modal3} as={Fragment}>
+                                <Dialog as="div" open={modal3} onClose={() => setModal3(true)}>
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-out duration-300"
+                                        enterFrom="opacity-0"
+                                        enterTo="opacity-100"
+                                        leave="ease-in duration-200"
+                                        leaveFrom="opacity-100"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <div className="fixed inset-0" />
+                                    </Transition.Child>
+                                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                                        <div className="flex items-start justify-center min-h-screen px-4">
+                                            <Transition.Child
+                                                as={Fragment}
+                                                enter="ease-out duration-300"
+                                                enterFrom="opacity-0 scale-95"
+                                                enterTo="opacity-100 scale-100"
+                                                leave="ease-in duration-200"
+                                                leaveFrom="opacity-100 scale-100"
+                                                leaveTo="opacity-0 scale-95"
+                                            >
+                                                <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8 text-black dark:text-white-dark">
+                                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                                        <div className="font-bold text-lg">Upload Document First</div>
+                                                    </div>
+                                                    <div className="p-5">
+                                                        <div className="flex flex-col">
+                                                            <div>
+                                                                <label htmlFor="imageUpload2" className="btn btn-outline-primary text-sm p-2">
+                                                                    Select Document
+                                                                    <input type="file" id="imageUpload2" className="hidden" onChange={handleImageUpload} accept="image/*" />
+                                                                </label>
+                                                                {selectedFile && (
+                                                                    <div className="flex items-center mt-2">
+                                                                        <p className="text-sm text-white mt-2 mr-2">File selected: {selectedFile?.name}</p>
+                                                                        <button type="button" onClick={() => setSelectedFile(null)} className="text-danger hover:danger-gray-300">
+                                                                            &#10005;
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                                {showSelectDocumentMessage && (
+                                                                    <div className="flex items-center mt-2">
+                                                                        <p className="text-sm text-danger mt-2 mr-2">Select a document</p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex justify-end items-center mt-4">
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    handleUpload(); // Call handleUpload when Save button is clicked
+                                                                }}
+                                                                className="btn btn-primary text-sm ltr:ml-2 rtl:mr-2 p-2"
+                                                            >
+                                                                Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Dialog.Panel>
+                                            </Transition.Child>
+                                        </div>
+                                    </div>
+                                </Dialog>
+                            </Transition>
                         </div>
-                      )}
-                    </div>
-                  </div>
-                  <div className="flex justify-end items-center mt-4">
-                    <button
-                      type="button"
-                      onClick={() => {
-                        setModal3(false);
-                        handleUpload(); // Call handleUpload when Save button is clicked
-                      }}
-                      className="btn btn-primary text-sm ltr:ml-2 rtl:mr-2 p-2"
-                    >
-                      Save
-                    </button>
-                  </div>
+                    )}
+                    {userProfile?.userStatus === 'readyToApprove' && (
+                        <div className="mb-5">
+                            <button type="button" onClick={() => {
+  setModal3(true);
+  setShowSelectDocumentMessage(false);
+}}
+ className={`btn btn-secondary text-sm `}>
+                                <IconFile className="ltr:mr-2 rtl:ml-2 shrink-0" />
+                                {hideupload?.status === 'Pending' ? 'Pending... ' : ' Pending...'}
+                            </button>
+                            <Transition appear show={modal3} as={Fragment}>
+                                <Dialog as="div" open={modal3} onClose={() => setModal3(true)}>
+                                    <Transition.Child
+                                        as={Fragment}
+                                        enter="ease-out duration-300"
+                                        enterFrom="opacity-0"
+                                        enterTo="opacity-100"
+                                        leave="ease-in duration-200"
+                                        leaveFrom="opacity-100"
+                                        leaveTo="opacity-0"
+                                    >
+                                        <div className="fixed inset-0" />
+                                    </Transition.Child>
+                                    <div className="fixed inset-0 bg-[black]/60 z-[999] overflow-y-auto">
+                                        <div className="flex items-start justify-center min-h-screen px-4">
+                                            <Transition.Child
+                                                as={Fragment}
+                                                enter="ease-out duration-300"
+                                                enterFrom="opacity-0 scale-95"
+                                                enterTo="opacity-100 scale-100"
+                                                leave="ease-in duration-200"
+                                                leaveFrom="opacity-100 scale-100"
+                                                leaveTo="opacity-0 scale-95"
+                                            >
+                                                <Dialog.Panel className="panel border-0 p-0 rounded-lg overflow-hidden w-full max-w-lg my-8 text-black dark:text-white-dark">
+                                                    <div className="flex bg-[#fbfbfb] dark:bg-[#121c2c] items-center justify-between px-5 py-3">
+                                                        <div className="font-bold text-lg">Update Document</div>
+                                                    </div>
+                                                    <div className="p-5">
+                                                        <div className="flex flex-col">
+                                                            <div>
+                                                                <label htmlFor="imageUpload2" className="btn btn-outline-primary text-sm p-2">
+                                                                    Select Document
+                                                                    <input type="file" id="imageUpload2" className="hidden" onChange={handleImageUpload} accept="image/*" />
+                                                                </label>
+                                                                {selectedFile && (
+                                                                    <div className="flex items-center mt-2">
+                                                                        <p className="text-sm text-white mt-2 mr-2">File selected: {selectedFile?.name}</p>
+                                                                        <button type="button" onClick={() => setSelectedFile(null)} className="text-white hover:text-gray-300">
+                                                                            &#10005;
+                                                                        </button>
+                                                                    </div>
+                                                                )}
+                                                                 {showSelectDocumentMessage && (
+                                                                    <div className="flex items-center mt-2">
+                                                                        <p className="text-sm text-danger mt-2 mr-2">Select a document</p>
+                                                                    </div>
+                                                                )}
+                                                            </div>
+                                                        </div>
+                                                        <div className="flex justify-end items-center mt-4">
+                                                            <button type="button" onClick={() => setModal3(false)} className="btn btn-outline-danger">
+                                                                Discard
+                                                            </button>
+                                                            <button
+                                                                type="button"
+                                                                onClick={() => {
+                                                                    setModal3(true);
+
+                                                                    handleUpload();
+                                                                }}
+                                                                className="btn btn-primary text-sm ltr:ml-2 rtl:mr-2 p-2"
+                                                            >
+                                                                Save
+                                                            </button>
+                                                        </div>
+                                                    </div>
+                                                </Dialog.Panel>
+                                            </Transition.Child>
+                                        </div>
+                                    </div>
+                                </Dialog>
+                            </Transition>
+                        </div>
+                    )}
                 </div>
-              </Dialog.Panel>
-            </Transition.Child>
-          </div>
-        </div>
-      </Dialog>
-    </Transition>
-  </div>
-)}
+            </div>
 
-
-
-
-</div>
-
-
-           
-            
             <div className="pt-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6 text-white">
                     <div className="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
@@ -1075,11 +972,6 @@ useEffect(()=>{
                     </div> */}
                 </div>
             </div>
-  
-
-     
-
-           
         </div>
     );
 };

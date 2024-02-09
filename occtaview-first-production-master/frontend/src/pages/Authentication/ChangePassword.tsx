@@ -21,7 +21,7 @@ import IconEye from '../../components/Icon/IconEye';
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('');
-    const [confirmPassword, setConfirmPassword] = useState('any');
+    const [confirmPassword, setConfirmPassword] = useState('');
     const { userInfo } = useAppSelector((state: any) => state.addchangePasswordreducer);
     const [showpassword,setShowPassword]=useState(false)
     const [showconfirmpassword,setConfirmShowPassword]=useState(false)

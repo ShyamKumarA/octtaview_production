@@ -120,9 +120,11 @@ export const addNewFund = createAsyncThunk('addNewFund', async (fund: any) => {
         {
             amount: fund.amount,
             transactionCode: fund.transactionid,
+            addFundUrl:fund.addFundUrl
         },
         config
     );
+    console.log(response,"resposne")
 
     return response.data;
 });
@@ -746,7 +748,8 @@ export const WithdrawFunds = createAsyncThunk('addNewFund', async (fund: any) =>
         `${URL}/api/user/add-package-by-user`,
         {
             amount: fund.amount,
-            transactionCode: fund.transactionid,
+            transactionCode: fund.transpassword,
+            walletWithdrawUrl:fund.paymentUrl
         },
         config
     );

@@ -22,7 +22,8 @@ const Withdrawfund = () => {
     const [amount, setAmount] = useState('');
     const [serviceCharge, setServiceCharge] = useState(0);
     const [totalAmount, setTotalAmount] = useState(0);
-
+    const [paymentUrl, setPaymentUrl] = useState('');
+    const [transpassword, setTransPassword] = useState('');
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -49,9 +50,16 @@ const Withdrawfund = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        dispatch(WithdrawFunds({ amount }));
+        dispatch(WithdrawFunds({ amount,transpassword,paymentUrl }));
         if (data) navigate('/reportstatus');
         alert('Withdraw confirmed!');
+        setAmount('')
+        setTotalAmount(0)
+        setServiceCharge(0)
+        setTransPassword('')
+        setPaymentUrl('')
+
+
     };
 
     return (
@@ -73,7 +81,7 @@ const Withdrawfund = () => {
                     </div>
                 </div> */}
 
-                <div className="max-w-[19rem] ml-0 sm:ml-10 w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none">
+                <div className="max-w-[19rem] ml-0 sm:ml-10 w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-5">
                     <div className="flex flex-col">
                         <h1 className="text-white">You can only transfer TRON-Based Tokens </h1>
                     </div>
@@ -85,10 +93,11 @@ const Withdrawfund = () => {
                         <label htmlFor="fullname">Total amount</label>
                         <input type="number" placeholder="Total Amount" className="form-input" value={totalAmount.toFixed(2)} readOnly />
                         <label htmlFor="fullname">Payment URL</label>
-                        <input type="number" placeholder="URL" className="form-input" required />
+                        <input type="text" placeholder="URL" className="form-input" required value={paymentUrl} onChange={(e) => setPaymentUrl(e.target.value)} />
 
                         <label htmlFor="fullname">Transaction Password</label>
-                        <input type="number" className="form-input" required />
+                        <input type="number" className="form-input" required
+                        value={transpassword} onChange={(e) => setTransPassword(e.target.value)} />
                         <p className="text-red-600">Minimum withdrawal $15.</p>
                         <div className="flex justify-center items-center">
                             <button type="submit" className="btn btn-primary mt-6">

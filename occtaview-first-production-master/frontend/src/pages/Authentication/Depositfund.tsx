@@ -40,6 +40,8 @@ const Depositfund = () => {
 
     const [amount, setAmount] = useState('');
     const [transactionid, setTransactionid] = useState('');
+    const [addFundUrl,setAddFundUrl]=useState('');
+    console.log(transactionid,"id");
 
     const [currentQRIndex, setCurrentQRIndex] = useState(0);
 
@@ -53,10 +55,15 @@ const Depositfund = () => {
     });
 
     const handlePayment = (e: any) => {
+        const addFundUrl=selectedQRCode.link
+        
+        console.log(addFundUrl,"linkkk")
         e.preventDefault();
-        dispatch(addNewFund({ amount, transactionid }));
+        dispatch(addNewFund({ amount, transactionid,addFundUrl }));
         if (data) navigate('/deposithistory');
         alert('Deposit confirmed!');
+        setAmount('')
+        setTransactionid('')
     };
 
     const qrCodeData = [
@@ -79,6 +86,7 @@ const Depositfund = () => {
         const randomIndex = Math.floor(Math.random() * qrCodeData.length);
         setSelectedQRCode(qrCodeData[randomIndex]);
     }, []);
+
 
     const copyToClipboard = () => {
         try {

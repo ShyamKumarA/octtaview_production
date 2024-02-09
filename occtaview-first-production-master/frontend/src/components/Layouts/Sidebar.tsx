@@ -4,7 +4,7 @@ import { useDispatch, useSelector } from 'react-redux';
 import { NavLink, useLocation } from 'react-router-dom';
 import { toggleSidebar } from '../../Slice/themeConfigSlice';
 import AnimateHeight from 'react-animate-height';
-import { IRootState } from '../../Slice';
+import { IRootState, useAppSelector } from '../../Slice';
 import { useState, useEffect } from 'react';
 import IconCaretsDown from '../Icon/IconCaretsDown';
 import IconCaretDown from '../Icon/IconCaretDown';
@@ -41,6 +41,8 @@ const Sidebar = () => {
     const location = useLocation();
     const dispatch = useDispatch();
     const { t } = useTranslation();
+    const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
+console.log(userProfile,"data;;;")
     const toggleMenu = (value: string) => {
         setCurrentMenu((oldValue) => {
             return oldValue === value ? '' : value;
@@ -111,20 +113,23 @@ const Sidebar = () => {
                                         <li>
                                             <NavLink to="/">{t('Member Home')}</NavLink>
                                         </li>
+                                        {userProfile?.userStatus === 'approved' &&(
                                         <li>
                                             <NavLink to="/register">{t('Join Now')}</NavLink>
                                         </li>
+                                        )}
                                     </ul>
                                 </AnimateHeight>
                             </li>
                             {/* -------------------------------------- */}
-
+                            {userProfile?.userStatus === "approved" &&(
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
                                 <span>{t('Portal')}</span>
                             </h2>
-
+  )}
                             {/* -------------------------------- */}
+                            {userProfile?.userStatus==="approved"&&(
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'Portal' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Portal')}>
                                     <div className="flex items-center">
@@ -151,12 +156,15 @@ const Sidebar = () => {
                                     </ul>
                                 </AnimateHeight>
                             </li>
+                            )}
 
                             {/* -------------------------- */}
 
                             {/* ------------------------ */}
                             <li className="nav-item">
                                 <ul>
+                                {userProfile?.userStatus==="approved"&&(
+
                                     <li className="menu nav-item">
                                         <button type="button" className={`${currentMenu === 'Fund Added' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Fund Added')}>
                                             <div className="flex items-center">
@@ -180,8 +188,10 @@ const Sidebar = () => {
                                             </ul>
                                         </AnimateHeight>
                                     </li>
-
+)}
                                     {/*------------------------------------------  */}
+                                    {userProfile?.userStatus==="approved"&&(
+
                                     <li className="menu nav-item">
                                         <button type="button" className={`${currentMenu === 'Network' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Network')}>
                                             <div className="flex items-center">
@@ -205,8 +215,9 @@ const Sidebar = () => {
                                             </ul>
                                         </AnimateHeight>
                                     </li>
-
+)}
                                     {/* ------------------------------------------ */}
+                                    {userProfile?.userStatus==="approved"&&(
                                     <li className="menu nav-item">
                                         <button type="button" className={`${currentMenu === 'Report' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Report')}>
                                             <div className="flex items-center">
@@ -233,39 +244,41 @@ const Sidebar = () => {
                                             </ul>
                                         </AnimateHeight>
                                     </li>
-
+)}
                                     {/* ------------------------------------------------- */}
+{userProfile?.userStatus==="approved"&&(
+    <li className="menu nav-item">
+    <button type="button" className={`${currentMenu === 'Withdraw' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Withdraw')}>
+        <div className="flex items-center">
+            <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
+            <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Withdraw')}</span>
+        </div>
 
-                                    <li className="menu nav-item">
-                                        <button type="button" className={`${currentMenu === 'Withdraw' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Withdraw')}>
-                                            <div className="flex items-center">
-                                                <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Withdraw')}</span>
-                                            </div>
+        <div className={currentMenu !== 'Withdraw' ? 'rtl:rotate-90 -rotate-90' : ''}>
+            <IconCaretDown />
+        </div>
+    </button>
 
-                                            <div className={currentMenu !== 'Withdraw' ? 'rtl:rotate-90 -rotate-90' : ''}>
-                                                <IconCaretDown />
-                                            </div>
-                                        </button>
+    <AnimateHeight duration={300} height={currentMenu === 'Withdraw' ? 'auto' : 0}>
+        <ul className="sub-menu text-gray-500">
+            <li>
+                <NavLink to="/withdrawfund">{t('WithDraw Fund')}</NavLink>
+            </li>
+            <li>
+                <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
+            </li>
+            <li>
+                <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>
+            </li>
+            <li>
+                <NavLink to="/capitalhistory">{t('Capital History')}</NavLink>
+            </li>
+        </ul>
+    </AnimateHeight>
+</li>
 
-                                        <AnimateHeight duration={300} height={currentMenu === 'Withdraw' ? 'auto' : 0}>
-                                            <ul className="sub-menu text-gray-500">
-                                                <li>
-                                                    <NavLink to="/withdrawfund">{t('WithDraw Fund')}</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>
-                                                </li>
-                                                <li>
-                                                    <NavLink to="/capitalhistory">{t('Capital History')}</NavLink>
-                                                </li>
-                                            </ul>
-                                        </AnimateHeight>
-                                    </li>
-
+)}
+                                
                                     {/* ---------------------------------------------------- */}
                                 </ul>
                             </li>

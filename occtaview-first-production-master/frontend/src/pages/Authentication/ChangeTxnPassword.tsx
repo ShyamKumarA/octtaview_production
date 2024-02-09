@@ -96,7 +96,7 @@ const ChangeTxnPassword = () => {
                                     <input
                                         id="Name"
                                         type="password"
-                                        placeholder="......"
+                                        placeholder="Enter password"
                                         className="form-input ps-10 placeholder:text-white-dark"
                                         value={newTransactionPassword}
                                         onChange={(e) => setNewTransactionPassword(e.target.value)}
@@ -113,7 +113,7 @@ const ChangeTxnPassword = () => {
                                     <input
                                         id="Name"
                                         type="password"
-                                        placeholder="......"
+                                        placeholder="Confirm password"
                                         className="form-input ps-10 placeholder:text-white-dark"
                                         value={confirmTransactionPassword}
                                         onChange={(e) => setConfirmTransactionPassword(e.target.value)}
