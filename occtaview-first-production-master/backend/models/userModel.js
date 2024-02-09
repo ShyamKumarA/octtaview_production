@@ -188,6 +188,9 @@ const userSchema=new mongoose.Schema({
       type: Number,
       default:0
     },
+    capitalDay:{
+      type:Date
+    },
     packageName:{
       type:String
     },

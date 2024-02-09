@@ -8,7 +8,7 @@ const __dirname = dirname(__filename);
 
 const storage = multer.diskStorage({
   destination: (req, file, cb) => {
-    let dir = join(__dirname, "/var/www/seclob/octtaview/uploads"); // Use 'join' here
+    let dir = join(__dirname, "../../uploads"); // Use 'join' here
     if (!fs.existsSync(dir)) {
       fs.mkdirSync(dir);
     }

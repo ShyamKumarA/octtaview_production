@@ -16,7 +16,7 @@ maxAmount:4999,
 stage1:10,
 stage2:4,
 stage3:2,
-minMembers:5
+minMembers:3
 },
 {
     name:"Gold",
@@ -25,7 +25,7 @@ maxAmount:14999,
 stage1:12,
 stage2:5,
 stage3:3,
-minMembers:15
+minMembers:5
 },
 {
     name:"Diamond",
@@ -34,7 +34,7 @@ maxAmount:30000,
 stage1:14,
 stage2:5,
 stage3:3,
-minMembers:30
+minMembers:7
 },
 {
     name:"Platinum",
@@ -43,7 +43,7 @@ maxAmount:100000,
 stage1:16,
 stage2:8,
 stage3:4,
-minMembers:60
+minMembers:9
 }
 
 ];

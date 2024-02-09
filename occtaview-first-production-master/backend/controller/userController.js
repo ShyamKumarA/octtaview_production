@@ -750,42 +750,45 @@ export const viewUserPackageDetails=async(req,res,next)=>{
     return baseString + randomDigits.toString();
   };
   
-  export const capitalWithdraw=async(req,res,next)=>{
-      try {
-         const transactionID = generateTnxString();
-         const userId=req.user._id;
-         const {amount,transactionPassword,capitalWithdrawUrl}=req.body;
-         const userData=await User.findById(userId);
-         if(userData){
-  
-          const validPassword = bcryptjs.compareSync(transactionPassword, userData.transactionPassword);
-          if (!validPassword) {
-            return next(errorHandler(401, "Wrong Transaction Password"));
-          } else {
-            userData.withdrawStatus ="pending";
-            userData.withdrawAmount=amount;
-            userData.capitalWithdrawUrl=capitalWithdrawUrl;
-            userData.transactionID=transactionID;
-    
-          const updatedUser = await userData.save();
-  
-          if (updatedUser) {
-            res.status(200).json({updatedUser, msg: "User Capital withdraw request send to admin" });
-          }
-            
-          }
-  
-        }else{
-        next(errorHandler("User not found, Please Login first"));
-  
+  export const capitalWithdraw = async (req, res, next) => {
+    try {
+        const transactionID = generateTnxString();
+        const userId = req.user._id;
+        const { amount, transactionPassword, capitalWithdrawUrl } = req.body;
+        const userData = await User.findById(userId);
+
+        if (userData) {
+            const validPassword = bcryptjs.compareSync(transactionPassword, userData.transactionPassword);
+            if (!validPassword) {
+                return next(errorHandler(401, "Wrong Transaction Password"));
+            } else {
+                const today = new Date();
+                const capitalDay = new Date(userData.capitalDay);
+                const ninetyDaysAgo = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000)); // 90 days in milliseconds
+
+                if (today.getTime() - capitalDay.getTime() > (90 * 24 * 60 * 60 * 1000)) { // Check if more than 90 days have passed
+                    userData.withdrawStatus = "pending";
+                    userData.withdrawAmount = amount;
+                    userData.capitalWithdrawUrl = capitalWithdrawUrl;
+                    userData.transactionID = transactionID;
+
+                    const updatedUser = await userData.save();
+
+                    if (updatedUser) {
+                        res.status(200).json({ updatedUser, msg: "User Capital withdraw request sent to admin" });
+                    }
+                } else {
+                    return next(errorHandler(401, "Withdraw only permitted after 90 days from the last fund addition"));
+                }
+            }
+        } else {
+            next(errorHandler("User not found, Please Login first"));
         }
-          
-          
-      } catch (error) {
-          next(error)
-      }
-  
-  }
+    } catch (error) {
+        next(error);
+    }
+}
+
 
 
   //request for wallet withdrawal

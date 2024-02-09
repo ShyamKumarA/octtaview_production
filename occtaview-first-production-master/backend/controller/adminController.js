@@ -24,7 +24,7 @@ export const dashboardData = async (req, res, next) => {
 
     const todaysUsers = userData.filter(user => {
       const userCreatedAt = new Date(user.createdAt);
-      return userCreatedAt >= today;
+      return userCreatedAt.toDateString() === today.toDateString();
     });
     const todaysUserCount = todaysUsers.length;
 
@@ -155,7 +155,7 @@ export const viewAllUsers = async (req, res, next) => {
   try {
     const user = await User.findById(userId);
     const userData = await User.find({ isSuperAdmin: { $ne: true } }).select(
-      "username email phone userStatus"
+      "username ownSponserId phone address email userStatus packageAmount packageName"
     );
     if (user) {
       return res.status(201).json({
@@ -408,6 +408,14 @@ export const approveFundAdd = async (req, res, next) => {
         userData.packageName=packageChosen;
         userData.packageChosen=packageData._id;
         userData.transactionCode=""
+        let today = new Date();
+
+// Format the date as YYYY-MM-DD
+        let formattedDate = today.toISOString().slice(0, 10);
+
+// Assign the formatted date to capitalDay
+        userData.capitalDay = formattedDate;
+
         userData.addFundHistory.push({
           reportName:"addFund",
           topUpAmount:amountToAdd,
@@ -677,6 +685,7 @@ export const userPackageApproval=async(req,res,next)=>{
 
     const adminId = req.user._id;
     const { id } = req.params;
+
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
@@ -709,6 +718,14 @@ export const userPackageApproval=async(req,res,next)=>{
         userData.packageName=packageChosen;
         userData.packageAmount=newPackageAmount;
         userData.packageChosen=packageData._id; 
+        // Get today's date
+let today = new Date();
+
+// Format the date as YYYY-MM-DD
+let formattedDate = today.toISOString().slice(0, 10);
+
+// Assign the formatted date to capitalDay
+userData.capitalDay = formattedDate;
         userData.addFundHistory.push({
           topUpAmount:amountToAdd,
           status:"approved",
