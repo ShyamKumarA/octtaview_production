@@ -12,45 +12,65 @@ import { findPackage, generateRandomString, generateReferalIncome } from "./user
 //Dashboard data
 
 export const dashboardData = async (req, res, next) => {
-  
   const adminId = req.user._id;
   const adminData = await User.findById(adminId);
   try {
     if (adminData.isSuperAdmin) {
+      const today = new Date();
+      const userData = await User.find({ isSuperAdmin: false }); // Filter out users where isSuperAdmin is false
+      const totalMembers = userData.length;
 
-    const today = new Date();
-    const userData = await User.find();
-    const totalMembers = userData.length;
+      const totalLevelROI = userData.reduce((total, user) => {
+        return total + user.level1ROI + user.level2ROI + user.level3ROI;
+      }, 0);
 
-    const todaysUsers = userData.filter(user => {
-      const userCreatedAt = new Date(user.createdAt);
-      return userCreatedAt.toDateString() === today.toDateString();
-    });
-    const todaysUserCount = todaysUsers.length;
+      const todaysUsers = userData.filter(user => {
+        const userCreatedAt = new Date(user.createdAt);
+        return userCreatedAt.toDateString() === today.toDateString();
+      });
+      const todaysUserCount = todaysUsers.length;
 
-    const DailyROI = userData.reduce((total, user) => {
-      return total + user.dailyROI;
-    }, 0);
-    const totalDailyROI =DailyROI.toFixed(2);
+      const totalWithdrawAmount = userData.reduce((total, user) => {
+        return total + user.totalWithdrawAmount;
+      }, 0);
 
-    // Filter users with 'userStatus' equal to 'pending'
-    const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
+      const totalPackageAmount = userData.reduce((total, user) => {
+        return total + user.packageAmount;
+      }, 0);
+
+      const WalletAmount = userData.reduce((total, user) => {
+        return total + user.walletAmount;
+      }, 0);
+      const totalWalletAmount = WalletAmount.toFixed(2);
 
 
+      const DailyROI = userData.reduce((total, user) => {
+        return total + user.dailyROI;
+      }, 0);
+      const totalDailyROI = DailyROI.toFixed(2);
 
-    res.status(200).json({
-      totalMembers,
-      todaysUserCount,
-      totalDailyROI,
-      pendingUsersCount
-    });
-  } else {
-    return next(errorHandler(401, "Admin Login Failed"));
+      // Filter users with 'userStatus' equal to 'pending'
+      const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
+
+      res.status(200).json({
+        totalMembers,
+        todaysUserCount,
+        totalLevelROI,
+        totalDailyROI,
+        totalPackageAmount,
+        totalWalletAmount,
+        totalWithdrawAmount,
+        pendingUsersCount
+      });
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
+    }
+  } catch (error) {
+    next(error);
   }
-} catch (error) {
-  next(error);
 }
-}
+
+
 
 //add admin Api
 
@@ -515,6 +535,7 @@ export const approveWalletWithdrawal = async (req, res, next) => {
       if (userData) {
         userData.walletWithdrawStatus = "approved";
         userData.walletAmount=newWalletAmount;
+        userData.totalWithdrawAmount=userData.totalWithdrawAmount+withdrawAmount;
         userData.walletWithdrawAmount=0;
         userData.walletWithdrawUrl="";
         userData.transactionID="";

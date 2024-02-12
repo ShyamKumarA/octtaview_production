@@ -32,16 +32,16 @@ app.use((err, req, res, next) => {
 });
 const __dirname = path.resolve();
 
-app.use("/uploads", express.static("/var/www/seclob/octtaview/uploads"));
+app.use("/uploads", express.static("/var/www/seclob/memberocttaview/uploads"));
 
 
  if (NODE_ENV == "production") {
   // app.use(express.static(__dirname + "/frontend/dist"));
-   app.use(express.static("/var/www/seclob/octtaview/frontend/dist"));
+   app.use(express.static("/var/www/seclob/memberocttaview/frontend/dist"));
 
   app.get("*", (req, res) => {
     // res.sendFile(__dirname + "/frontend/dist/index.html");
-    res.sendFile("/var/www/seclob/octtaview/frontend/dist/index.html");
+    res.sendFile("/var/www/seclob/memberocttaview/frontend/dist/index.html");
   });
  } else {
   app.get("/", (req, res) => {

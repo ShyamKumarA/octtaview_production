@@ -14,6 +14,7 @@ const Basic = () => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [initialRecords, setInitialRecords] = useState([]);
     const [recordsData, setRecordsData] = useState([]);
+    console.log(recordsData,)
 
     useEffect(() => {
         dispatch(fetchDirectIncome());

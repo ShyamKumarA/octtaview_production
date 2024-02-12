@@ -2,6 +2,7 @@ import { createSlice, createAsyncThunk, PayloadAction } from '@reduxjs/toolkit';
 import axios from 'axios';
 import { URL } from '../Constant';
 import { log } from 'console';
+import { Show_Toast } from '../pages/Components/Toastify';
 
 // Add new user
 
@@ -771,9 +772,11 @@ const getWithdrawFund = createSlice({
             .addCase(WithdrawFunds.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.data = action.payload;
+
             })
             .addCase(WithdrawFunds.rejected, (state, action: any) => {
                 state.loading = false;
+
                 if (action.error && action.error.message === 'Your specific error message') {
                     // Handle specific error
                     state.error = 'Your specific error message';
@@ -822,7 +825,8 @@ export const capitalWithdrawFunds = createAsyncThunk('addNewFund', async (fund: 
         `${URL}/api/user/withdraw-capital`,
         {
             amount: fund.amount,
-            transactionCode: fund.transactionid,
+            transactionPassword: fund.transpassword,
+            walletUrl:fund.paymentUrl
         },
         config
     );
@@ -844,9 +848,15 @@ const getCapitalWithdrawFund = createSlice({
             .addCase(capitalWithdrawFunds.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.data = action.payload;
+                Show_Toast({ message: 'Withdraw confirmed!', type: true });
+
             })
             .addCase(capitalWithdrawFunds.rejected, (state, action: any) => {
                 state.loading = false;
+                state.error=action.payload.message;
+                
+                Show_Toast({ message: 'Withdraw confirmed!', type: false });
+
                 if (action.error && action.error.message === 'Your specific error message') {
                     // Handle specific error
                     state.error = 'Your specific error message';

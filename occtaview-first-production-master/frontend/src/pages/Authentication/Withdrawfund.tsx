@@ -17,6 +17,8 @@ import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
 import { WithdrawFunds } from '../../Slice/userSlice';
 import { IRootState, useAppDispatch, useAppSelector } from '../../Slice/index';
+import { Show_Toast } from '../Components/Toastify';
+import IconEye from '../../components/Icon/IconEye';
 
 const Withdrawfund = () => {
     const [amount, setAmount] = useState('');
@@ -24,6 +26,7 @@ const Withdrawfund = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [paymentUrl, setPaymentUrl] = useState('');
     const [transpassword, setTransPassword] = useState('');
+    const [showpassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
@@ -36,13 +39,9 @@ const Withdrawfund = () => {
     useEffect(() => {
         const withdrawalAmount = parseFloat(amount);
 
-        // Check if the withdrawal amount is a valid number
         if (!isNaN(withdrawalAmount)) {
-            // Calculate 4% deduction
             const deduction = withdrawalAmount * 0.04;
             const deductedAmount = withdrawalAmount - deduction;
-
-            // Update state values for serviceCharge and totalAmount
             setServiceCharge(deduction);
             setTotalAmount(deductedAmount);
         }
@@ -50,17 +49,29 @@ const Withdrawfund = () => {
 
     const handleSubmit = (e: any) => {
         e.preventDefault();
-        dispatch(WithdrawFunds({ amount,transpassword,paymentUrl }));
-        if (data) navigate('/reportstatus');
-        alert('Withdraw confirmed!');
-        setAmount('')
-        setTotalAmount(0)
-        setServiceCharge(0)
-        setTransPassword('')
-        setPaymentUrl('')
-
-
+        
+        const numericAmount = Number(amount);
+        const minWithdrawalAmount = 15;
+        const minPasswordLength = 6;
+    
+        if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
+            dispatch(WithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
+            if (data) navigate('/reportstatus');
+            Show_Toast({ message: 'Withdraw confirmed..', type: true });
+            setAmount('');
+            setTotalAmount(0);
+            setServiceCharge(0);
+            setTransPassword('');
+            setPaymentUrl('');
+        } else {
+            if (numericAmount < minWithdrawalAmount) {
+                Show_Toast({ message: `Minimum withdrawal amount is $${minWithdrawalAmount}.`, type: false });
+            } else {
+                Show_Toast({ message: `Transaction Password must be at least ${minPasswordLength} characters.`, type: false });
+            }
+        }
     };
+    
 
     return (
         <div>
@@ -86,8 +97,10 @@ const Withdrawfund = () => {
                         <h1 className="text-white">You can only transfer TRON-Based Tokens </h1>
                     </div>
                     <form className="py-5" onSubmit={handleSubmit}>
-                        <label htmlFor="fullname"> Amount</label>
+                        <label htmlFor="fullname">Amount</label>
                         <input type="number" placeholder="Amount" className="form-input" required value={amount} onChange={(e) => setAmount(e.target.value)} />
+                        {amount && Number(amount) < 15 && <p className="text-red-500">Minimum withdrawal amount is $15.</p>}
+
                         <label htmlFor="fullname">Service Charge $4% deducted</label>
                         <input type="number" placeholder="Service Charge" className="form-input" value={serviceCharge.toFixed(2)} readOnly />
                         <label htmlFor="fullname">Total amount</label>
@@ -96,9 +109,22 @@ const Withdrawfund = () => {
                         <input type="text" placeholder="URL" className="form-input" required value={paymentUrl} onChange={(e) => setPaymentUrl(e.target.value)} />
 
                         <label htmlFor="fullname">Transaction Password</label>
-                        <input type="number" className="form-input" required
-                        value={transpassword} onChange={(e) => setTransPassword(e.target.value)} />
-                        <p className="text-red-600">Minimum withdrawal $15.</p>
+                        <div className="relative">
+                            <input
+                                type={showpassword ? 'text' : 'password'}
+                                placeholder="Enter Password"
+                                className="form-input"
+                                required
+                                value={transpassword}
+                                onChange={(e) => setTransPassword(e.target.value)}
+                            />
+                            <span className="absolute end-4 top-1/2 -translate-y-1/2 cursor-pointer" onClick={() => setShowPassword(!showpassword)}>
+                                {showpassword ? <IconLockDots /> : <IconEye />}
+                            </span>
+                        </div>
+
+                        {transpassword && transpassword.length < 6 && <p className="text-red-500">Transaction Password must be at least six digits.</p>}
+
                         <div className="flex justify-center items-center">
                             <button type="submit" className="btn btn-primary mt-6">
                                 Withdraw

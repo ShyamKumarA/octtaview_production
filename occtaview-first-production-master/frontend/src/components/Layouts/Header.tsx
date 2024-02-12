@@ -44,6 +44,9 @@ const Header = () => {
     const { userInfo } = useAppSelector((state: any) => state.userReducer);
     const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
     console.log(userProfile,"userProfile...userProfile")
+    const [copied, setCopied] = useState(false);
+    const userProfileId = userProfile && userProfile.id;
+    console.log(userProfileId,"userProfileId.")
 
 console.log(userInfo,"user")
     useEffect(() => {
@@ -81,6 +84,21 @@ console.log(userInfo,"user")
         dispatch(logout());
     };
 
+    const handleCopyClick = () => {
+        const textArea = document.createElement('textarea');
+        textArea.value = `https://admin.octtaview.com/auth/registerformik?id=${userProfileId}`;
+        document.body.appendChild(textArea);
+
+        textArea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textArea);
+
+        setCopied(true);
+
+        setTimeout(() => {
+            setCopied(false);
+        }, 2000);
+    };
     return (
         <header className={`z-40 ${themeConfig.semidark && themeConfig.menu === 'horizontal' ? 'dark' : ''}`}>
             <div className="shadow-sm">
@@ -134,10 +152,22 @@ console.log(userInfo,"user")
                         {/* --------------------------------------------------------- */}
 
                         <div>
-                            <Link to={`/register/${userInfo && userInfo.id}`} className="dark:hover:text-white">
-                                <IconShare className="w-4.5 h-4.5 ltr:mr-2 rtl:ml-2 shrink-0" />
-                            </Link>
-                        </div>
+                     
+                        <button className="btn btn-primary" onClick={handleCopyClick}>
+    {copied ? 'Copied' : 'Copy Refferal ID'}
+
+</button>
+{/* <div className="flex items-center">
+        <input 
+            type="text" 
+            value={`https://admin.octtaview.com/auth/registerformik?id=${userInfo && userInfo.id}`} 
+            readOnly 
+            className="border p-1 ml-2" 
+        />
+    </div> */}
+
+</div>
+
 
                         {/* ------------------------------------------------------------------------- */}
 
@@ -361,7 +391,7 @@ console.log(userInfo,"user")
         <NavLink to="/withdrawfund">{t('Withdraw Fund')}</NavLink>
       </li>
       <li>
-        <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
+        <NavLink to="/reportstatus">{t('Withdraw Status')}</NavLink>
       </li>
       <li>
         <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>

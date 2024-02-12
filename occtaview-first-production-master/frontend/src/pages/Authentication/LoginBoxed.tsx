@@ -47,6 +47,8 @@ import { setPageTitle, toggleRTL } from '../../Slice/themeConfigSlice';
 import IconMail from '../../components/Icon/IconMail';
 import IconLockDots from '../../components/Icon/IconLockDots';
 import { fetchUser } from '../../Slice/authSlice';
+import IconEye from '../../components/Icon/IconEye';
+import { Show_Toast } from '../Components/Toastify';
 // import { useDispatch, useSelector } from 'react-redux';
 // import Dropdown from '../../components/Dropdown';
 // import i18next from 'i18next';
@@ -66,6 +68,7 @@ const LoginBoxed: React.FC<ComponentProps> = () => {
 
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
+    const [showpassword,setShowPassword]=useState(false)
 
     const { userInfo } = useAppSelector((state: any) => state.userReducer);
 
@@ -78,6 +81,8 @@ const LoginBoxed: React.FC<ComponentProps> = () => {
         e.preventDefault();
         dispatch(fetchUser({ email, password }));
         // if (userInfo) navigate('/');
+        // Show_Toast({ message: 'User logged in successfully!', type: false });        
+        
     };
 
     // const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
@@ -135,17 +140,20 @@ const LoginBoxed: React.FC<ComponentProps> = () => {
                                     <div className="relative text-white-dark">
                                         <input
                                             id="Password"
-                                            type="password"
-                                            placeholder="Enter Password"
+                                            type={showpassword ? 'text' : 'password'}                                            placeholder="Enter Password"
                                             className="form-input ps-10 placeholder:text-white-dark"
                                             value={password}
                                             onChange={(e) => setPassword(e.target.value)}
                                         />
-                                        <span className="absolute start-4 top-1/2 -translate-y-1/2">
-                                            <IconLockDots fill={true} />
-                                        </span>
+                                              <span className="absolute start-4 top-1/2 -translate-y-1/2"
+                                                        onClick={() => setShowPassword(!showpassword)}
+                                                        >
+                    {showpassword ? <IconLockDots/>: <IconEye/>}
+                                    </span>
+                                      
                                     </div>
                                 </div>
+                        
 
                                 <button type="submit" onClick={submitForm} className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                                     login

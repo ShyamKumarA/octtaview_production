@@ -461,7 +461,7 @@ const Finance = () => {
 
     const handleCopyClick = () => {
         const textArea = document.createElement('textarea');
-        textArea.value = `https://octtaview.com/register/${userProfileId}`;
+        textArea.value = `https://admin.octtaview.com/auth/registerformik?id=${userProfileId}`;
         document.body.appendChild(textArea);
 
         textArea.select();
@@ -484,12 +484,12 @@ const Finance = () => {
     return (
         <div>
             <div className="flex flex-col ">
-                <div className="flex i">
+                {/* <div className="flex i">
                     <button className="bg-primary text-white hover:underline rounded-md" onClick={handleCopyClick}>
                         {copied ? 'Copied!' : 'Copy'}
                     </button>
-                    <span className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">{`https://octtaview.com/register/${userProfileId}`}</span>
-                </div>
+                    <span className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">{`https://admin.octtaview.com/auth/registerformik?id=${userProfileId}`}</span>
+                </div> */}
 
                 <div className="mt-5">
                     {userProfile?.userStatus === 'pending' && (
@@ -713,7 +713,7 @@ const Finance = () => {
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            {userProfile && userProfile.capitalAmount}
+                            $ {userProfile && userProfile.capitalAmount}
                         </div>
                     </div>
 
@@ -745,7 +745,7 @@ const Finance = () => {
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            {userProfile && userProfile.totalIncome}
+                            $ {userProfile && userProfile.totalIncome}
                         </div>
                     </div>
 
@@ -777,7 +777,7 @@ const Finance = () => {
                         </div>
                         <div className="flex items-center font-semibold mt-5">
                             <IconEye className="ltr:mr-2 rtl:ml-2 shrink-0" />
-                            {userProfile && userProfile.directIncome}
+                            $ {userProfile && userProfile.directIncome}
                         </div>
                     </div>
                 </div>
@@ -793,19 +793,19 @@ const Finance = () => {
                         </div>
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:mb-5">
                             {/*  Bitcoin  */}
+                            
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconBitcoin /> */}</div>
+                                    {/* <div className="shrink-0 w-10 h-10 bg-warning rounded-full grid place-content-center p-2">
+                                        <IconEthereum />
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">SponserID</h6>
                                         <p className="text-white-dark text-xs">{userProfile && userProfile.ownSponserId}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={bitcoin.series} options={bitcoin.options} type="line" height={45} /> */}</div>
-                                <div className="flex justify-between items-center font-bold text-base">
-                                    {}
-                                    <span className="text-success font-normal text-sm">{}</span>
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
+                                <div className="flex justify-between items-center font-bold text-base">{/* $21,000 <span className="text-danger font-normal text-sm">-1.25%</span> */}</div>
                             </div>
                             {/*  Ethereum*/}
                             <div className="panel">
@@ -815,26 +815,29 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">DailyBonus</h6>
-                                        <p className="text-white-dark text-xs"> {userProfile && userProfile.dailyBonus}</p>
+                                        <p className="text-white-dark text-xs">$ {userProfile && userProfile.dailyBonus}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">{/* $21,000 <span className="text-danger font-normal text-sm">-1.25%</span> */}</div>
                             </div>
-                            {/* Litecoin */}
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconLitecoin /> */}</div>
+                                    {/* <div className="shrink-0 w-10 h-10 bg-warning rounded-full grid place-content-center p-2">
+                                        <IconEthereum />
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Level ROI</h6>
                                         <p className="text-white-dark text-xs">{userProfile && userProfile.levelRoi}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={litecoin.series} options={litecoin.options} type="line" height={45} /> */}</div>
-                                <div className="flex justify-between items-center font-bold text-base">
-                                    {} <span className="text-success font-normal text-sm">{}</span>
-                                </div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
+                                <div className="flex justify-between items-center font-bold text-base">{/* $21,000 <span className="text-danger font-normal text-sm">-1.25%</span> */}</div>
                             </div>
+                            
+                            
+                            {/* Litecoin */}
+                            
                         </div>
                     </div>
                     {/*  Prices  */}
@@ -863,17 +866,20 @@ const Finance = () => {
                                 </div> */}
                             </div>
                             {/*  Tether  */}
+                         
                             <div className="panel">
                                 <div className="flex items-center font-semibold mb-5">
-                                    <div className="shrink-0 w-10 h-10 rounded-full grid place-content-center">{/* <IconTether /> */}</div>
+                                    {/* <div className="shrink-0 w-10 h-10 bg-warning rounded-full p-2 grid place-content-center">
+                                        <IconSolana />
+                                    </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Email</h6>
-                                        <p className="text-white-dark text-xs"> {userProfile && userProfile.email}</p>
+                                        <p className="text-white-dark text-xs">{userProfile && userProfile.email}</p>
                                     </div>
                                 </div>
-                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={tether.series} options={tether.options} type="line" height={45} /> */}</div>
+                                <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={solana.series} options={solana.options} type="line" height={45} /> */}</div>
                                 <div className="flex justify-between items-center font-bold text-base">
-                                    {} <span className="text-success font-normal text-sm">{}</span>
+                                    {} <span className="text-danger font-normal text-sm">{}</span>
                                 </div>
                             </div>
                             {/*  Solana */}

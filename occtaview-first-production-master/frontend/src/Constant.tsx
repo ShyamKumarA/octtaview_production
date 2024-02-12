@@ -1,1 +1,1 @@
-export const URL = 'https://octtaview.com';
+export const URL = 'https://member.octtaview.com';

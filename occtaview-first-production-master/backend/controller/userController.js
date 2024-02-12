@@ -762,11 +762,13 @@ export const viewUserPackageDetails=async(req,res,next)=>{
             if (!validPassword) {
                 return next(errorHandler(401, "Wrong Transaction Password"));
             } else {
+                const capitalAmount=userData.packageAmount;
                 const today = new Date();
                 const capitalDay = new Date(userData.capitalDay);
                 const ninetyDaysAgo = new Date(today.getTime() - (90 * 24 * 60 * 60 * 1000)); // 90 days in milliseconds
 
                 if (today.getTime() - capitalDay.getTime() > (90 * 24 * 60 * 60 * 1000)) { // Check if more than 90 days have passed
+                  if(capitalAmount>=amount){
                     userData.withdrawStatus = "pending";
                     userData.withdrawAmount = amount;
                     userData.capitalWithdrawUrl = capitalWithdrawUrl;
@@ -777,6 +779,10 @@ export const viewUserPackageDetails=async(req,res,next)=>{
                     if (updatedUser) {
                         res.status(200).json({ updatedUser, msg: "User Capital withdraw request sent to admin" });
                     }
+                  }else{
+                    return next(errorHandler(401, "Amount should less than Capital amount"));
+                  }
+                  
                 } else {
                     return next(errorHandler(401, "Withdraw only permitted after 90 days from the last fund addition"));
                 }
@@ -799,26 +805,30 @@ export const viewUserPackageDetails=async(req,res,next)=>{
          const userId=req.user._id;
          const {amount,transactionPassword,walletWithdrawUrl}=req.body;
          const userData=await User.findById(userId);
+         const walletAmount=userData.walletAmount;
          if(userData){
           const validPassword = bcryptjs.compareSync(transactionPassword, userData.transactionPassword);
           if (!validPassword) {
             return next(errorHandler(401, "Wrong Transaction Password"));
           } else {
-            userData.walletWithdrawStatus ="pending";
-            userData.walletWithdrawAmount=amount;
-            userData.walletWithdrawUrl=walletWithdrawUrl;
-            userData.transactionID=transactionID;
+            if(walletAmount>=amount){
+              userData.walletWithdrawStatus ="pending";
+              userData.walletWithdrawAmount=amount;
+              userData.walletWithdrawUrl=walletWithdrawUrl;
+              userData.transactionID=transactionID;
+      
+            const updatedUser = await userData.save();
     
-          const updatedUser = await userData.save();
-  
-          if (updatedUser) {
-            res.status(200).json({updatedUser, msg: "User wallet withdraw request send to admin" });
+            if (updatedUser) {
+              res.status(200).json({updatedUser, msg: "User wallet withdraw request send to admin" });
+            }
+            }else{
+           return next(errorHandler("Amount should less than Wallet Amount"));
+
+            }
           }
-            
-          }
-  
         }else{
-        next(errorHandler("User not found, Please Login first"));
+       return next(errorHandler("User not found, Please Login first"));
   
         }
           

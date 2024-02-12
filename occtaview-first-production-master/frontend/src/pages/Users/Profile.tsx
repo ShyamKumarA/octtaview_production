@@ -56,24 +56,24 @@ const Profile = () => {
                     <div className="panel">
                         <div className="flex items-center justify-between mb-5">
                             <h5 className="font-semibold text-lg dark:text-white-light">Profile</h5>
-                            <Link to="/users/user-account-settings" className="ltr:ml-auto rtl:mr-auto btn btn-primary p-2 rounded-full">
+                            {/* <Link to="/users/user-account-settings" className="ltr:ml-auto rtl:mr-auto btn btn-primary p-2 rounded-full">
                                 <IconPencilPaper />
-                            </Link>
+                            </Link> */}
                         </div>
                         <div className="mb-5">
                             <div className="flex flex-col justify-center items-center">
-                                <img src="/assets/images/profile-34.jpeg" alt="img" className="w-24 h-24 rounded-full object-cover  mb-5" />
+                                <img src="/assets/images/profile-icon.jpeg" alt="img" className="w-24 h-24 rounded-full object-cover  mb-5" />
                                 <p className="font-semibold text-primary text-xl">{userProfile && userProfile.name}</p>
                             </div>
                             <ul className="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
                                 <li className="flex items-center gap-2">
                                     <IconCoffee className="shrink-0" />
-                                    email:
+                                    Email:
                                     {userProfile && userProfile.email}
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <IconCalendar className="shrink-0" />
-                                    phone:
+                                    Phone:
                                     {userProfile && userProfile.phone}
                                 </li>
                                 <li className="flex items-center gap-2">
@@ -84,15 +84,15 @@ const Profile = () => {
                                 <li>
                                     <button className="flex items-center gap-2">
                                         <IconMail className="w-5 h-5 shrink-0" />
-                                        sponserid:
+                                        Sponserid:
                                         <span className="text-primary truncate"> {userProfile && userProfile.ownSponserId}</span>
                                     </button>
                                 </li>
                                 <li className="flex items-center gap-2">
                                     <IconPhone />
                                     <span className="whitespace-nowrap" dir="ltr">
-                                        daily bonus
-                                        {userProfile && userProfile.dailyBonus}
+                                        Daily bonus:
+                                        $ {userProfile && userProfile.dailyBonus}
                                     </span>
                                 </li>
                             </ul>
@@ -124,10 +124,10 @@ const Profile = () => {
                                 <table className="whitespace-nowrap">
                                     <thead>
                                         <tr>
-                                            <th>direct income</th>
+                                            <th>Direct income</th>
                                             <th>PackageName</th>
-                                            <th>levelRoi</th>
-                                            <th className="text-center">capital amount</th>
+                                            <th>LevelRoi</th>
+                                            <th className="text-center">Capital amount</th>
                                             <th className="text-center">Total Income</th>
                                         </tr>
                                     </thead>
@@ -144,11 +144,11 @@ const Profile = () => {
                                             {/* <td>{userProfile && userProfile.directIncome}</td> */}
                                         </tr>
                                         <tr>
-                                            <td>{userProfile && userProfile.directIncome}</td>
+                                            <td>$ {userProfile && userProfile.directIncome}</td>
                                             {<td>{userProfile && userProfile.packageName}</td>}
                                             <td className="text-success"> {userProfile && userProfile.levelRoi}</td>
-                                            <td className="text-center">{userProfile && userProfile.capitalAmount}</td>
-                                            <td className="text-center">{userProfile && userProfile.totalIncome}</td>
+                                            <td className="text-center">$ {userProfile && userProfile.capitalAmount}</td>
+                                            <td className="text-center">$ {userProfile && userProfile.totalIncome}</td>
                                         </tr>
                                         {/* <tr>
                                             <td>Flutter App</td>

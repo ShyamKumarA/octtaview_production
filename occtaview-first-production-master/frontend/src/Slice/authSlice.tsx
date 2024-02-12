@@ -1,6 +1,7 @@
 import { createAsyncThunk, createSlice, PayloadAction } from '@reduxjs/toolkit';
 import axios, { AxiosResponse } from 'axios';
 import { URL } from '../Constant';
+import { Show_Toast } from '../pages/Components/Toastify';
 
 // Define the type for user data
 interface UserData {
@@ -32,10 +33,11 @@ export const fetchUser = createAsyncThunk<UserData, UserData>('fetchUser', async
         config
     );
 
-    console.log(response);
+    console.log(response,"response=");
 
     return response.data; // Corrected to return only the data
 });
+
 
 export const logout = createAsyncThunk('logout', async () => {
     localStorage.removeItem('userInfo');
@@ -63,14 +65,20 @@ const authSlice = createSlice({
             state.userInfo = action.payload;
             state.error = false;
             localStorage.setItem('userInfo', JSON.stringify(action.payload));
+            Show_Toast({ message: 'User logged in successfully!', type: true });        
+
         });
         builder.addCase(fetchUser.rejected, (state, action) => {
             console.log('Error', action.payload);
             state.pending = false;
             state.error = true;
+        Show_Toast({ message: 'Invalid Login Credentials', type: false });        
+
         });
         builder.addCase(logout.fulfilled, (state) => {
             state.userInfo = null;
+            Show_Toast({ message: 'Logout Success', type: true });        
+
         });
     },
 });

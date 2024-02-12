@@ -39,7 +39,7 @@ const ChangeTxnPassword = () => {
 
         dispatch(fetchTransactionChangePassword({ newTransactionPassword, confirmTransactionPassword }) as any);
 
-        alert('Change transaction password request sent!');
+        // alert('Change transaction password request sent!');
     };
 
     const navigate = useNavigate();

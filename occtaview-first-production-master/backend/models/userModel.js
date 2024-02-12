@@ -181,6 +181,10 @@ const userSchema=new mongoose.Schema({
       type: Number,
       default:0
     },
+    totalWithdrawAmount:{
+      type: Number,
+      default:0
+    },
     walletWithdrawStatus:{
       type: String
     },
