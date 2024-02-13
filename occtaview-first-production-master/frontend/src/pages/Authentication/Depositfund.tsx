@@ -154,6 +154,8 @@ const Depositfund = () => {
                     </div>
                     {/* --------------------------------------- */}
                     <div className="flex flex-col items-center space-y-4 mt-4 lg:mt-0">
+                    <p className="text-white">Minimum $50 is required</p>
+
                         <div>
                             <p className="text-white">Add Amount</p>
                             <input

@@ -848,15 +848,15 @@ const getCapitalWithdrawFund = createSlice({
             .addCase(capitalWithdrawFunds.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.data = action.payload;
-                Show_Toast({ message: 'Withdraw confirmed!', type: true });
+                Show_Toast({ message: 'Capital Withdraw confirmed!', type: true });
 
             })
             .addCase(capitalWithdrawFunds.rejected, (state, action: any) => {
+                console.log('Rejection case executed');
                 state.loading = false;
-                state.error=action.payload.message;
-                
-                Show_Toast({ message: 'Withdraw confirmed!', type: false });
-
+            
+                Show_Toast({ message: 'Check the password or check the widhraw validity', type: false });
+            
                 if (action.error && action.error.message === 'Your specific error message') {
                     // Handle specific error
                     state.error = 'Your specific error message';
@@ -864,6 +864,7 @@ const getCapitalWithdrawFund = createSlice({
                     state.error = 'An error occurred while processing your request.';
                 }
             });
+            
     },
 });
 

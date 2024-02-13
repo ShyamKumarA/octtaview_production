@@ -101,7 +101,7 @@ const CapitalWithdraw = () => {
             <div className="mt-5">
                 <div className="flex justify-center items-center mt-10">
                     <form className="" 
-onSubmit={(e) => handleSubmit(e)}                    >
+           onSubmit={(e) => handleSubmit(e)}                    >
                         <div>
                         <label htmlFor="fullname">Amount</label>
                         <input type="number" placeholder="Amount" className="form-input" required value={amount} onChange={(e) => setAmount(e.target.value)} />
@@ -124,7 +124,7 @@ onSubmit={(e) => handleSubmit(e)}                    >
                         </div>
                         {transpassword && transpassword.length < 6 && <p className="text-red-500">Transaction Password must be at least six digits.</p>}
 
-                            <p className="text-red-600 mt-5">10% will be deducted as transaction fees on every withdrawal.</p>
+                            <p className="text-red-600 mt-5">Withdrawal is possible only after 90 days....</p>
 
                             <button type="submit" className="btn btn-primary mt-6">
                                 Withdraw

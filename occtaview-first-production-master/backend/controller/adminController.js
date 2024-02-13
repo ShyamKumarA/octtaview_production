@@ -20,9 +20,11 @@ export const dashboardData = async (req, res, next) => {
       const userData = await User.find({ isSuperAdmin: false }); // Filter out users where isSuperAdmin is false
       const totalMembers = userData.length;
 
-      const totalLevelROI = userData.reduce((total, user) => {
+      const LevelROI = userData.reduce((total, user) => {
         return total + user.level1ROI + user.level2ROI + user.level3ROI;
       }, 0);
+      const totalLevelROI = LevelROI.toFixed(2);
+
 
       const todaysUsers = userData.filter(user => {
         const userCreatedAt = new Date(user.createdAt);
@@ -175,7 +177,7 @@ export const viewAllUsers = async (req, res, next) => {
   try {
     const user = await User.findById(userId);
     const userData = await User.find({ isSuperAdmin: { $ne: true } }).select(
-      "username ownSponserId phone address email userStatus packageAmount packageName"
+      "username ownSponserId phone address email userStatus packageAmount sponserName packageName"
     );
     if (user) {
       return res.status(201).json({
@@ -192,7 +194,6 @@ export const viewAllUsers = async (req, res, next) => {
 //View Profile by params userId
 
 export const viewUserDetails = async (req, res, next) => {
-console.log("hlo");
   const {id}=req.params;
   console.log(id);
   const adminId = req.user._id;
@@ -227,6 +228,7 @@ console.log("hlo");
         dailyBonus:userData.dailyROI,
         levelRoi:totalLevelRoi,
         transactionCode:userData.transactionCode,
+        aadhaar:userData.aadhaar,
         // packageChosen: user.packageChosen,
         capitalAmount:userData.packageAmount,
         myDownline:countFirstChild,
@@ -276,7 +278,7 @@ export const getReadyToApproveUsers = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         userStatus: { $eq: "readyToApprove" },
-      }).select("username email phone userStatus aadhaar createdAt");
+      }).select("username email phone userStatus aadhaar sponserName createdAt");
       res.status(200).json({
         userData,
         sts: "01",

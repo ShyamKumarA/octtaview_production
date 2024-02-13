@@ -152,6 +152,14 @@ const LoginBoxed: React.FC<ComponentProps> = () => {
                                     </span>
                                       
                                     </div>
+                                    <div className="mt-6 text-center">
+                  <p>
+                    Don’t have any account?{' '}
+                    <Link to="https://admin.octtaview.com/auth/registerformik?id=65c5b7c1697cedb3b6290b51" className="text-primary">
+                   Register
+                    </Link>
+                  </p>
+                </div>
                                 </div>
                         
 

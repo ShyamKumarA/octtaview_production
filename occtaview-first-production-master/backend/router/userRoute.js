@@ -16,7 +16,6 @@ router.post("/change-tnx-password",protectUser,changeTxnPassword)
 router.post("/add-package-by-user",protectUser,addPackageByUser)
 router.post("/withdraw-capital",protectUser,capitalWithdraw)
 router.post("/withdraw-wallet",protectUser,walletWithdraw)
-
 router.get("/view-user-profile",protectUser,viewUserProfile)
 router.get("/view-all-package",protectUser,viewAllPackage)
 router.get("/view-childs",protectUser,viewChilds)

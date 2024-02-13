@@ -90,6 +90,10 @@ const userSchema=new mongoose.Schema({
     type:mongoose.Schema.Types.ObjectId,
     ref:"User"
   },
+  sponserName:{
+    type: String,
+    required: true,
+  },
     username:{
         type:String,
         required:true,

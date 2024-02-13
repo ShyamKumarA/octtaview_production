@@ -203,7 +203,8 @@ export const addFundHistory = async (req, res, next) => {
       "name":userData.username,
       "topUpAmount":userData.topUpAmount,
       "transactionCode":userData.transactionCode,
-      "status":userData.addPackageStatus
+      "status":"Pending",
+      "createdAt":userData.createdAt
     }
     arrayOfUsers.push(newUserData);
     if (userData) {

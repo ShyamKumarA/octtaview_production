@@ -94,7 +94,7 @@ const Withdrawfund = () => {
 
                 <div className="max-w-[19rem] ml-0 sm:ml-10 w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-5">
                     <div className="flex flex-col">
-                        <h1 className="text-white">You can only transfer TRON-Based Tokens </h1>
+                        <h1 className="text-white">Minimum withdrawal amount is $15. </h1>
                     </div>
                     <form className="py-5" onSubmit={handleSubmit}>
                         <label htmlFor="fullname">Amount</label>

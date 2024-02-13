@@ -183,8 +183,8 @@ const LoginCover = () => {
                             </div>
                             <div className="text-center dark:text-white">
                                 Don't have an account ?&nbsp;
-                                <Link to="/auth/cover-register" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
-                                    SIGN UP
+                                <Link to="https://admin.octtaview.com/auth/registerformik?id=65c5b7c1697cedb3b6290b51" className="uppercase text-primary underline transition hover:text-black dark:hover:text-white">
+                                 Register
                                 </Link>
                             </div>
                         </div>

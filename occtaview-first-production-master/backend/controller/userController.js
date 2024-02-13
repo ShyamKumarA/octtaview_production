@@ -154,6 +154,8 @@ export const addUser = async (req, res, next) => {
     const sponser = req.user._id;
     const userStatus = "pending";
 
+    const sponserData=await User.findById(sponser);
+    const sponserName=sponserData.username;
     const ownSponserId = generateRandomString();
 
     const { username, email, phone, address,transactionPassword, password } = req.body;
@@ -173,6 +175,7 @@ export const addUser = async (req, res, next) => {
 
     const user = await User.create({
       sponser,
+      sponserName,
       username,
       email,
       phone,
@@ -194,9 +197,10 @@ export const addUser = async (req, res, next) => {
           );
         
 
-        res.json({
+          res.status(200).json({
           _id: user._id,
           sponser: user.sponser,
+          sponserName:user.sponserName,
           name: user.username,
           email: user.email,
           phone: user.phone,
@@ -215,6 +219,8 @@ export const addUser = async (req, res, next) => {
     console.log(error);
   }
 };
+
+
 // add user by Referal link
 export const addReferalUser = async (req, res, next) => {
   try {
@@ -225,6 +231,9 @@ export const addReferalUser = async (req, res, next) => {
     const { userId,username, email, phone, address,transactionPassword, password } = req.body;
 
     const sponser = userId;
+
+    const sponserData=await User.findById(sponser);
+    const sponserName=sponserData.username;
 
     // const packageChosen = findPackage(packageAmount);
     // const packageData = await Package.findOne({ name: packageChosen });
@@ -242,6 +251,7 @@ export const addReferalUser = async (req, res, next) => {
 
     const user = await User.create({
       sponser,
+      sponserName,
       username,
       email,
       phone,
@@ -263,9 +273,10 @@ export const addReferalUser = async (req, res, next) => {
           );
         
 
-        res.json({
+          res.status(200).json({
           _id: user._id,
           sponser: user.sponser,
+          sponserName:user.sponserName,
           name: user.username,
           email: user.email,
           phone: user.phone,
@@ -398,7 +409,7 @@ export const viewUserProfile = async (req, res, next) => {
         address: userData.address,
         dailyBonus:dailyBonus,
         levelRoi:totalLevelRoi,
-        // packageAmount: user.packageAmount,
+        aadhaar:userData.aadhaar,
         // packageChosen: user.packageChosen,
         capitalAmount:userData.packageAmount,
         myDownline:countFirstChild,
@@ -507,15 +518,15 @@ export const viewChilds = async (req, res, next) => {
       .populate([
         {
           path: 'childLevel1',
-          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+          select: 'username ownSponserId phone address email sponserName userStatus packageAmount packageName'
         },
         {
           path: 'childLevel2',
-          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+          select: 'username ownSponserId phone address email sponserName userStatus packageAmount packageName'
         },
         {
           path: 'childLevel3',
-          select: 'username ownSponserId phone address email userStatus packageAmount packageName'
+          select: 'username ownSponserId phone address email sponserName userStatus packageAmount packageName'
         }
       ]);
 
@@ -788,7 +799,7 @@ export const viewUserPackageDetails=async(req,res,next)=>{
                 }
             }
         } else {
-            next(errorHandler("User not found, Please Login first"));
+            next(errorHandler(401,"User not found, Please Login first"));
         }
     } catch (error) {
         next(error);
@@ -823,12 +834,12 @@ export const viewUserPackageDetails=async(req,res,next)=>{
               res.status(200).json({updatedUser, msg: "User wallet withdraw request send to admin" });
             }
             }else{
-           return next(errorHandler("Amount should less than Wallet Amount"));
+           return next(errorHandler(401,"Amount should less than Wallet Amount"));
 
             }
           }
         }else{
-       return next(errorHandler("User not found, Please Login first"));
+       return next(errorHandler(401,"User not found, Please Login first"));
   
         }
           

@@ -391,7 +391,7 @@ console.log(userInfo,"user")
         <NavLink to="/withdrawfund">{t('Withdraw Fund')}</NavLink>
       </li>
       <li>
-        <NavLink to="/reportstatus">{t('Withdraw Status')}</NavLink>
+        <NavLink to="/reportstatus">{t('Withdraw History')}</NavLink>
       </li>
       <li>
         <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>

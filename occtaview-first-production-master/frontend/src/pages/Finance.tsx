@@ -531,7 +531,7 @@ const Finance = () => {
                                                                 </label>
                                                                 {selectedFile && (
                                                                     <div className="flex items-center mt-2">
-                                                                        <p className="text-sm text-white mt-2 mr-2">File selected: {selectedFile?.name}</p>
+                                                                        <p className="text-sm text-danger mt-2 mr-2">File selected: {selectedFile?.name}</p>
                                                                         <button type="button" onClick={() => setSelectedFile(null)} className="text-danger hover:danger-gray-300">
                                                                             &#10005;
                                                                         </button>
@@ -611,7 +611,7 @@ const Finance = () => {
                                                                 </label>
                                                                 {selectedFile && (
                                                                     <div className="flex items-center mt-2">
-                                                                        <p className="text-sm text-white mt-2 mr-2">File selected: {selectedFile?.name}</p>
+                                                                        <p className="text-sm text-danger mt-2 mr-2">File selected: {selectedFile?.name}</p>
                                                                         <button type="button" onClick={() => setSelectedFile(null)} className="text-white hover:text-gray-300">
                                                                             &#10005;
                                                                         </button>
@@ -651,7 +651,7 @@ const Finance = () => {
                     )}
                 </div>
             </div>
-
+         
             <div className="pt-5">
                 <div className="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-6 mb-6 text-white">
                     <div className="panel bg-gradient-to-r from-cyan-500 to-cyan-400">
@@ -785,12 +785,7 @@ const Finance = () => {
                 <div className="grid grid-cols-1 xl:grid-cols-2 gap-6">
                     {/*  Favorites  */}
                     <div>
-                        <div className="flex items-center mb-5 font-bold">
-                            <span className="text-lg">Profile</span>
-                            <button type="button" className="ltr:ml-auto rtl:mr-auto text-primary hover:text-black dark:hover:text-white-dark">
-                                See All
-                            </button>
-                        </div>
+                      
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 md:mb-5">
                             {/*  Bitcoin  */}
                             
@@ -842,10 +837,7 @@ const Finance = () => {
                     </div>
                     {/*  Prices  */}
                     <div>
-                        <div className="flex items-center mb-5 font-bold">
-                            <span className="text-lg">Profile</span>
-                            <button type="button" className="ltr:ml-auto rtl:mr-auto text-primary hover:text-black dark:hover:text-white-dark"></button>
-                        </div>
+                        
                         <div className="grid grid-cols-1 sm:grid-cols-3 gap-6 mb-6">
                             {/*  Binance */}
                             <div className="panel">
