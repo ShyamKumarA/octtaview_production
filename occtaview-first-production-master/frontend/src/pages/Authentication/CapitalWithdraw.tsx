@@ -26,14 +26,13 @@ const CapitalWithdraw = () => {
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
 
-    const { userInfo } = useAppSelector((state: any) => state.getCapitalWithdrawFundreducer);
+    const { data: userInfo, error: capitalWithdrawError } = useAppSelector((state: any) => state.getCapitalWithdrawFundReducer);
+    const { loading, data, error } = useAppSelector((state: any) => state.getCheckNewVerifySlicereducer);
     // const amount = searchParams.get('amount');
     const [amount,setAmount]=useState('')
     const [paymentUrl, setPaymentUrl] = useState('');
     const [transpassword, setTransPassword] = useState('');
-    console.log(amount,"amount")
-    console.log(paymentUrl,"amount")
-    console.log(transpassword,"amount")
+   
     const [showpassword, setShowPassword] = useState(false);
 
     useEffect(() => {
@@ -63,33 +62,40 @@ const CapitalWithdraw = () => {
     //         navigate('/capitalhistory');
     //     }
     // };
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        
+    
         const numericAmount = Number(amount);
         const minWithdrawalAmount = 15;
         const minPasswordLength = 6;
     
-        if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
-            dispatch(capitalWithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
-            if (userInfo) 
-            navigate('/capitalhistory');
-            // Show_Toast({ message: 'Withdraw confirmed!', type: true });
-            setAmount('');
-        
-            setTransPassword('');
-            setPaymentUrl('');
-        } else {
-            if (numericAmount < minWithdrawalAmount) {
-                Show_Toast({ message: `Minimum withdrawal amount is $${minWithdrawalAmount}.`, type: false });
-            } else {
-                Show_Toast({ message: `Transaction Password must be at least ${minPasswordLength} characters.`, type: false });
+        try {
+            if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
+                await dispatch(capitalWithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
+    
+                if (capitalWithdrawError) {
+                    Show_Toast({ message: capitalWithdrawError, type: false });
+                } else {
+                    navigate('/capitalhistory');
+                    Show_Toast({ message: 'Withdraw confirmed!', type: true });
+                    setAmount('');
+                    setTransPassword('');
+                    setPaymentUrl('');
+                    return; // Exit the function to prevent showing the toast for invalid input
+                }
             }
+    
+        } catch (error) {
+            console.error("Error from the backend:", error);
+    
+            // Show a generic error toast
+            Show_Toast({ message: 'An error occurred while processing your request.', type: false });
         }
     };
     
+    
 
-
+    
     return (
         <div>
             <Headers />

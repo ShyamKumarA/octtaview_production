@@ -121,11 +121,11 @@ export const addNewFund = createAsyncThunk('addNewFund', async (fund: any) => {
         {
             amount: fund.amount,
             transactionCode: fund.transactionid,
-            addFundUrl:fund.addFundUrl
+            addFundUrl: fund.addFundUrl,
         },
         config
     );
-    console.log(response,"resposne")
+    console.log(response, 'resposne...........................................');
 
     return response.data;
 });
@@ -177,7 +177,7 @@ interface UserProfileData {
     ownSponserId: string;
     dailyBonus: number;
     totalIncome: number;
-    userStatus:string;
+    userStatus: string;
     // Add other profile-related fields here
 }
 
@@ -735,8 +735,10 @@ const initialState4: WithDrawFundState = {
 };
 
 export const WithdrawFunds = createAsyncThunk('addNewFund', async (fund: any) => {
+    console.log(fund, 'fund....');
     const token: any = localStorage.getItem('userInfo');
     const parsedData = JSON.parse(token);
+    console.log(token, 'token....');
 
     const config = {
         headers: {
@@ -744,24 +746,24 @@ export const WithdrawFunds = createAsyncThunk('addNewFund', async (fund: any) =>
             'content-type': 'application/json',
         },
     };
-
     const response = await axios.post(
-        `${URL}/api/user/add-package-by-user`,
+        `${URL}/api/user/withdraw-wallet`,
         {
             amount: fund.amount,
-            transactionCode: fund.transpassword,
-            walletWithdrawUrl:fund.paymentUrl
+            transactionPassword: fund.transpassword,
+            walletWithdrawUrl: fund.paymentUrl,
         },
         config
     );
+    console.log(response, 'response  fund....');
 
     return response.data;
 });
 
 // redux
-const getWithdrawFund = createSlice({
-    name: 'getAddNewFund',
-    initialState,
+const getWithdrawFundSlice = createSlice({
+    name: 'getWithdrawFundSlice',
+    initialState: initialState4,
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -772,16 +774,21 @@ const getWithdrawFund = createSlice({
             .addCase(WithdrawFunds.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.data = action.payload;
-
             })
             .addCase(WithdrawFunds.rejected, (state, action: any) => {
                 state.loading = false;
+                state.error = action.error.message;
 
-                if (action.error && action.error.message === 'Your specific error message') {
-                    // Handle specific error
-                    state.error = 'Your specific error message';
+                // console.log(state.error, "action.error");
+
+                if (state.error && state.error === 'Request failed with status code 401') {
+                    state.error = 'Check the password or check your wallet balance';
+                    console.log('reached here 1');
+                    // Show_Toast({ message: state.error, type: false});
                 } else {
                     state.error = 'An error occurred while processing your request.';
+                    console.log('reached here 2');
+                    // Show_Toast({ message: state.error, type: false });
                 }
             });
     },
@@ -789,7 +796,7 @@ const getWithdrawFund = createSlice({
 
 // export const selectAddNewFund = (state: any) => state.getAddNewFund;
 
-export const getWithdrawFundreducer = getWithdrawFund.reducer;
+// export const getWithdrawFundreducer = getWithdrawFund.reducer;
 
 // capital Withdraw
 
@@ -826,7 +833,7 @@ export const capitalWithdrawFunds = createAsyncThunk('addNewFund', async (fund: 
         {
             amount: fund.amount,
             transactionPassword: fund.transpassword,
-            walletUrl:fund.paymentUrl
+            walletUrl: fund.paymentUrl,
         },
         config
     );
@@ -835,9 +842,9 @@ export const capitalWithdrawFunds = createAsyncThunk('addNewFund', async (fund: 
 });
 
 // redux
-const getCapitalWithdrawFund = createSlice({
-    name: 'getcapitalwithdraw',
-    initialState,
+const getCapitalWithdrawFundSlice = createSlice({
+    name: 'getCapitalWithdrawFundSlice',
+    initialState: initialState5,
     reducers: {},
     extraReducers: (builder) => {
         builder
@@ -848,29 +855,25 @@ const getCapitalWithdrawFund = createSlice({
             .addCase(capitalWithdrawFunds.fulfilled, (state, action: PayloadAction<any>) => {
                 state.loading = false;
                 state.data = action.payload;
-                Show_Toast({ message: 'Capital Withdraw confirmed!', type: true });
-
             })
             .addCase(capitalWithdrawFunds.rejected, (state, action: any) => {
                 console.log('Rejection case executed');
-                state.loading = false;
-            
-                Show_Toast({ message: 'Check the password or check the widhraw validity', type: false });
-            
-                if (action.error && action.error.message === 'Your specific error message') {
-                    // Handle specific error
-                    state.error = 'Your specific error message';
+                state.error = action.error.message;
+
+                console.log(state.error, 'action.error');
+
+                if (state.error && state.error === 'Request failed with status code 401') {
+                    state.error = 'Check the password or your validity of 90 days';
+                    // Show_Toast({ message: state.error, type: false });
                 } else {
                     state.error = 'An error occurred while processing your request.';
+                    // Show_Toast({ message: state.error, type: false });
                 }
             });
-            
     },
 });
 
 // export const selectAddNewFund = (state: any) => state.getAddNewFund;
-
-export const getCapitalWithdrawFundreducer = getCapitalWithdrawFund.reducer;
 
 // referrel users
 
@@ -1034,4 +1037,6 @@ const getCheckNewVerifySlice = createSlice({
 
 // export const selectAddNewFund = (state: any) => state.getAddNewFund;
 
+export const getCapitalWithdrawFundReducer = getCapitalWithdrawFundSlice.reducer;
+export const getWithdrawFundReducer = getWithdrawFundSlice.reducer;
 export const getCheckNewVerifySlicereducer = getCheckNewVerifySlice.reducer;

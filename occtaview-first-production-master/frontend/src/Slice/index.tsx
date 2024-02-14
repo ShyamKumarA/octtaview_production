@@ -14,9 +14,9 @@ import { directIncomeReducer } from './userSlice';
 import { levelIncomeReducer1 } from './userSlice';
 import { levelIncomeReducer2 } from './userSlice';
 import { levelIncomeReducer3 } from './userSlice';
-import { getWithdrawFundreducer } from './userSlice';
+import { getWithdrawFundReducer } from './userSlice';
 import { withdrawHistoryreducer } from './packageSlice';
-import { getCapitalWithdrawFundreducer } from './userSlice';
+import { getCapitalWithdrawFundReducer } from './userSlice';
 import { capitalWithdrawHistoryreducer } from './packageSlice';
 import { RoiincomeSlicereducer } from './packageSlice';
 import { getNewReferalReducer } from './userSlice';
@@ -36,9 +36,9 @@ const rootReducer = combineReducers({
     levelIncomeReducer1,
     levelIncomeReducer2,
     levelIncomeReducer3,
-    getWithdrawFundreducer,
+    getWithdrawFundReducer,
     withdrawHistoryreducer,
-    getCapitalWithdrawFundreducer,
+    getCapitalWithdrawFundReducer,
     capitalWithdrawHistoryreducer,
     RoiincomeSlicereducer,
     getNewReferalReducer,

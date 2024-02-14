@@ -32,6 +32,7 @@ import QRcode8 from '../../../public/assets/qrcodes/QRcode8.png';
 import QRcode9 from '../../../public/assets/qrcodes/QRcode9.png';
 import QRcode10 from '../../../public/assets/qrcodes/QRcode10.png';
 import { link } from 'fs';
+import { Show_Toast } from '../Components/Toastify';
 
 //
 
@@ -57,13 +58,21 @@ const Depositfund = () => {
     const handlePayment = (e: any) => {
         const addFundUrl=selectedQRCode.link
         
-        console.log(addFundUrl,"linkkk")
         e.preventDefault();
-        dispatch(addNewFund({ amount, transactionid,addFundUrl }));
-        if (data) navigate('/deposithistory');
-        alert('Deposit confirmed!');
-        setAmount('')
-        setTransactionid('')
+        const numericAmount =Number(amount);
+        if (!transactionid) {
+            // Show an error message if transaction code is not provided
+            Show_Toast({ message: 'Transaction ID is required.', type: false});
+          } else if (numericAmount >= 50) {
+            dispatch(addNewFund({ amount, transactionid, addFundUrl }));
+            if (data) navigate('/deposithistory');
+            Show_Toast({ message: 'Deposit confirmed!', type: true });
+            setAmount('');
+            setTransactionid('');
+          } else {
+            Show_Toast({ message: 'Minimum deposit amount is $50.', type: false });
+          }
+      
     };
 
     const qrCodeData = [
@@ -96,7 +105,6 @@ const Depositfund = () => {
             textField.select();
             document.execCommand('copy');
             document.body.removeChild(textField);
-            console.log('Link copied to clipboard!');
             alert('Link copied to clipboard!');
         } catch (err) {
             console.error('Error copying to clipboard: ', err);
@@ -131,7 +139,7 @@ const Depositfund = () => {
                 </div>
                 {/* <p className="text-white">Amount: {amount}</p> */}
 
-                <div className="flex justify-center ">
+                <div className="flex justify-center mt-3 ">
                     <h1 className="text-white font-extrabold text-2xl sm:text-3xl md:text-4xl lg:text-5xl">{amount}</h1>
                 </div>
 
@@ -155,6 +163,8 @@ const Depositfund = () => {
                     {/* --------------------------------------- */}
                     <div className="flex flex-col items-center space-y-4 mt-4 lg:mt-0">
                     <p className="text-white">Minimum $50 is required</p>
+                    <p className="text-red-600">Depositfund only tron TRC-20.</p>
+
 
                         <div>
                             <p className="text-white">Add Amount</p>
@@ -166,7 +176,8 @@ const Depositfund = () => {
                                 onChange={(e) => setAmount(e.target.value)}
                                 required
                             />
-                            <p className="text-red-600">Depositfund only tron TRC-20.</p>
+                        {amount && Number(amount) < 50 && <p className="text-red-500">Minimum deposite amount is $50.</p>}
+
                         </div>
 
                         <div className="flex flex-col ">
@@ -179,6 +190,7 @@ const Depositfund = () => {
                                 onChange={(e) => setTransactionid(e.target.value)}
                                 required
                             />
+
                         </div>
                         <div className="flex justify-center items-center py-4">
                             <button className="bg-green-500 text-white w-full max-w-[19rem] lg:w-40 h-10 rounded-sm " onClick={handlePayment}>

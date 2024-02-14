@@ -72,7 +72,7 @@ const ChangePassword = () => {
                     <div className="mx-auto w-full max-w-[440px] ">
                         <div className="mb-10">
                             <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">Login Password Update</h1>
-                            <p className="text-base font-bold leading-normal text-white-dark">Enter New Password and confirm password</p>
+                            {/* <p className="text-base font-bold leading-normal text-white-dark">Enter New Password and confirm password</p> */}
                         </div>
                         <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
                             <div>
@@ -100,7 +100,7 @@ const ChangePassword = () => {
                                     <input
                                         id="confirmpassword"
                                         type={showconfirmpassword ? 'text' : 'password'}
-                                        placeholder="Enter your password"
+                                        placeholder="Confirm password"
                                         className="form-input ps-10 placeholder:text-white-dark"
                                         value={confirmPassword}
                                         onChange={(e) => setConfirmPassword(e.target.value)}

@@ -154,7 +154,7 @@ console.log(userInfo,"user")
                         <div>
                      
                         <button className="btn btn-primary" onClick={handleCopyClick}>
-    {copied ? 'Copied' : 'Copy Refferal ID'}
+    {copied ? 'Copied' : 'Copy Referral ID'}
 
 </button>
 {/* <div className="flex items-center">
@@ -263,7 +263,7 @@ console.log(userInfo,"user")
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
                                 <IconMenuDashboard className="shrink-0" />
-                                <span className="px-1">{t('dashboard')}</span>
+                                <span className="px-1">{t('Home')}</span>
                             </div>
                             <div className="right_arrow">
                                 <IconCaretDown />
@@ -271,10 +271,10 @@ console.log(userInfo,"user")
                         </button>
                         <ul className="sub-menu">
                             <li>
-                                <NavLink to="/">{t('Member Home')}</NavLink>
+                                <NavLink to="/">{t('Dashboard')}</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/register">{t('Join Now')}</NavLink>
+                                <NavLink to="/register">{t('Add Member')}</NavLink>
                             </li>
                       
                         </ul>
@@ -286,7 +286,7 @@ console.log(userInfo,"user")
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
                                 <IconMenuApps className="shrink-0" />
-                                <span className="px-1">{t('Portal')}</span>
+                                <span className="px-1">{t('Profile')}</span>
                             </div>
                             <div className="right_arrow">
                                 <IconCaretDown />
@@ -294,13 +294,13 @@ console.log(userInfo,"user")
                         </button>
                         <ul className="sub-menu">
                             <li>
-                                <NavLink to="/myprofile">{t('My Profile')}</NavLink>
+                                <NavLink to="/myprofile">{t('Profile Details')}</NavLink>
                             </li>
                             <li>
                                 <NavLink to="/ChangePassword">{t('Change Login Password')}</NavLink>
                             </li>
                             <li>
-                                <NavLink to="/changeTxnpassword">{t('Change Txn Password')}</NavLink>
+                                <NavLink to="/changeTxnpassword">{t('Change Transaction Password')}</NavLink>
                             </li>
                         </ul>
                     </li>
@@ -311,7 +311,7 @@ console.log(userInfo,"user")
                         <button type="button" className="nav-link">
                             <div className="flex items-center">
                                 <IconMenuComponents className="shrink-0" />
-                                <span className="px-1">{t('Funds Added')}</span>
+                                <span className="px-1">{t('Add Fund')}</span>
                             </div>
                             <div className="right_arrow">
                                 <IconCaretDown />

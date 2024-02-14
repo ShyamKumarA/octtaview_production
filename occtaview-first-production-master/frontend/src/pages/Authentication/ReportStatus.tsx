@@ -146,6 +146,7 @@ const ReportStatus = () => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [initialRecords, setInitialRecords] = useState(rowData || []);
     const [recordsData, setRecordsData] = useState(initialRecords);
+    console.log(recordsData,"dataa..")
 
     const [search, setSearch] = useState('');
 

@@ -69,10 +69,10 @@ const ChangeTxnPassword = () => {
                     <div className="mx-auto w-full max-w-[440px] ">
                         <div className="mb-10">
                             <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">TRANSACTION PASSWORD UPDATE</h1>
-                            <p className="text-base font-bold leading-normal text-white-dark">Enter your Transaction Password and New Transaction Password</p>
+                            {/* <p className="text-base font-bold leading-normal text-white-dark">Enter your Transaction Password and New Transaction Password</p> */}
                         </div>
                         <form className="space-y-5 dark:text-white" onClick={submitForm}>
-                            <div>
+                            {/* <div>
                                 <label htmlFor="Password">Current Transaction Password</label>
                                 <div className="relative text-white-dark">
                                     <input
@@ -87,7 +87,7 @@ const ChangeTxnPassword = () => {
                                         <IconUser fill={true} />
                                     </span>
                                 </div>
-                            </div>
+                            </div> */}
                             {/*  */}
 
                             <div>

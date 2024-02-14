@@ -100,7 +100,7 @@ console.log(userProfile,"data;;;")
                                 <button type="button" className={`${currentMenu === 'General' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('General')}>
                                     <div className="flex items-center">
                                         <IconMenuDashboard className="group-hover:!text-primary shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('General')}</span>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Home')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'General' ? 'rtl:rotate-90 -rotate-90' : ''}>
@@ -111,30 +111,30 @@ console.log(userProfile,"data;;;")
                                 <AnimateHeight duration={300} height={currentMenu === 'General' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <NavLink to="/">{t('Member Home')}</NavLink>
+                                            <NavLink to="/">{t('Dashboard')}</NavLink>
                                         </li>
                                         {userProfile?.userStatus === 'approved' &&(
                                         <li>
-                                            <NavLink to="/register">{t('Join Now')}</NavLink>
+                                            <NavLink to="/register">{t('Add Member')}</NavLink>
                                         </li>
                                         )}
                                     </ul>
                                 </AnimateHeight>
                             </li>
                             {/* -------------------------------------- */}
-                            {userProfile?.userStatus === "approved" &&(
+                            {/* {userProfile?.userStatus === "approved" &&(
                             <h2 className="py-3 px-7 flex items-center uppercase font-extrabold bg-white-light/30 dark:bg-dark dark:bg-opacity-[0.08] -mx-4 mb-1">
                                 <IconMinus className="w-4 h-5 flex-none hidden" />
                                 <span>{t('Portal')}</span>
                             </h2>
-  )}
+  )} */}
                             {/* -------------------------------- */}
                             {userProfile?.userStatus==="approved"&&(
                             <li className="menu nav-item">
                                 <button type="button" className={`${currentMenu === 'Portal' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Portal')}>
                                     <div className="flex items-center">
                                         <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
-                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Portal')}</span>
+                                        <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Profile')}</span>
                                     </div>
 
                                     <div className={currentMenu !== 'Portal' ? 'rtl:rotate-90 -rotate-90' : ''}>
@@ -145,13 +145,13 @@ console.log(userProfile,"data;;;")
                                 <AnimateHeight duration={300} height={currentMenu === 'Portal' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <NavLink to="/myprofile">{t('My Profile')}</NavLink>
+                                            <NavLink to="/myprofile">{t('My Details')}</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to="/ChangePassword">{t('Change Login Password')}</NavLink>
                                         </li>
                                         <li>
-                                            <NavLink to="/changeTxnpassword">{t('Change Txn Password')}</NavLink>
+                                            <NavLink to="/changeTxnpassword">{t('Change Transaction Password')}</NavLink>
                                         </li>
                                     </ul>
                                 </AnimateHeight>

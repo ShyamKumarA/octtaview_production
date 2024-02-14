@@ -5,7 +5,7 @@ const packageSchema = new mongoose.Schema(
     name: {
       type: String,
       required: true,
-      unique:true
+      unique: true,
     },
     minAmount: {
       type: Number,
@@ -31,10 +31,7 @@ const packageSchema = new mongoose.Schema(
       type: Number,
       required: true,
     },
-    PackageUsed:[
-      {type:mongoose.Schema.Types.ObjectId,
-        ref:"User"}
-    ]
+    PackageUsed: [{ type: mongoose.Schema.Types.ObjectId, ref: "User" }],
   },
   {
     timestamps: true,

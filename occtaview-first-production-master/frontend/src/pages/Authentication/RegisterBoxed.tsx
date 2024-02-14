@@ -86,8 +86,8 @@ const RegisterBoxed = () => {
                 </div>
                 <div className="mx-auto w-full max-w-[440px] mt-5 px-4">
                     <div className="mb-10">
-                        <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">Add New Member</h1>
-                        <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p>
+                        <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-2xl=r">Add New People</h1>
+                        {/* <p className="text-base font-bold leading-normal text-white-dark">Enter your email and password to register</p> */}
                     </div>
                     <form className="space-y-5 dark:text-white " action="#">
                         {/* ----- */}

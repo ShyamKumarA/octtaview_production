@@ -19,7 +19,7 @@ app.use(express.json());
 app.use(cookieParser());
 
 app.use("/api/user", userRoute);
-app.use("/api/admin", adminRouter); 
+app.use("/api/admin", adminRouter);
 
 app.use((err, req, res, next) => {
   const statusCode = err.statusCode || 500;
@@ -34,20 +34,19 @@ const __dirname = path.resolve();
 
 app.use("/uploads", express.static("/var/www/seclob/memberocttaview/uploads"));
 
-
- if (NODE_ENV == "production") {
+if (NODE_ENV == "production") {
   // app.use(express.static(__dirname + "/frontend/dist"));
-   app.use(express.static("/var/www/seclob/memberocttaview/frontend/dist"));
+  app.use(express.static("/var/www/seclob/memberocttaview/frontend/dist"));
 
   app.get("*", (req, res) => {
     // res.sendFile(__dirname + "/frontend/dist/index.html");
     res.sendFile("/var/www/seclob/memberocttaview/frontend/dist/index.html");
   });
- } else {
+} else {
   app.get("/", (req, res) => {
     res.status(201).json("Running");
   });
- }
+}
 
 app.listen(port, () => {
   console.log(`Server connected ${port}`);

@@ -3,11 +3,11 @@ import bcryptjs from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { errorHandler } from "../middleware/errorHandler.js";
 import Package from "../models/packageModel.js";
-import { findPackage, generateRandomString, generateReferalIncome } from "./userController.js";
-
-
-
-
+import {
+  findPackage,
+  generateRandomString,
+  generateReferalIncome,
+} from "./userController.js";
 
 //Dashboard data
 
@@ -25,8 +25,7 @@ export const dashboardData = async (req, res, next) => {
       }, 0);
       const totalLevelROI = LevelROI.toFixed(2);
 
-
-      const todaysUsers = userData.filter(user => {
+      const todaysUsers = userData.filter((user) => {
         const userCreatedAt = new Date(user.createdAt);
         return userCreatedAt.toDateString() === today.toDateString();
       });
@@ -45,14 +44,15 @@ export const dashboardData = async (req, res, next) => {
       }, 0);
       const totalWalletAmount = WalletAmount.toFixed(2);
 
-
       const DailyROI = userData.reduce((total, user) => {
         return total + user.dailyROI;
       }, 0);
       const totalDailyROI = DailyROI.toFixed(2);
 
       // Filter users with 'userStatus' equal to 'pending'
-      const pendingUsersCount = userData.filter(user => user.userStatus === 'pending').length;
+      const pendingUsersCount = userData.filter(
+        (user) => user.userStatus === "pending"
+      ).length;
 
       res.status(200).json({
         totalMembers,
@@ -62,7 +62,7 @@ export const dashboardData = async (req, res, next) => {
         totalPackageAmount,
         totalWalletAmount,
         totalWithdrawAmount,
-        pendingUsersCount
+        pendingUsersCount,
       });
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
@@ -70,9 +70,7 @@ export const dashboardData = async (req, res, next) => {
   } catch (error) {
     next(error);
   }
-}
-
-
+};
 
 //add admin Api
 
@@ -80,7 +78,6 @@ export const addAdmin = async (req, res, next) => {
   const { password, username, email, address, phone, isSuperAdmin } = req.body;
   try {
     const adminData = await User.findOne({ email: email });
-    console.log(adminData);
     const ownSponserId = generateRandomString();
     const hashedPassword = bcryptjs.hashSync(password, 10);
     const newUser = new User({
@@ -117,13 +114,9 @@ export const adminLogin = async (req, res, next) => {
       if (!validPassword) {
         return next(errorHandler(401, "Wrong credentials"));
       }
-      const token = jwt.sign(
-        { userId: validAdmin._id },
-        "Shyam",
-        {
-          expiresIn: "365d",
-        }
-      );
+      const token = jwt.sign({ userId: validAdmin._id }, "Shyam", {
+        expiresIn: "365d",
+      });
 
       res.status(200).json({
         id: validAdmin._id,
@@ -141,7 +134,6 @@ export const adminLogin = async (req, res, next) => {
     next(error);
   }
 };
-
 
 //Add package API
 
@@ -194,23 +186,23 @@ export const viewAllUsers = async (req, res, next) => {
 //View Profile by params userId
 
 export const viewUserDetails = async (req, res, next) => {
-  const {id}=req.params;
-  console.log(id);
+  const { id } = req.params;
   const adminId = req.user._id;
   try {
     const userData = await User.findById(id).populate("packageChosen");
     let packageName;
-    const packageData=userData.packageChosen;
-    if(packageData){
-    packageName=packageData.name;
-    }else{
-      packageName=null;
+    const packageData = userData.packageChosen;
+    if (packageData) {
+      packageName = packageData.name;
+    } else {
+      packageName = null;
     }
 
-    const countFirstChild=userData.childLevel1.length;
-    const countSecondChild=userData.childLevel1.length;
-    const countThreeChild=userData.childLevel1.length;
-    const totalLevelRoi=userData.level1ROI+userData.level2ROI+userData.level3ROI;
+    const countFirstChild = userData.childLevel1.length;
+    const countSecondChild = userData.childLevel1.length;
+    const countThreeChild = userData.childLevel1.length;
+    const totalLevelRoi =
+      userData.level1ROI + userData.level2ROI + userData.level3ROI;
 
     // .select(
     //   "username ownSponserId email phone userStatus packageAmount"
@@ -220,20 +212,20 @@ export const viewUserDetails = async (req, res, next) => {
         id: userData._id,
         userStatus: userData.userStatus,
         ownSponserId: userData.ownSponserId,
-        packageName:packageName,
+        packageName: packageName,
         name: userData.username,
         email: userData.email,
         phone: userData.phone,
         address: userData.address,
-        dailyBonus:userData.dailyROI,
-        levelRoi:totalLevelRoi,
-        transactionCode:userData.transactionCode,
-        aadhaar:userData.aadhaar,
+        dailyBonus: userData.dailyROI,
+        levelRoi: totalLevelRoi,
+        transactionCode: userData.transactionCode,
+        aadhaar: userData.aadhaar,
         // packageChosen: user.packageChosen,
-        capitalAmount:userData.packageAmount,
-        myDownline:countFirstChild,
-        directIncome:userData.referalIncome,
-        totalIncome:userData.walletAmount,
+        capitalAmount: userData.packageAmount,
+        myDownline: countFirstChild,
+        directIncome: userData.referalIncome,
+        totalIncome: userData.walletAmount,
         sts: "01",
         msg: "get user profile Success",
       });
@@ -244,7 +236,6 @@ export const viewUserDetails = async (req, res, next) => {
     next(error);
   }
 };
-
 
 //View approved (verified) users
 
@@ -278,7 +269,9 @@ export const getReadyToApproveUsers = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         userStatus: { $eq: "readyToApprove" },
-      }).select("username email phone userStatus aadhaar sponserName createdAt");
+      }).select(
+        "username email phone userStatus aadhaar sponserName createdAt"
+      );
       res.status(200).json({
         userData,
         sts: "01",
@@ -298,20 +291,20 @@ export const acceptUser = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { id } = req.params;
-    console.log(id);
 
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      //console.log(userData);
       // const sponserId=userData.sponser;
       if (userData) {
         userData.userStatus = "approved";
 
         const updatedUser = await userData.save();
         if (updatedUser) {
-            // const referalIncome=generateReferalIncome(sponserId,updatedUser.packageAmount)
-          res.status(200).json({updatedUser, msg: "User verification Accepted!" });
+          // const referalIncome=generateReferalIncome(sponserId,updatedUser.packageAmount)
+          res
+            .status(200)
+            .json({ updatedUser, msg: "User verification Accepted!" });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -327,84 +320,84 @@ export const acceptUser = async (req, res, next) => {
 //admin can reject the users
 
 export const rejectUser = async (req, res, next) => {
-    try {
-      const adminId = req.user._id;
-      
-      const { id} = req.params;
-      console.log(id);
-      const adminData = await User.findById(adminId);
-      if (adminData.isSuperAdmin) {
-        const userData = await User.findById(id);
-        if (userData) {
-          userData.userStatus = "pending";
-            
-          const updatedUser = await userData.save();
-  
-          if (updatedUser) {
-            res.status(200).json({ msg: "User verification rejected!" });
-          }
-        } else {
-          next(errorHandler("User not Found"));
+  try {
+    const adminId = req.user._id;
+
+    const { id } = req.params;
+    const adminData = await User.findById(adminId);
+    if (adminData.isSuperAdmin) {
+      const userData = await User.findById(id);
+      if (userData) {
+        userData.userStatus = "pending";
+
+        const updatedUser = await userData.save();
+
+        if (updatedUser) {
+          res.status(200).json({ msg: "User verification rejected!" });
         }
       } else {
-        return next(errorHandler(401, "Admin Login Failed"));
+        next(errorHandler("User not Found"));
       }
-    } catch (error) {
-      next(error);
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
     }
-  };
+  } catch (error) {
+    next(error);
+  }
+};
 
+//view add fund pending by admin
 
-
-   //view add fund pending by admin
-
-   export const viewAddFundPending = async (req, res, next) => {
-    const userId = req.user._id;
-    const adminData = await User.findById(userId);
-    try {
-      if (adminData.isSuperAdmin) {
-        const userData = await User.find({
-          addFundStatus: { $eq: "pending" },
-          isSuperAdmin: { $ne: true } 
-        }).select("username email phone userStatus addFundUrl createdAt topUpAmount transactionCode");
-        res.status(200).json({
-          userData,
-          sts: "01",
-          msg: "get Fund add pending users Success",
-        });
-      } else {
-        return next(errorHandler(401, "Admin Login Failed"));
-      }
-    } catch (error) {
-      next(error);
+export const viewAddFundPending = async (req, res, next) => {
+  const userId = req.user._id;
+  const adminData = await User.findById(userId);
+  try {
+    if (adminData.isSuperAdmin) {
+      const userData = await User.find({
+        addFundStatus: { $eq: "pending" },
+        isSuperAdmin: { $ne: true },
+      }).select(
+        "username email phone userStatus addFundUrl createdAt topUpAmount transactionCode"
+      );
+      res.status(200).json({
+        userData,
+        sts: "01",
+        msg: "get Fund add pending users Success",
+      });
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
     }
-  };
+  } catch (error) {
+    next(error);
+  }
+};
 
+//view add Package fund pending by admin
 
-    //view add Package fund pending by admin
-
-    export const viewAddPackageFundPending = async (req, res, next) => {
-      const userId = req.user._id;
-      const adminData = await User.findById(userId);
-      try {
-        if (adminData.isSuperAdmin) {
-          const userData = await User.find({
-            addPackageStatus: { $eq: "pending" },
-            isSuperAdmin: { $ne: true } 
-          }).select("username email phone addFundUrl  userStatus createdAt topUpAmount transactionCode");
-          res.status(200).json({
-            userData,
-            sts: "01",
-            msg: "get Package Fund add pending users Success",
-          });
-        } else {
-          return next(errorHandler(401, "Admin Login Failed"));
-        }
-      } catch (error) {
-        next(error);
-      }
-    };
-  //admin can Approve users fund adding 
+export const viewAddPackageFundPending = async (req, res, next) => {
+  const userId = req.user._id;
+  const adminData = await User.findById(userId);
+  try {
+    if (adminData.isSuperAdmin) {
+      const userData = await User.find({
+        addPackageStatus: { $eq: "pending" },
+        isSuperAdmin: { $ne: true },
+      }).select(
+        "username email phone addFundUrl  userStatus createdAt topUpAmount transactionCode"
+      );
+      res.status(200).json({
+        userData,
+        sts: "01",
+        msg: "get Package Fund add pending users Success",
+      });
+    } else {
+      return next(errorHandler(401, "Admin Login Failed"));
+    }
+  } catch (error) {
+    next(error);
+  }
+};
+//admin can Approve users fund adding
 
 export const approveFundAdd = async (req, res, next) => {
   try {
@@ -415,41 +408,43 @@ export const approveFundAdd = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       let previousPackage;
       const userData = await User.findById(id);
-      const packageAmount=userData.packageAmount;
-      if(packageAmount) previousPackage = findPackage(packageAmount);
-      const amountToAdd=userData.topUpAmount;
-      const addFundUrl=userData.addFundUrl;
-      const newPackageAmount=packageAmount+amountToAdd;
-      const transactionCode=userData.transactionCode;
+      const packageAmount = userData.packageAmount;
+      if (packageAmount) previousPackage = findPackage(packageAmount);
+      const amountToAdd = userData.topUpAmount;
+      const addFundUrl = userData.addFundUrl;
+      const newPackageAmount = packageAmount + amountToAdd;
+      const transactionCode = userData.transactionCode;
       const packageChosen = findPackage(newPackageAmount);
       const packageData = await Package.findOne({ name: packageChosen });
       if (userData) {
         userData.addFundStatus = "approved";
-        userData.packageAmount=newPackageAmount;
-        userData.previousPackage=previousPackage;
-        userData.packageName=packageChosen;
-        userData.packageChosen=packageData._id;
-        userData.transactionCode=""
+        userData.packageAmount = newPackageAmount;
+        userData.previousPackage = previousPackage;
+        userData.packageName = packageChosen;
+        userData.packageChosen = packageData._id;
+        userData.transactionCode = "";
         let today = new Date();
 
-// Format the date as YYYY-MM-DD
+        // Format the date as YYYY-MM-DD
         let formattedDate = today.toISOString().slice(0, 10);
 
-// Assign the formatted date to capitalDay
+        // Assign the formatted date to capitalDay
         userData.capitalDay = formattedDate;
 
         userData.addFundHistory.push({
-          reportName:"addFund",
-          topUpAmount:amountToAdd,
-          status:"approved",
-          name:userData.username,
-          addFundUrl:addFundUrl,
-          transactionCode:transactionCode
-        })
-        userData.topUpAmount=0;
+          reportName: "addFund",
+          topUpAmount: amountToAdd,
+          status: "approved",
+          name: userData.username,
+          addFundUrl: addFundUrl,
+          transactionCode: transactionCode,
+        });
+        userData.topUpAmount = 0;
         const updatedUser = await userData.save();
         if (updatedUser) {
-          res.status(200).json({updatedUser, msg: "User verification Accepted!" });
+          res
+            .status(200)
+            .json({ updatedUser, msg: "User verification Accepted!" });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -458,7 +453,6 @@ export const approveFundAdd = async (req, res, next) => {
       return next(errorHandler(401, "Admin Login Failed"));
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
@@ -474,36 +468,38 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       let previousPackage;
       const userData = await User.findById(id);
-      const packageAmount=userData.packageAmount;
+      const packageAmount = userData.packageAmount;
       previousPackage = findPackage(packageAmount);
-      const withdrawAmount=userData.withdrawAmount;
-      const newPackageAmount=packageAmount-withdrawAmount;
-      const capitalWithdrawUrl=userData.capitalWithdrawUrl;
-      const tnxID=userData.transactionID;
+      const withdrawAmount = userData.withdrawAmount;
+      const newPackageAmount = packageAmount - withdrawAmount;
+      const capitalWithdrawUrl = userData.capitalWithdrawUrl;
+      const tnxID = userData.transactionID;
       const packageChosen = findPackage(newPackageAmount);
       const packageData = await Package.findOne({ name: packageChosen });
       if (userData) {
         userData.withdrawStatus = "approved";
-        userData.packageAmount=newPackageAmount;
-        userData.previousPackage=previousPackage;
-        userData.packageName=packageChosen;
-        userData.packageChosen=packageData._id;
-        userData.withdrawAmount=0;
-        userData.transactionCode="";
-        userData.transactionID="";
+        userData.packageAmount = newPackageAmount;
+        userData.previousPackage = previousPackage;
+        userData.packageName = packageChosen;
+        userData.packageChosen = packageData._id;
+        userData.withdrawAmount = 0;
+        userData.transactionCode = "";
+        userData.transactionID = "";
         userData.capitalWithdrawHistory.push({
-          name:userData.username,
-          reportName:"capitalWithdrawReport",
-          ownID:userData.ownSponserId,
-          packageName:userData.packageName,
-          tnxID:tnxID,
+          name: userData.username,
+          reportName: "capitalWithdrawReport",
+          ownID: userData.ownSponserId,
+          packageName: userData.packageName,
+          tnxID: tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:capitalWithdrawUrl,
-          status:"Approved"
-        })
+          walletUrl: capitalWithdrawUrl,
+          status: "Approved",
+        });
         const updatedUser = await userData.save();
         if (updatedUser) {
-          res.status(200).json({updatedUser, msg: "User Withdraw request Accepted!" });
+          res
+            .status(200)
+            .json({ updatedUser, msg: "User Withdraw request Accepted!" });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -512,12 +508,9 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
       return next(errorHandler(401, "Admin Login Failed"));
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
-
-
 
 //admin can approve Capital fund withdrawal
 
@@ -529,31 +522,37 @@ export const approveWalletWithdrawal = async (req, res, next) => {
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      const walletAmount=userData.walletAmount;
-      const withdrawAmount=userData.walletWithdrawAmount;
-      const newWalletAmount=walletAmount-withdrawAmount;
-      const walletWithdrawUrl=userData.walletWithdrawUrl;
-      const tnxID=userData.transactionID;
+      const walletAmount = userData.walletAmount;
+      const withdrawAmount = userData.walletWithdrawAmount;
+      const newWalletAmount = walletAmount - withdrawAmount;
+      const walletWithdrawUrl = userData.walletWithdrawUrl;
+      const tnxID = userData.transactionID;
       if (userData) {
         userData.walletWithdrawStatus = "approved";
-        userData.walletAmount=newWalletAmount;
-        userData.totalWithdrawAmount=userData.totalWithdrawAmount+withdrawAmount;
-        userData.walletWithdrawAmount=0;
-        userData.walletWithdrawUrl="";
-        userData.transactionID="";
+        userData.walletAmount = newWalletAmount;
+        userData.totalWithdrawAmount =
+          userData.totalWithdrawAmount + withdrawAmount;
+        userData.walletWithdrawAmount = 0;
+        userData.walletWithdrawUrl = "";
+        userData.transactionID = "";
         userData.walletWithdrawHistory.push({
-          reportName:"walletWithdrawReport",
-          name:userData.username,
-          ownID:userData.ownSponserId,
-          packageName:userData.packageName,
-          tnxID:tnxID,
+          reportName: "walletWithdrawReport",
+          name: userData.username,
+          ownID: userData.ownSponserId,
+          packageName: userData.packageName,
+          tnxID: tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:walletWithdrawUrl,
-          status:"Approved"
-        })
+          walletUrl: walletWithdrawUrl,
+          status: "Approved",
+        });
         const updatedUser = await userData.save();
         if (updatedUser) {
-          res.status(200).json({updatedUser, msg: "User Wallet Withdraw request Accepted!" });
+          res
+            .status(200)
+            .json({
+              updatedUser,
+              msg: "User Wallet Withdraw request Accepted!",
+            });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -562,40 +561,43 @@ export const approveWalletWithdrawal = async (req, res, next) => {
       return next(errorHandler(401, "Admin Login Failed"));
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 //admin reject user wallet withdrawal request
-  
+
 export const rejectWalletWithdrawal = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { id } = req.params;
-    console.log(id);
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      const withdrawAmount=userData.walletWithdrawAmount;
-      const walletWithdrawUrl=userData.walletWithdrawUrl;
-      const tnxID=userData.transactionID;
+      const withdrawAmount = userData.walletWithdrawAmount;
+      const walletWithdrawUrl = userData.walletWithdrawUrl;
+      const tnxID = userData.transactionID;
       if (userData) {
-        userData.walletWithdrawStatus = ""; 
-        userData.walletWithdrawAmount=0;
-        userData.walletWithdrawUrl="";
-        userData.transactionID="";
+        userData.walletWithdrawStatus = "";
+        userData.walletWithdrawAmount = 0;
+        userData.walletWithdrawUrl = "";
+        userData.transactionID = "";
         userData.walletWithdrawHistory.push({
-          reportName:"walletwithdrawReject",
-          name:userData.username,
-          tnxID:tnxID,
+          reportName: "walletwithdrawReject",
+          name: userData.username,
+          tnxID: tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:walletWithdrawUrl,
-          status:"Rejected"
-        })
+          walletUrl: walletWithdrawUrl,
+          status: "Rejected",
+        });
         const updatedUser = await userData.save();
         if (updatedUser) {
-          res.status(200).json({updatedUser, msg: "User Wallet Withdraw request Rejected!" });
+          res
+            .status(200)
+            .json({
+              updatedUser,
+              msg: "User Wallet Withdraw request Rejected!",
+            });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -604,11 +606,9 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
       return next(errorHandler(401, "Admin Login Failed"));
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
-
 
 //view pending capital withdraw requestes
 
@@ -619,7 +619,9 @@ export const viewWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         withdrawStatus: { $eq: "pending" },
-      }).select("username email phone withdrawStatus capitalWithdrawUrl createdAt withdrawAmount");
+      }).select(
+        "username email phone withdrawStatus capitalWithdrawUrl createdAt withdrawAmount"
+      );
       res.status(200).json({
         userData,
         sts: "01",
@@ -633,7 +635,6 @@ export const viewWithdrawPending = async (req, res, next) => {
   }
 };
 
-
 //view pending wallet withdraw requestes
 
 export const viewWalletWithdrawPending = async (req, res, next) => {
@@ -643,7 +644,9 @@ export const viewWalletWithdrawPending = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         walletWithdrawStatus: { $eq: "pending" },
-      }).select("username email phone walletWithdrawStatus walletWithdrawUrl createdAt walletWithdrawAmount");
+      }).select(
+        "username email phone walletWithdrawStatus walletWithdrawUrl createdAt walletWithdrawAmount"
+      );
       res.status(200).json({
         userData,
         sts: "01",
@@ -657,36 +660,36 @@ export const viewWalletWithdrawPending = async (req, res, next) => {
   }
 };
 
-
 //admin reject user withdrawal request
-  
+
 export const rejectCapitalwithdrawal = async (req, res, next) => {
   try {
     const adminId = req.user._id;
     const { id } = req.params;
-    console.log(id);
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      const withdrawAmount=userData.withdrawAmount;
-      const capitalWithdrawUrl=userData.capitalWithdrawUrl;
-      const tnxID=userData.transactionID;
+      const withdrawAmount = userData.withdrawAmount;
+      const capitalWithdrawUrl = userData.capitalWithdrawUrl;
+      const tnxID = userData.transactionID;
       if (userData) {
         userData.withdrawStatus = "";
-        userData.withdrawAmount=0;
-        userData.capitalWithdrawUrl="";
-        userData.transactionID="";
+        userData.withdrawAmount = 0;
+        userData.capitalWithdrawUrl = "";
+        userData.transactionID = "";
         userData.capitalWithdrawHistory.push({
-          name:userData.username,
-          reportName:"rejectCapitalwithdraw",
-          tnxID:tnxID,
+          name: userData.username,
+          reportName: "rejectCapitalwithdraw",
+          tnxID: tnxID,
           withdrawAmount: withdrawAmount,
-          walletUrl:capitalWithdrawUrl,
-          status:"Rejected"
-        })
+          walletUrl: capitalWithdrawUrl,
+          status: "Rejected",
+        });
         const updatedUser = await userData.save();
         if (updatedUser) {
-          res.status(200).json({updatedUser, msg: "User Withdraw request Rejected!" });
+          res
+            .status(200)
+            .json({ updatedUser, msg: "User Withdraw request Rejected!" });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -695,87 +698,93 @@ export const rejectCapitalwithdrawal = async (req, res, next) => {
       return next(errorHandler(401, "Admin Login Failed"));
     }
   } catch (error) {
-    console.log(error);
     next(error);
   }
 };
 
 //admin approve initial package
 
-export const userPackageApproval=async(req,res,next)=>{
-  try{
-    console.log("adminId");
-
+export const userPackageApproval = async (req, res, next) => {
+  try {
     const adminId = req.user._id;
     const { id } = req.params;
 
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      const sponserId1=userData.sponser;
+      const sponserId1 = userData.sponser;
       const sponserUser1 = await User.findById(sponserId1);
 
-    let sponserUser2, sponserUser3;
+      let sponserUser2, sponserUser3;
 
-    const sponserId2 = sponserUser1.sponser||null;
-    if (sponserId2) { 
-      sponserUser2 = await User.findById(sponserId2);
-    }
-    if (sponserUser2) {
-    const sponserId3 = sponserUser2.sponser||null;
-      sponserUser3 = await User.findById(sponserId3);
-    }
+      const sponserId2 = sponserUser1.sponser || null;
+      if (sponserId2) {
+        sponserUser2 = await User.findById(sponserId2);
+      }
+      if (sponserUser2) {
+        const sponserId3 = sponserUser2.sponser || null;
+        sponserUser3 = await User.findById(sponserId3);
+      }
 
-
-      const packageAmount=userData.packageAmount;
-      const amountToAdd=userData.topUpAmount;
-      const transactionCode=userData.transactionCode;
-      const addFundUrl=userData.addFundUrl;
-      const newPackageAmount=packageAmount+amountToAdd
+      const packageAmount = userData.packageAmount;
+      const amountToAdd = userData.topUpAmount;
+      const transactionCode = userData.transactionCode;
+      const addFundUrl = userData.addFundUrl;
+      const newPackageAmount = packageAmount + amountToAdd;
       const packageChosen = findPackage(newPackageAmount);
-      console.log(packageChosen);
       const packageData = await Package.findOne({ name: packageChosen });
       if (userData) {
         userData.addPackageStatus = "approved";
-        userData.referalStatus="approved";
-        userData.packageName=packageChosen;
-        userData.packageAmount=newPackageAmount;
-        userData.packageChosen=packageData._id; 
+        userData.referalStatus = "approved";
+        userData.packageName = packageChosen;
+        userData.packageAmount = newPackageAmount;
+        userData.packageChosen = packageData._id;
         // Get today's date
-let today = new Date();
+        let today = new Date();
 
-// Format the date as YYYY-MM-DD
-let formattedDate = today.toISOString().slice(0, 10);
+        // Format the date as YYYY-MM-DD
+        let formattedDate = today.toISOString().slice(0, 10);
 
-// Assign the formatted date to capitalDay
-userData.capitalDay = formattedDate;
+        // Assign the formatted date to capitalDay
+        userData.capitalDay = formattedDate;
         userData.addFundHistory.push({
-          topUpAmount:amountToAdd,
-          status:"approved",
-          name:userData.username,
-          addFundUrl:addFundUrl,
-          transactionCode:transactionCode
-        })
-        userData.topUpAmount=0;
-        userData.transactionCode='';
+          topUpAmount: amountToAdd,
+          status: "approved",
+          name: userData.username,
+          addFundUrl: addFundUrl,
+          transactionCode: transactionCode,
+        });
+        userData.topUpAmount = 0;
+        userData.transactionCode = "";
         const updatedUser = await userData.save();
         if (updatedUser) {
-          packageData.PackageUsed.push(updatedUser._id)
-            await packageData.save();
-          if(sponserUser3){
+          packageData.PackageUsed.push(updatedUser._id);
+          await packageData.save();
+          if (sponserUser3) {
             sponserUser3.childLevel3.push(updatedUser._id);
             await sponserUser3.save();
           }
-          if(sponserUser2){
+          if (sponserUser2) {
             sponserUser2.childLevel2.push(updatedUser._id);
             await sponserUser2.save();
           }
           if (sponserUser1) {
             sponserUser1.childLevel1.push(updatedUser._id);
-             await sponserUser1.save();
+            await sponserUser1.save();
           }
-          const referalIncome=generateReferalIncome(id,sponserId1,updatedUser.packageAmount,transactionCode)
-          res.status(200).json({updatedUser,referalIncome, msg: "New package added successfull! Referal amount approved!" });
+          const referalIncome = generateReferalIncome(
+            id,
+            sponserId1,
+            updatedUser.packageAmount,
+            transactionCode
+          );
+          res
+            .status(200)
+            .json({
+              updatedUser,
+              referalIncome,
+              msg: "New package added successfull! Referal amount approved!",
+            });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -783,62 +792,55 @@ userData.capitalDay = formattedDate;
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
     }
-
-
-  }catch(error){
-    console.log(error);
-    next(error)
+  } catch (error) {
+    next(error);
   }
-
-}
-
-
-
-
-
+};
 
 //admin Reject initial package
 
-export const userPackageReject=async(req,res,next)=>{
-console.log("hello");
-
-  try{
+export const userPackageReject = async (req, res, next) => {
+  try {
     const adminId = req.user._id;
     const { id } = req.params;
     const adminData = await User.findById(adminId);
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
-      // const packageAmount=userData.packageAmount;      
+      // const packageAmount=userData.packageAmount;
       // const sponserId=userData.sponser;
-      const amountToAdd=userData.topUpAmount;
-      const transactionCode=userData.transactionCode;
-      const addFundUrl=userData.addFundUrl;
+      const amountToAdd = userData.topUpAmount;
+      const transactionCode = userData.transactionCode;
+      const addFundUrl = userData.addFundUrl;
       // const newPackageAmount=packageAmount+amountToAdd
       // const packageChosen = findPackage(newPackageAmount);
       // const packageData = await Package.findOne({ name: packageChosen });
       if (userData) {
-        if(userData.addPackageStatus=="pending"){
+        if (userData.addPackageStatus == "pending") {
           userData.addPackageStatus = "";
-          userData.referalStatus="";
+          userData.referalStatus = "";
         }
-        if(userData.addFundStatus=="pending"){
+        if (userData.addFundStatus == "pending") {
           userData.addFundStatus = "";
         }
-        
-        
+
         userData.addFundHistory.push({
-          topUpAmount:amountToAdd,
-          status:"Rejected",
-          name:userData.username,
-          addFundUrl:addFundUrl,
-          transactionCode:transactionCode
-        })
-        userData.topUpAmount=0;
-        userData.transactionCode='';
+          topUpAmount: amountToAdd,
+          status: "Rejected",
+          name: userData.username,
+          addFundUrl: addFundUrl,
+          transactionCode: transactionCode,
+        });
+        userData.topUpAmount = 0;
+        userData.transactionCode = "";
         const updatedUser = await userData.save();
         if (updatedUser) {
           // const referalIncome=generateReferalIncome(id,sponserId,updatedUser.packageAmount)
-          res.status(200).json({updatedUser, msg: "New Fund added Rejected! Referal amount rejected!" });
+          res
+            .status(200)
+            .json({
+              updatedUser,
+              msg: "New Fund added Rejected! Referal amount rejected!",
+            });
         }
       } else {
         next(errorHandler("User not Found"));
@@ -846,21 +848,14 @@ console.log("hello");
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
     }
-
-
-  }catch(error){
-    next(error)
+  } catch (error) {
+    next(error);
   }
-
-}
-
-
+};
 
 //Admin Reports
 
-
 // add fund history
-
 
 export const totalAddFundHistory = async (req, res, next) => {
   const userId = req.user._id;
@@ -870,12 +865,12 @@ export const totalAddFundHistory = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const aggregateQuery = [
         {
-          $unwind: "$addFundHistory"
+          $unwind: "$addFundHistory",
         },
         {
           $sort: {
-            "addFundHistory.createdAt": -1
-          }
+            "addFundHistory.createdAt": -1,
+          },
         },
         {
           $project: {
@@ -886,15 +881,20 @@ export const totalAddFundHistory = async (req, res, next) => {
             status: "$addFundHistory.status",
             _id: "$addFundHistory._id",
             createdAt: "$addFundHistory.createdAt",
-            updatedAt: "$addFundHistory.updatedAt"
-          }
-        }
+            updatedAt: "$addFundHistory.updatedAt",
+          },
+        },
       ];
 
       const result = await User.aggregate(aggregateQuery);
 
       if (result) {
-        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+        res
+          .status(200)
+          .json({
+            allAddFundHistory: result,
+            msg: "Successfully get users fund history!",
+          });
       }
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
@@ -903,7 +903,6 @@ export const totalAddFundHistory = async (req, res, next) => {
     next(error);
   }
 };
-
 
 // add Capital withdraw history
 
@@ -915,12 +914,12 @@ export const totalCapitalWithdrawHistory = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const aggregateQuery = [
         {
-          $unwind: "$capitalWithdrawHistory"
+          $unwind: "$capitalWithdrawHistory",
         },
         {
           $sort: {
-            "capitalWithdrawHistory.createdAt": -1
-          }
+            "capitalWithdrawHistory.createdAt": -1,
+          },
         },
         {
           $project: {
@@ -929,16 +928,21 @@ export const totalCapitalWithdrawHistory = async (req, res, next) => {
             topUpAmount: "$capitalWithdrawHistory.withdrawAmount",
             walletUrl: "$capitalWithdrawHistory.walletUrl",
             status: "$capitalWithdrawHistory.status",
-           transactionID:"$capitalWithdrawHistory.tnxID",
+            transactionID: "$capitalWithdrawHistory.tnxID",
             createdAt: "$capitalWithdrawHistory.createdAt",
-          }
-        }
+          },
+        },
       ];
 
       const result = await User.aggregate(aggregateQuery);
 
       if (result) {
-        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+        res
+          .status(200)
+          .json({
+            allAddFundHistory: result,
+            msg: "Successfully get users fund history!",
+          });
       }
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
@@ -947,8 +951,6 @@ export const totalCapitalWithdrawHistory = async (req, res, next) => {
     next(error);
   }
 };
-
-
 
 export const totalWalletWithdrawHistory = async (req, res, next) => {
   const userId = req.user._id;
@@ -958,12 +960,12 @@ export const totalWalletWithdrawHistory = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const aggregateQuery = [
         {
-          $unwind: "$walletWithdrawHistory"
+          $unwind: "$walletWithdrawHistory",
         },
         {
           $sort: {
-            "walletWithdrawHistory.createdAt": -1
-          }
+            "walletWithdrawHistory.createdAt": -1,
+          },
         },
         {
           $project: {
@@ -972,16 +974,21 @@ export const totalWalletWithdrawHistory = async (req, res, next) => {
             topUpAmount: "$walletWithdrawHistory.withdrawAmount",
             walletUrl: "$walletWithdrawHistory.walletUrl",
             status: "$walletWithdrawHistory.status",
-           transactionID:"$walletWithdrawHistory.tnxID",
+            transactionID: "$walletWithdrawHistory.tnxID",
             createdAt: "$walletWithdrawHistory.createdAt",
-          }
-        }
+          },
+        },
       ];
 
       const result = await User.aggregate(aggregateQuery);
 
       if (result) {
-        res.status(200).json({ allAddFundHistory: result, msg: "Successfully get users fund history!" });
+        res
+          .status(200)
+          .json({
+            allAddFundHistory: result,
+            msg: "Successfully get users fund history!",
+          });
       }
     } else {
       return next(errorHandler(401, "Admin Login Failed"));
@@ -991,49 +998,44 @@ export const totalWalletWithdrawHistory = async (req, res, next) => {
   }
 };
 
-
 // edit user profile by admin
 
 export const editProfileByAdmin = async (req, res, next) => {
   const adminId = req.user._id;
-  const {id}=req.params;
-  console.log(id);
+  const { id } = req.params;
   const adminData = await User.findById(adminId);
   try {
     if (adminData.isSuperAdmin) {
-    const userData = await User.findById(id);
-    if (userData) {
-      const { username,email,password,txnPassword, phone, address } = req.body;
-      
-      userData.username = username || userData.username;
-      userData.address = address || userData.address;
-      userData.phone = phone || userData.phone;
-      userData.email = email || userData.email;
+      const userData = await User.findById(id);
+      if (userData) {
+        const { username, email, password, txnPassword, phone, address } =
+          req.body;
+        userData.username = username || userData.username;
+        userData.address = address || userData.address;
+        userData.phone = phone || userData.phone;
+        userData.email = email || userData.email;
 
+        if (password) {
+          const hashedPassword = bcryptjs.hashSync(password, 10);
+          userData.password = hashedPassword;
+        }
 
-      if (password) {
-        const hashedPassword = bcryptjs.hashSync(password, 10);
-        userData.password = hashedPassword;
+        if (txnPassword) {
+          const hashedPassword = bcryptjs.hashSync(txnPassword, 10);
+          userData.transactionPassword = hashedPassword;
+        }
+
+        const updatedUser = await userData.save();
+        res
+          .status(200)
+          .json({ updatedUser, sts: "01", msg: "Successfully Updated" });
+      } else {
+        next(errorHandler("User not found, Please Login first"));
       }
-
-      if (txnPassword) {
-        const hashedPassword = bcryptjs.hashSync(txnPassword, 10);
-        userData.transactionPassword = hashedPassword;
-      }
-
-      const updatedUser = await userData.save();
-
-      res
-        .status(200)
-        .json({ updatedUser, sts: "01", msg: "Successfully Updated" });
     } else {
-      next(errorHandler("User not found, Please Login first"));
+      return next(errorHandler(401, "Admin Login Failed"));
     }
-  } else {
-    return next(errorHandler(401, "Admin Login Failed"));
-  }
   } catch (error) {
     next(error);
   }
 };
-

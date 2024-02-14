@@ -12,7 +12,7 @@ const importData = async () => {
     await Package.deleteMany();
 
     const createdUsers = await User.insertMany(users);
-    const createdPackages=await Package.insertMany(packages);
+    const createdPackages = await Package.insertMany(packages);
     console.log("Data cleared");
     process.exit();
   } catch (error) {

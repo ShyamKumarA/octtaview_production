@@ -15,7 +15,7 @@ import IconInstagram from '../../components/Icon/IconInstagram';
 import IconFacebookCircle from '../../components/Icon/IconFacebookCircle';
 import IconTwitter from '../../components/Icon/IconTwitter';
 import IconGoogle from '../../components/Icon/IconGoogle';
-import { WithdrawFunds } from '../../Slice/userSlice';
+import { WithdrawFunds, fetchUserProfile } from '../../Slice/userSlice';
 import { IRootState, useAppDispatch, useAppSelector } from '../../Slice/index';
 import { Show_Toast } from '../Components/Toastify';
 import IconEye from '../../components/Icon/IconEye';
@@ -26,14 +26,17 @@ const Withdrawfund = () => {
     const [totalAmount, setTotalAmount] = useState(0);
     const [paymentUrl, setPaymentUrl] = useState('');
     const [transpassword, setTransPassword] = useState('');
+
     const [showpassword, setShowPassword] = useState(false);
     const dispatch = useAppDispatch();
     const navigate = useNavigate();
+    const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
 
-    const { data } = useAppSelector((state: any) => state.getWithdrawFundreducer);
-
+    const { data:data2, error: withdrawFundError } = useAppSelector((state: any) => state.getWithdrawFundReducer);
     useEffect(() => {
         dispatch(setPageTitle('Register Boxed'));
+        dispatch(fetchUserProfile());
+
     }, [dispatch]);
 
     useEffect(() => {
@@ -46,33 +49,45 @@ const Withdrawfund = () => {
             setTotalAmount(deductedAmount);
         }
     }, [amount]);
+    
 
-    const handleSubmit = (e: any) => {
+    const handleSubmit = async (e: any) => {
         e.preventDefault();
-        
+    
         const numericAmount = Number(amount);
         const minWithdrawalAmount = 15;
         const minPasswordLength = 6;
     
-        if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
-            dispatch(WithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
-            if (data) navigate('/reportstatus');
-            Show_Toast({ message: 'Withdraw confirmed..', type: true });
-            setAmount('');
-            setTotalAmount(0);
-            setServiceCharge(0);
-            setTransPassword('');
-            setPaymentUrl('');
-        } else {
-            if (numericAmount < minWithdrawalAmount) {
-                Show_Toast({ message: `Minimum withdrawal amount is $${minWithdrawalAmount}.`, type: false });
+        try {
+            if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
+                await dispatch(WithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
+    
+                if (withdrawFundError) {
+                    Show_Toast({ message: withdrawFundError, type: false });
+                } else {
+                    navigate('/reportstatus');
+                    Show_Toast({ message: 'Withdraw confirmed..', type: true });
+                    setAmount('');
+                    setTotalAmount(0);
+                    setServiceCharge(0);
+                    setTransPassword('');
+                    setPaymentUrl('');
+                }
             } else {
-                Show_Toast({ message: `Transaction Password must be at least ${minPasswordLength} characters.`, type: false });
+                if (numericAmount < minWithdrawalAmount) {
+                    Show_Toast({ message: `Minimum withdrawal amount is $${minWithdrawalAmount}.`, type: false });
+                } else {
+                    Show_Toast({ message: `Transaction Password must be at least ${minPasswordLength} characters.`, type: false });
+                }
             }
+        } catch (error) {
+            console.error("Error from the server:", error);
+            Show_Toast({ message: 'An error occurred while processing your request.', type: false });
         }
     };
     
 
+    
     return (
         <div>
             <Headers />
@@ -82,6 +97,7 @@ const Withdrawfund = () => {
                     <h2 className="text-xl text-white">Withdraw Fund</h2>
                 </div>
             </div>
+          
             <div className="mb-5 flex flex-col sm:flex-row items-center justify-center mt-10">
                 {/* <div className="max-w-[19rem] w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none flex flex-col justify-center items-center mb-5 sm:mb-0">
                     <h1 className="text-white">Available Balance</h1>
@@ -91,12 +107,14 @@ const Withdrawfund = () => {
                         <h5 className="text-[#3b3f5c] text-xl font-semibold mb-4 dark:text-white-light">0</h5>
                     </div>
                 </div> */}
+                
 
-                <div className="max-w-[19rem] ml-0 sm:ml-10 w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-5">
+                <div className="max-w-[26rem] ml-0 sm:ml-10 w-full bg-white shadow-[4px_6px_10px_-3px_#bfc9d4] rounded border border-white-light dark:border-[#1b2e4b] dark:bg-[#191e3a] dark:shadow-none p-5">
                     <div className="flex flex-col">
-                        <h1 className="text-white">Minimum withdrawal amount is $15. </h1>
+                        <h2 className='text-white'>Available wallet amount : $ {userProfile && userProfile.totalIncome}</h2>
+                        <h1 className="text-white mt-3">Withdraw as much as you want, but never less than $15.</h1>
                     </div>
-                    <form className="py-5" onSubmit={handleSubmit}>
+                    <form className="py-5"onSubmit={(e) => handleSubmit(e)}>
                         <label htmlFor="fullname">Amount</label>
                         <input type="number" placeholder="Amount" className="form-input" required value={amount} onChange={(e) => setAmount(e.target.value)} />
                         {amount && Number(amount) < 15 && <p className="text-red-500">Minimum withdrawal amount is $15.</p>}
