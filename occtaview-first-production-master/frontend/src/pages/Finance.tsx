@@ -758,7 +758,7 @@ const Finance = () => {
                                     offset={[0, 5]}
                                     placement={`${isRtl ? 'bottom-start' : 'bottom-end'}`}
                                     btnClassName="hover:opacity-80"
-                                    button={<IconHorizontalDots className="hover:opacity-80 opacity-70" />}
+                                    // button={<IconHorizontalDots className="hover:opacity-80 opacity-70" />}
                                 >
                                     <ul className="text-black dark:text-white-dark">
                                         <li>
@@ -796,7 +796,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">SponserID</h6>
-                                        <p className="text-white-dark text-xs">{userProfile && userProfile.ownSponserId}</p>
+                                        <p className="text-white-dark text-xs mt-4">{userProfile && userProfile.ownSponserId}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
@@ -810,7 +810,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">DailyBonus</h6>
-                                        <p className="text-white-dark text-xs">$ {userProfile && userProfile.dailyBonus}</p>
+                                        <p className="text-white-dark text-xs mt-4">$ {userProfile && userProfile.dailyBonus}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
@@ -823,7 +823,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Level ROI</h6>
-                                        <p className="text-white-dark text-xs">{userProfile && userProfile.levelRoi}</p>
+                                        <p className="text-white-dark text-xs mt-4">{userProfile && userProfile.levelRoi}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={ethereum.series} options={ethereum.options} type="line" height={45} /> */}</div>
@@ -847,7 +847,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Name</h6>
-                                        <p className="text-white-dark text-xs">{userProfile && userProfile.name}</p>
+                                        <p className="text-white-dark text-xs mt-4">{userProfile && userProfile.name}</p>
                                     </div>
                                 </div>
                                 {/* <div className="mb-5 overflow-hidden">
@@ -866,7 +866,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Email</h6>
-                                        <p className="text-white-dark text-xs">{userProfile && userProfile.email}</p>
+                                        <p className="text-white-dark text-xs mt-4">{userProfile && userProfile.email}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={solana.series} options={solana.options} type="line" height={45} /> */}</div>
@@ -882,7 +882,7 @@ const Finance = () => {
                                     </div> */}
                                     <div className="ltr:ml-2 rtl:mr-2">
                                         <h6 className="text-dark dark:text-white-light">Phone</h6>
-                                        <p className="text-white-dark text-xs">{userProfile && userProfile.phone}</p>
+                                        <p className="text-white-dark text-xs mt-4">{userProfile && userProfile.phone}</p>
                                     </div>
                                 </div>
                                 <div className="mb-5 overflow-hidden">{/* <ReactApexChart series={solana.series} options={solana.options} type="line" height={45} /> */}</div>

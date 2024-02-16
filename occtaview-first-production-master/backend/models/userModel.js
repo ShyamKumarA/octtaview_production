@@ -118,6 +118,7 @@ const userSchema = new mongoose.Schema(
     },
     transactionPassword: {
       type: String,
+      required: true,
     },
     aadhaar: {
       type: String,

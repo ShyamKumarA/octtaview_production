@@ -88,10 +88,11 @@ const CapitalHistory = () => {
                         className="whitespace-nowrap table-striped"
                         records={recordsData}
                         columns={[
-                            { accessor: '$ withdrawAmount', title: 'Withdraw Amount' },
-                            { accessor: 'status', title: 'Status' },
+                            { accessor: 'withdrawAmount', title: 'Withdraw Amount' },
                             { accessor: 'packageName', title: 'Package Name' },
                             { accessor: 'capitalWalletUrl', title: 'Wallet Url' },
+                            { accessor: 'status', title: 'Status' },
+
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}

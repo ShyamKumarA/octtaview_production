@@ -56,37 +56,33 @@ const Profile = () => {
                                 <img src="/assets/images/profile-icon.jpeg" alt="img" className="w-24 h-24 rounded-full object-cover  mb-5" />
                                 <p className="font-semibold text-primary text-xl">{userProfile && userProfile.name}</p>
                             </div>
-                            <ul className="mt-5 flex flex-col max-w-[160px]  space-y-4 font-semibold text-white-dark">
-                                <li className="flex  gap-2">
-                                    <IconCoffee className="shrink-0" />
-                                    Email:
-                                    {userProfile && userProfile.email}
-                                </li>
-                                <li className="flex  gap-2">
-                                    <IconCalendar className="shrink-0" />
-                                    Phone:
-                                    {userProfile && userProfile.phone}
-                                </li>
-                                <li className="flex  gap-2">
-                                    <IconMapPin className="shrink-0" />
-                                    Address:
-                                     {userProfile && userProfile.address}
-                                </li>
-                                <li>
-                                    <button className="flex gap-2">
-                                        <IconMail className="w-5 h-5 shrink-0" />
-                                        Sponserid:
-                                        <span className="text-primary truncate"> {userProfile && userProfile.ownSponserId}</span>
-                                    </button>
-                                </li>
-                                <li className="flex  gap-2">
-                                    <IconPhone />
-                                    <span className="whitespace-nowrap" dir="ltr">
-                                        Daily bonus:
-                                        $ {userProfile && userProfile.dailyBonus}
-                                    </span>
-                                </li>
-                            </ul>
+                           <ul className="mt-5 flex flex-col max-w-[160px] space-y-4 font-semibold text-white-dark">
+  <li className="flex gap-2">
+    <IconCoffee className="shrink-0" />
+    Email: {userProfile && userProfile.email}
+  </li>
+  <li className="flex gap-2">
+    <IconCalendar className="shrink-0" />
+    Phone: {userProfile && userProfile.phone}
+  </li>
+  <li className="flex gap-2">
+    <IconMapPin className="shrink-0" />
+    Address: {userProfile && userProfile.address}
+  </li>
+  <li className="flex gap-2">
+    <button className="flex gap-2">
+      <IconMail className="w-5 h-5 shrink-0" />
+      Sponserid: <span className="text-primary truncate"> {userProfile && userProfile.ownSponserId}</span>
+    </button>
+  </li>
+  <li className="flex gap-2">
+    <IconPhone />
+    <span className="whitespace-nowrap" dir="ltr">
+      Daily bonus: $ {userProfile && userProfile.dailyBonus}
+    </span>
+  </li>
+</ul>
+
                             {/* <ul className="mt-7 flex items-center justify-center gap-2">
                                 <li>
                                     <button className="btn btn-info flex items-center justify-center rounded-full w-10 h-10 p-0">

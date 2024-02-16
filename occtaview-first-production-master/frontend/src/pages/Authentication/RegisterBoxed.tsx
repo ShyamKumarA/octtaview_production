@@ -19,6 +19,7 @@ import Header from '../../components/Layouts/Header';
 import { useAppDispatch, useAppSelector } from '../../Slice/index';
 import { logout } from '../../Slice/authSlice';
 import IconEye from '../../components/Icon/IconEye';
+import { Show_Toast } from '../Components/Toastify';
 
 const RegisterBoxed = () => {
     const dispatch = useAppDispatch();
@@ -45,13 +46,34 @@ const RegisterBoxed = () => {
         }
     }, [userInfo]);
 
-    const submitForm = (e: any) => {
+    const submitForm = async (e: any) => {
         e.preventDefault();
+        const minPasswordLength = 6;
 
-        const data = { userName, email, phone, address, transactionPassword, password };
+        if (transactionPassword.length < minPasswordLength || password.length < minPasswordLength) {
+            Show_Toast({ message: 'Password and transaction password must be 6 characters ', type: false });
+        }
 
-        dispatch(addNewUser(data));
-        // if (userData) navigate('/');
+        const data = {
+            userName,
+            email,
+            phone,
+            address,
+            transactionPassword,
+            password,
+        };
+
+        try {
+            const response = await dispatch(addNewUser(data));
+            console.log(response, 'response from api');
+            if (response.type === 'addNewUser/fulfilled') {
+                Show_Toast({ message: 'Registered successfully!', type: true });
+            } else {
+                Show_Toast({ message: error, type: false });
+            }
+        } catch (error) {
+            console.error('Error submitting form:', error);
+        }
     };
 
     const logoutHandler = (e: any) => {
@@ -96,6 +118,7 @@ const RegisterBoxed = () => {
                                 <input
                                     id="Name"
                                     type="text"
+                                    required
                                     value={userName}
                                     onChange={(e) => setUserName(e.target.value)}
                                     placeholder="Enter Name"
@@ -114,6 +137,7 @@ const RegisterBoxed = () => {
                                     id="email"
                                     type="email"
                                     value={email}
+                                    required
                                     onChange={(e) => setEmail(e.target.value)}
                                     placeholder="Enter mail"
                                     className="form-input ps-10 placeholder:text-white-dark"
@@ -133,6 +157,7 @@ const RegisterBoxed = () => {
                                     id="Phone"
                                     type="number"
                                     value={phone}
+                                    required
                                     onChange={(e) => setPhone(e.target.value)}
                                     placeholder="Enter number"
                                     className="form-input ps-10 placeholder:text-white-dark"
@@ -166,16 +191,18 @@ const RegisterBoxed = () => {
                             <div className="relative text-white-dark">
                                 <input
                                     id="transactionPassword"
-                                    type={showpassword ? 'text' : 'password'}
+                                    required
+                                    type={showtranspassword ? 'text' : 'password'}
                                     value={transactionPassword}
                                     onChange={(e) => setTransactionPassword(e.target.value)}
                                     placeholder="Enter Transaction Password"
                                     className="form-input ps-10 placeholder:text-white-dark"
                                 />
-                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showpassword)}>
-                                    {showpassword ? <IconLockDots /> : <IconEye />}
+                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setTransShowPassword(!showtranspassword)}>
+                                    {showtranspassword ? <IconLockDots /> : <IconEye />}
                                 </span>
                             </div>
+                            {transactionPassword && transactionPassword.length < 6 && <p className="text-red-500">Transaction Password must be at least six digits.</p>}
                         </div>
                         {/*  */}
                         <div>
@@ -183,20 +210,22 @@ const RegisterBoxed = () => {
                             <div className="relative text-white-dark">
                                 <input
                                     id="Password"
-                                    type={showtranspassword ? 'text' : 'password'}
+                                    required
+                                    type={showpassword ? 'text' : 'password'}
                                     value={password}
                                     onChange={(e) => setPassword(e.target.value)}
                                     placeholder="Enter Password"
                                     className="form-input ps-10 placeholder:text-white-dark"
                                 />
-                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setTransShowPassword(!showtranspassword)}>
-                                    {showtranspassword ? <IconLockDots /> : <IconEye />}
+                                <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showpassword)}>
+                                    {showpassword ? <IconLockDots /> : <IconEye />}
                                 </span>
                             </div>
+                            {password && password.length < 6 && <p className="text-red-500">Login Password must be at least six digits.</p>}
                         </div>
 
                         {/*  */}
-                        <button onClick={submitForm} type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
+                        <button onClick={(e) => submitForm(e)} type="submit" className="btn btn-gradient !mt-6 w-full border-0 uppercase shadow-[0_10px_20px_-10px_rgba(67,97,238,0.44)]">
                             {loading && <span className="animate-spin border-2 border-white border-l-transparent rounded-full w-5 h-5 ltr:mr-4 rtl:ml-4 inline-block align-middle"></span>}
                             Add Member
                         </button>

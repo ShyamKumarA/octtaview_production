@@ -208,9 +208,10 @@ const ReportStatus = () => {
                         records={recordsData}
                         columns={[
                             { accessor: `withdrawAmount`, title: 'Withdraw Amount' },
-                            { accessor: 'status', title: 'Status' },
                             { accessor: 'packageName', title: 'Package Name' },
                             { accessor: 'walletUrl', title: 'Wallet Url' },
+                            { accessor: 'status', title: 'Status' },
+
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}

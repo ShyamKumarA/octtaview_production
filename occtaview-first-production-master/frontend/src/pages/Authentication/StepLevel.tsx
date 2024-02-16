@@ -61,11 +61,11 @@ const StepLevel = () => {
                         className="whitespace-nowrap table-striped"
                         records={recordsData}
                         columns={[
-                            { accessor: 'userID', title: 'userID' },
-                            { accessor: 'name', title: 'Sponsor Name' },
+                            { accessor: 'userID', title: 'UserID' },
+                            { accessor: 'name', title: 'Name' },
                             { accessor: 'LevelAmountCredited', title: 'Level Amount Credited' },
                             { accessor: 'percentage', title: 'Percentage' },
-                            { accessor: 'createdAt', title: 'createdAt' },
+                            { accessor: 'createdAt', title: 'Created At' },
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}
