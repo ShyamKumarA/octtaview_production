@@ -43,12 +43,9 @@ const Header = () => {
 
     const { userInfo } = useAppSelector((state: any) => state.userReducer);
     const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
-    console.log(userProfile,"userProfile...userProfile")
     const [copied, setCopied] = useState(false);
     const userProfileId = userProfile && userProfile.id;
-    console.log(userProfileId,"userProfileId.")
 
-console.log(userInfo,"user")
     useEffect(() => {
         const selector = document.querySelector('ul.horizontal-menu a[href="' + window.location.pathname + '"]');
         if (selector) {
@@ -72,7 +69,6 @@ console.log(userInfo,"user")
         if (!userInfo) navigate('/login');
     }, [location, userInfo]);
 
-    // console.log(userInfo.id);
 
     const isRtl = useSelector((state: IRootState) => state.themeConfig.rtlClass) === 'rtl' ? true : false;
 
@@ -171,7 +167,7 @@ console.log(userInfo,"user")
 
                         {/* ------------------------------------------------------------------------- */}
 
-                        <div>
+                        {/* <div>
                             {themeConfig.theme === 'light' ? (
                                 <button
                                     className={`${
@@ -214,7 +210,7 @@ console.log(userInfo,"user")
                                     <IconLaptop />
                                 </button>
                             )}
-                        </div>
+                        </div> */}
 
                         <div className="dropdown shrink-0 flex">
                             <Dropdown

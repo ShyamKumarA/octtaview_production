@@ -38,7 +38,6 @@ export const addNewUser = createAsyncThunk('addNewUser', async (user: any) => {
             'content-type': 'application/json',
         },
     };
-    console.log(user.transactionPassword);
 
     const response = await axios.post(
         `${URL}/api/user/add-user`,
@@ -125,7 +124,6 @@ export const addNewFund = createAsyncThunk('addNewFund', async (fund: any) => {
         },
         config
     );
-    console.log(response, 'resposne...........................................');
 
     return response.data;
 });
@@ -238,7 +236,7 @@ export const userProfileReducer = userProfileSlice.reducer;
 
 //4...... change PAssword
 interface UserData {
-    password: any;
+    newPassword: any;
     confirmPassword: any;
 }
 
@@ -251,7 +249,7 @@ interface UserState {
 
 // Redux action to get add fund history
 export const fetchChangePassword = createAsyncThunk('fetchChangePassword', async (data: UserData) => {
-    const { password, confirmPassword } = data;
+    const { newPassword, confirmPassword } = data;
 
     const token: any = localStorage.getItem('userInfo');
     const parsedData = JSON.parse(token);
@@ -266,12 +264,11 @@ export const fetchChangePassword = createAsyncThunk('fetchChangePassword', async
     const response = await axios.post(
         `${URL}/api/user/change-password`,
         {
-            password,
+            newPassword,
             confirmPassword,
         },
         config
     );
-    console.log(response);
 
     return response;
 });
@@ -306,7 +303,7 @@ export const addchangePasswordreducer = addchangePassword.reducer;
 
 interface UserDatas {
     currentTransactionPassword: any;
-    newTransactionPassword: any;
+    newPassword: any;
     confirmTransactionPassword: any;
     UserInfo: any;
 }
@@ -320,7 +317,7 @@ interface UserState {
 
 // Redux
 export const fetchTransactionChangePassword = createAsyncThunk('fetchChangePassword', async (datas: any) => {
-    const { currentTransactionPassword, newTransactionPassword, confirmTransactionPassword } = datas;
+    const {  newPassword, confirmTransactionPassword } = datas;
 
     const token: any = localStorage.getItem('userInfo');
     const parsedData = JSON.parse(token);
@@ -335,8 +332,8 @@ export const fetchTransactionChangePassword = createAsyncThunk('fetchChangePassw
     const response = await axios.post(
         `${URL}/api/user/transactonpassword`,
         {
-            currentTransactionPassword,
-            newTransactionPassword,
+            
+            newPassword,
             confirmTransactionPassword,
         },
         config
@@ -544,6 +541,7 @@ export const fetchLevelIncome1 = createAsyncThunk<directIncome[]>('fetchLevelInc
 
     // Adjust the API endpoint according to your backend
     const response = await axios.get(`${URL}/api/user/view-level1-Report`, config);
+    console.log(response.data,"level icome")
 
     return response.data;
 });
@@ -735,10 +733,8 @@ const initialState4: WithDrawFundState = {
 };
 
 export const WithdrawFunds = createAsyncThunk('addNewFund', async (fund: any) => {
-    console.log(fund, 'fund....');
     const token: any = localStorage.getItem('userInfo');
     const parsedData = JSON.parse(token);
-    console.log(token, 'token....');
 
     const config = {
         headers: {
@@ -755,7 +751,7 @@ export const WithdrawFunds = createAsyncThunk('addNewFund', async (fund: any) =>
         },
         config
     );
-    console.log(response, 'response  fund....');
+    console.log(response.data,"response from widhraw")
 
     return response.data;
 });
@@ -779,15 +775,12 @@ const getWithdrawFundSlice = createSlice({
                 state.loading = false;
                 state.error = action.error.message;
 
-                // console.log(state.error, "action.error");
 
                 if (state.error && state.error === 'Request failed with status code 401') {
                     state.error = 'Check the password or check your wallet balance';
-                    console.log('reached here 1');
                     // Show_Toast({ message: state.error, type: false});
                 } else {
                     state.error = 'An error occurred while processing your request.';
-                    console.log('reached here 2');
                     // Show_Toast({ message: state.error, type: false });
                 }
             });
@@ -837,6 +830,8 @@ export const capitalWithdrawFunds = createAsyncThunk('addNewFund', async (fund: 
         },
         config
     );
+    console.log(response,"reached")
+
 
     return response.data;
 });
@@ -857,10 +852,8 @@ const getCapitalWithdrawFundSlice = createSlice({
                 state.data = action.payload;
             })
             .addCase(capitalWithdrawFunds.rejected, (state, action: any) => {
-                console.log('Rejection case executed');
                 state.error = action.error.message;
 
-                console.log(state.error, 'action.error');
 
                 if (state.error && state.error === 'Request failed with status code 401') {
                     state.error = 'Check the password or your validity of 90 days';

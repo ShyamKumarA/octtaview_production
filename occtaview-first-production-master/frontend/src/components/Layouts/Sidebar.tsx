@@ -42,7 +42,6 @@ const Sidebar = () => {
     const dispatch = useDispatch();
     const { t } = useTranslation();
     const { data: userProfile, loading, error } = useAppSelector((state) => state.userProfileReducer);
-console.log(userProfile,"data;;;")
     const toggleMenu = (value: string) => {
         setCurrentMenu((oldValue) => {
             return oldValue === value ? '' : value;
@@ -145,7 +144,7 @@ console.log(userProfile,"data;;;")
                                 <AnimateHeight duration={300} height={currentMenu === 'Portal' ? 'auto' : 0}>
                                     <ul className="sub-menu text-gray-500">
                                         <li>
-                                            <NavLink to="/myprofile">{t('My Details')}</NavLink>
+                                            <NavLink to="/myprofile">{t('My Profile')}</NavLink>
                                         </li>
                                         <li>
                                             <NavLink to="/ChangePassword">{t('Change Login Password')}</NavLink>
@@ -169,7 +168,7 @@ console.log(userProfile,"data;;;")
                                         <button type="button" className={`${currentMenu === 'Fund Added' ? 'active' : ''} nav-link group w-full`} onClick={() => toggleMenu('Fund Added')}>
                                             <div className="flex items-center">
                                                 <IconMenuInvoice className="group-hover:!text-primary shrink-0" />
-                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Fund Added')}</span>
+                                                <span className="ltr:pl-3 rtl:pr-3 text-black dark:text-[#506690] dark:group-hover:text-white-dark">{t('Add Fund')}</span>
                                             </div>
 
                                             <div className={currentMenu !== 'Fund Added' ? 'rtl:rotate-90 -rotate-90' : ''}>
@@ -265,7 +264,7 @@ console.log(userProfile,"data;;;")
                 <NavLink to="/withdrawfund">{t('WithDraw Fund')}</NavLink>
             </li>
             <li>
-                <NavLink to="/reportstatus">{t('Reports Status')}</NavLink>
+                <NavLink to="/reportstatus">{t('WithDraw History')}</NavLink>
             </li>
             <li>
                 <NavLink to="/capitalwithdraw">{t('Capital Withdraw')}</NavLink>

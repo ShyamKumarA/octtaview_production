@@ -60,11 +60,9 @@ const Withdrawfund = () => {
     
         try {
             if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
-                await dispatch(WithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
-    
-                if (withdrawFundError) {
-                    Show_Toast({ message: withdrawFundError, type: false });
-                } else {
+                const response = await dispatch(WithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
+                console.log(response?.type,"response from api reached")    
+                if (response?.type === "addNewFund/fulfilled") {
                     navigate('/reportstatus');
                     Show_Toast({ message: 'Withdraw confirmed..', type: true });
                     setAmount('');
@@ -72,6 +70,9 @@ const Withdrawfund = () => {
                     setServiceCharge(0);
                     setTransPassword('');
                     setPaymentUrl('');
+                } else {
+                    Show_Toast({ message: withdrawFundError, type: false });
+
                 }
             } else {
                 if (numericAmount < minWithdrawalAmount) {

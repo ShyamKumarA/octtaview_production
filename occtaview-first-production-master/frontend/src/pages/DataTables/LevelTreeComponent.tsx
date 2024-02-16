@@ -38,8 +38,8 @@ const LevelTreeComponent: React.FC<LevelTreeComponentProps> = ({ level }) => {
                         columns={[
                             { accessor: 'username', title: 'Name' },
                             { accessor: 'email', title: 'Email' },
-                            { accessor: 'ownSponserId', title: 'Sponsor ID' },
-                            { accessor: 'userStatus', title: 'Status', render: (value) => (value ? 'Active' : 'Inactive') },
+                            { accessor: 'sponserName', title: 'Sponser Name' },
+                            { accessor: 'userStatus', title: 'Status', },
                         ]}
                         totalRecords={initialRecords2 ? initialRecords2.length : 0}
                         recordsPerPage={pageSize2}

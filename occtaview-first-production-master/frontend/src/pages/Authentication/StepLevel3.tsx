@@ -62,9 +62,10 @@ const StepLevel3 = () => {
                         records={recordsData}
                         columns={[
                             { accessor: 'userID', title: 'userID' },
-                            { accessor: 'name', title: 'name' },
-                            { accessor: 'capitalAmount', title: 'Sponsor ID' },
-                            { accessor: 'LevelAmountCredited', title: 'LevelAmountCredited' },
+                            { accessor: 'name', title: 'Sponsor Name' },
+                            { accessor: 'LevelAmountCredited', title: 'Level Amount Credited' },
+                            { accessor: 'percentage', title: 'Percentage' },
+                            { accessor: 'createdAt', title: 'createdAt' },
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}

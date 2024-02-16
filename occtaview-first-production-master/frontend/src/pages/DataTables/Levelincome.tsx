@@ -18,6 +18,7 @@ const Levelincome = () => {
     useEffect(() => {
         dispatch(fetchLevelIncome1());
     }, [dispatch]);
+    
     useEffect(() => {
         dispatch(setPageTitle('Skin Tables'));
     });
@@ -38,7 +39,7 @@ const Levelincome = () => {
         <div className="inline-block w-full">
             <Header />
             <ul className="mb-5 grid grid-cols-4 gap-2 text-center">
-                <li>
+                <li className="mt-5">
                     <div
                         className={`${activeTab === 1 ? '!bg-primary text-white' : ''}
                 block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`}
@@ -47,12 +48,12 @@ const Levelincome = () => {
                         Level 1
                     </div>
                 </li>
-                <li>
+                <li className="mt-5">
                     <div className={`${activeTab === 2 ? '!bg-primary text-white' : ''} block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`} onClick={levelTwoHandler}>
                         Level 2
                     </div>
                 </li>
-                <li>
+                <li className="mt-5">
                     <div className={`${activeTab === 3 ? '!bg-primary text-white' : ''} block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`} onClick={levelThreeHandler}>
                         Level 3
                     </div>
@@ -66,6 +67,7 @@ const Levelincome = () => {
                 {/* Additional components for other levels */}
             </div>
             <div className="flex justify-between">
+          
                 <button type="button" className={`btn btn-primary ${activeTab === 1 ? 'hidden' : ''}`} onClick={() => setActiveTab(activeTab === 3 ? 2 : 1)}>
                     Back
                 </button>

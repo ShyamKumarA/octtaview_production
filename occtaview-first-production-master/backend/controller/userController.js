@@ -21,7 +21,7 @@ export const userLogin = async (req, res, next) => {
       return next(errorHandler(401, "Wrong credentials"));
     }
     const token = jwt.sign({ userId: validUser._id }, "Shyam", {
-      expiresIn: "365d",
+      expiresIn: "1d",
     });
     //const {password:hashedPassword,...rest}=validUser._doc
     res.cookie("access_token", token, { httpOnly: true }).status(200).json({

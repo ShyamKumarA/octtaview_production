@@ -62,6 +62,7 @@ const CapitalWithdraw = () => {
     //         navigate('/capitalhistory');
     //     }
     // };
+
     const handleSubmit = async (e: any) => {
         e.preventDefault();
     
@@ -71,17 +72,24 @@ const CapitalWithdraw = () => {
     
         try {
             if (!isNaN(numericAmount) && numericAmount >= minWithdrawalAmount && transpassword.length >= minPasswordLength) {
-                await dispatch(capitalWithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
-    
-                if (capitalWithdrawError) {
-                    Show_Toast({ message: capitalWithdrawError, type: false });
-                } else {
+               const respone = await dispatch(capitalWithdrawFunds({ amount: numericAmount, transpassword, paymentUrl }));
+    console.log(respone,"response from api")
+                if (respone?.type ==="addNewFund/fulfilled") {
                     navigate('/capitalhistory');
                     Show_Toast({ message: 'Withdraw confirmed!', type: true });
                     setAmount('');
                     setTransPassword('');
                     setPaymentUrl('');
-                    return; // Exit the function to prevent showing the toast for invalid input
+                } else {
+                    Show_Toast({ message: capitalWithdrawError, type: false });
+
+                }
+            }
+            else {
+                if (numericAmount < minWithdrawalAmount) {
+                    Show_Toast({ message: `Minimum withdrawal amount is $${minWithdrawalAmount}.`, type: false });
+                } else {
+                    Show_Toast({ message: `Transaction Password must be at least ${minPasswordLength} characters.`, type: false });
                 }
             }
     

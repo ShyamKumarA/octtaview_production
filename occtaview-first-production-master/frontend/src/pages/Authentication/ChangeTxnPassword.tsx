@@ -17,9 +17,11 @@ import IconGoogle from '../../components/Icon/IconGoogle';
 import React from 'react';
 import Header from '../../components/Layouts/Header';
 import { fetchTransactionChangePassword } from '../../Slice/userSlice';
+import { Show_Toast } from '../Components/Toastify';
 
 const ChangeTxnPassword = () => {
     const [currentTransactionPassword, setCurrentTransactionPassword] = useState('');
+    const[newPassword,setnewPassword]=useState('')
     const [newTransactionPassword, setNewTransactionPassword] = useState('');
     const [confirmTransactionPassword, setConfirmTransactionPassword] = useState('');
     //
@@ -32,15 +34,18 @@ const ChangeTxnPassword = () => {
 
     const submitForm = (e: React.FormEvent) => {
         e.preventDefault();
-        if (newTransactionPassword !== confirmTransactionPassword) {
+        if (newPassword !== confirmTransactionPassword) {
             console.error('Passwords do not match');
             return;
         }
 
-        dispatch(fetchTransactionChangePassword({ newTransactionPassword, confirmTransactionPassword }) as any);
+        dispatch(fetchTransactionChangePassword({ newPassword, confirmTransactionPassword }) as any);
 
-        // alert('Change transaction password request sent!');
-    };
+        Show_Toast({ message: ' Transaction password updated', type: true });
+
+        setConfirmTransactionPassword('')
+        setnewPassword('')  
+      };
 
     const navigate = useNavigate();
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
@@ -71,7 +76,7 @@ const ChangeTxnPassword = () => {
                             <h1 className="text-3xl font-extrabold uppercase !leading-snug text-primary md:text-2xl">TRANSACTION PASSWORD UPDATE</h1>
                             {/* <p className="text-base font-bold leading-normal text-white-dark">Enter your Transaction Password and New Transaction Password</p> */}
                         </div>
-                        <form className="space-y-5 dark:text-white" onClick={submitForm}>
+                        <form className="space-y-5 dark:text-white" onSubmit={submitForm}>
                             {/* <div>
                                 <label htmlFor="Password">Current Transaction Password</label>
                                 <div className="relative text-white-dark">
@@ -98,8 +103,9 @@ const ChangeTxnPassword = () => {
                                         type="password"
                                         placeholder="Enter password"
                                         className="form-input ps-10 placeholder:text-white-dark"
-                                        value={newTransactionPassword}
-                                        onChange={(e) => setNewTransactionPassword(e.target.value)}
+                                        value={newPassword}
+                                        onChange={(e) => setnewPassword(e.target.value)}
+                                        required
                                     />
                                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                         <IconUser fill={true} />
@@ -117,6 +123,7 @@ const ChangeTxnPassword = () => {
                                         className="form-input ps-10 placeholder:text-white-dark"
                                         value={confirmTransactionPassword}
                                         onChange={(e) => setConfirmTransactionPassword(e.target.value)}
+                                        required
                                     />
                                     <span className="absolute start-4 top-1/2 -translate-y-1/2">
                                         <IconUser fill={true} />

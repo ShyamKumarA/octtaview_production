@@ -47,7 +47,6 @@ const RegisterBoxed = () => {
 
     const submitForm = (e: any) => {
         e.preventDefault();
-        console.log(userName, email, phone, address, transactionPassword, password);
 
         const data = { userName, email, phone, address, transactionPassword, password };
 
@@ -170,7 +169,7 @@ const RegisterBoxed = () => {
                                     type={showpassword ? 'text' : 'password'}
                                     value={transactionPassword}
                                     onChange={(e) => setTransactionPassword(e.target.value)}
-                                    placeholder="Enter Txn Password"
+                                    placeholder="Enter Transaction Password"
                                     className="form-input ps-10 placeholder:text-white-dark"
                                 />
                                 <span className="absolute start-4 top-1/2 -translate-y-1/2" style={{ cursor: 'pointer' }} onClick={() => setShowPassword(!showpassword)}>

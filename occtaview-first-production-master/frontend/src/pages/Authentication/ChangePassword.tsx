@@ -18,9 +18,11 @@ import React from 'react';
 import Header from '../../components/Layouts/Header';
 import { fetchChangePassword } from '../../Slice/userSlice';
 import IconEye from '../../components/Icon/IconEye';
+import { Show_Toast } from '../Components/Toastify';
 
 const ChangePassword = () => {
     const [password, setPassword] = useState('');
+    const [newPassword, setnewPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const { userInfo } = useAppSelector((state: any) => state.addchangePasswordreducer);
     const [showpassword,setShowPassword]=useState(false)
@@ -31,19 +33,23 @@ const ChangePassword = () => {
     useEffect(() => {
         dispatch(setPageTitle('Change Login Password'));
         if (userInfo) navigate(`/`);
+
     }, [userInfo, navigate]);
 
     const submitForm = (e: React.FormEvent) => {
         e.preventDefault();
 
-        if (password !== confirmPassword) {
-            console.error('Passwords do not match');
+        if (newPassword !== confirmPassword) {
             return;
         }
 
-        dispatch(fetchChangePassword({ password, confirmPassword }) as any);
+        dispatch(fetchChangePassword({ newPassword, confirmPassword }) as any);
 
-        alert('Change password request sent!');
+        Show_Toast({ message: 'Login password updated!', type: true });
+
+        setConfirmPassword('')
+        setnewPassword('')
+
     };
 
     const isDark = useSelector((state: IRootState) => state.themeConfig.theme === 'dark' || state.themeConfig.isDarkMode);
@@ -83,8 +89,8 @@ const ChangePassword = () => {
                                         type={showpassword ? 'text' : 'password'}
                                         placeholder="Enter your Password"
                                         className="form-input ps-10 placeholder:text-white-dark "
-                                        value={password}
-                                        onChange={(e) => setPassword(e.target.value)}
+                                        value={newPassword}
+                                        onChange={(e) => setnewPassword(e.target.value)}
                                         required
                                     />
                                     <span className="absolute start-4 top-1/2 -translate-y-1/2"

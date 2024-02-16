@@ -133,7 +133,9 @@ const ReportStatus = () => {
 
     let rowData: any;
     if (data) {
-        rowData = (data as { addFundHistory: any }).addFundHistory;
+        rowData = (data as { walletWithdrawHistory
+            : any }).walletWithdrawHistory
+            ;
     }
 
     useEffect(() => {
@@ -146,7 +148,6 @@ const ReportStatus = () => {
     const [pageSize, setPageSize] = useState(PAGE_SIZES[0]);
     const [initialRecords, setInitialRecords] = useState(rowData || []);
     const [recordsData, setRecordsData] = useState(initialRecords);
-    console.log(recordsData,"dataa..")
 
     const [search, setSearch] = useState('');
 
@@ -161,17 +162,19 @@ const ReportStatus = () => {
             setRecordsData([...initialRecords.slice(from, to)]);
         }
     }, [page, pageSize, initialRecords]);
+    
 
     useEffect(() => {
         setInitialRecords(() => {
             return (
                 rowData &&
                 rowData.filter((item: any) => {
+
                     return (
-                        item.walletAmount.toLowerCase().includes(search.toLowerCase()) ||
-                        item.totalRefferalAmount.toLowerCase().includes(search.toLowerCase()) ||
-                        item.totalDailyBonus.toLowerCase().includes(search.toLowerCase()) ||
-                        item.sts.toLowerCase().includes(search.toLowerCase())
+                        item?.withdrawAmount||
+                        item.status.toLowerCase().includes(search.toLowerCase()) ||
+                        item.packageName.toLowerCase().includes(search.toLowerCase()) ||
+                        item.walletUrl.toLowerCase().includes(search.toLowerCase())
                     );
                 })
             );
@@ -204,10 +207,10 @@ const ReportStatus = () => {
                         className="whitespace-nowrap table-striped"
                         records={recordsData}
                         columns={[
-                            { accessor: 'walletAmount', title: 'walletAmount' },
-                            { accessor: 'totalRefferalAmount', title: 'Top Up Amount' },
-                            { accessor: 'totalDailyBonus', title: 'Transaction Code' },
-                            { accessor: 'sts', title: 'User Status' },
+                            { accessor: `withdrawAmount`, title: 'Withdraw Amount' },
+                            { accessor: 'status', title: 'Status' },
+                            { accessor: 'packageName', title: 'Package Name' },
+                            { accessor: 'walletUrl', title: 'Wallet Url' },
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}

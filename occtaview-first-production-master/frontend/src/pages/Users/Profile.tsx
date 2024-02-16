@@ -40,16 +40,7 @@ const Profile = () => {
 
     return (
         <div>
-            <ul className="flex space-x-2 rtl:space-x-reverse">
-                <li>
-                    <Link to="#" className="text-primary hover:underline">
-                        Users
-                    </Link>
-                </li>
-                <li className="before:content-['/'] ltr:before:mr-2 rtl:before:ml-2">
-                    <span>Profile</span>
-                </li>
-            </ul>
+        
 
             <div className="pt-5">
                 <div className="grid grid-cols-1 lg:grid-cols-3 xl:grid-cols-4 gap-5 mb-5">
@@ -61,34 +52,34 @@ const Profile = () => {
                             </Link> */}
                         </div>
                         <div className="mb-5">
-                            <div className="flex flex-col justify-center items-center">
+                            <div className="flex flex-col ">
                                 <img src="/assets/images/profile-icon.jpeg" alt="img" className="w-24 h-24 rounded-full object-cover  mb-5" />
                                 <p className="font-semibold text-primary text-xl">{userProfile && userProfile.name}</p>
                             </div>
-                            <ul className="mt-5 flex flex-col max-w-[160px] m-auto space-y-4 font-semibold text-white-dark">
-                                <li className="flex items-center gap-2">
+                            <ul className="mt-5 flex flex-col max-w-[160px]  space-y-4 font-semibold text-white-dark">
+                                <li className="flex  gap-2">
                                     <IconCoffee className="shrink-0" />
                                     Email:
                                     {userProfile && userProfile.email}
                                 </li>
-                                <li className="flex items-center gap-2">
+                                <li className="flex  gap-2">
                                     <IconCalendar className="shrink-0" />
                                     Phone:
                                     {userProfile && userProfile.phone}
                                 </li>
-                                <li className="flex items-center gap-2">
+                                <li className="flex  gap-2">
                                     <IconMapPin className="shrink-0" />
                                     Address:
-                                    {userProfile && userProfile.address}
+                                     {userProfile && userProfile.address}
                                 </li>
                                 <li>
-                                    <button className="flex items-center gap-2">
+                                    <button className="flex gap-2">
                                         <IconMail className="w-5 h-5 shrink-0" />
                                         Sponserid:
                                         <span className="text-primary truncate"> {userProfile && userProfile.ownSponserId}</span>
                                     </button>
                                 </li>
-                                <li className="flex items-center gap-2">
+                                <li className="flex  gap-2">
                                     <IconPhone />
                                     <span className="whitespace-nowrap" dir="ltr">
                                         Daily bonus:

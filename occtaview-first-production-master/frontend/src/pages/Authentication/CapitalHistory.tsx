@@ -6,7 +6,7 @@ import IconBell from '../../components/Icon/IconBell';
 import { Header } from '@mantine/core';
 import Headers from '../../components/Layouts/Header';
 import { useAppDispatch, useAppSelector } from '../../Slice';
-import { fetchWithdrawHistory } from '../../Slice/packageSlice';
+import { fetchCapitalWithdrawHistory, fetchWithdrawHistory } from '../../Slice/packageSlice';
 
 const CapitalHistory = () => {
     const dispatch = useAppDispatch();
@@ -14,14 +14,13 @@ const CapitalHistory = () => {
     const { data, loading, error } = useAppSelector((state) => state.capitalWithdrawHistoryreducer);
 
     useEffect(() => {
-        dispatch(fetchWithdrawHistory());
+        dispatch(fetchCapitalWithdrawHistory());
     }, [dispatch]);
 
     let rowData: any;
     if (data) {
-        rowData = (data as { addFundHistory: any }).addFundHistory;
+        rowData = (data as { capitalWithdrawHistory: any }).capitalWithdrawHistory;
     }
-
     useEffect(() => {
         dispatch(setPageTitle('Skin Tables'));
     });
@@ -53,10 +52,10 @@ const CapitalHistory = () => {
                 rowData &&
                 rowData.filter((item: any) => {
                     return (
-                        item.walletAmount.toLowerCase().includes(search.toLowerCase()) ||
-                        item.totalRefferalAmount.toLowerCase().includes(search.toLowerCase()) ||
-                        item.totalDailyBonus.toLowerCase().includes(search.toLowerCase()) ||
-                        item.sts.toLowerCase().includes(search.toLowerCase())
+                        item.withdrawAmount.toLowerCase().includes(search.toLowerCase()) ||
+                        item.status.toLowerCase().includes(search.toLowerCase()) ||
+                        item.packageName.toLowerCase().includes(search.toLowerCase()) ||
+                        item.capitalWalletUrl.toLowerCase().includes(search.toLowerCase())
                     );
                 })
             );
@@ -89,10 +88,10 @@ const CapitalHistory = () => {
                         className="whitespace-nowrap table-striped"
                         records={recordsData}
                         columns={[
-                            { accessor: 'walletAmount', title: 'walletAmount' },
-                            { accessor: 'totalRefferalAmount', title: 'Top Up Amount' },
-                            { accessor: 'totalDailyBonus', title: 'Transaction Code' },
-                            { accessor: 'sts', title: 'User Status' },
+                            { accessor: '$ withdrawAmount', title: 'Withdraw Amount' },
+                            { accessor: 'status', title: 'Status' },
+                            { accessor: 'packageName', title: 'Package Name' },
+                            { accessor: 'capitalWalletUrl', title: 'Wallet Url' },
                         ]}
                         totalRecords={initialRecords ? initialRecords.length : 0}
                         recordsPerPage={pageSize}

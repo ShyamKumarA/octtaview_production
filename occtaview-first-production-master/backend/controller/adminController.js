@@ -115,7 +115,7 @@ export const adminLogin = async (req, res, next) => {
         return next(errorHandler(401, "Wrong credentials"));
       }
       const token = jwt.sign({ userId: validAdmin._id }, "Shyam", {
-        expiresIn: "365d",
+        expiresIn: "1d",
       });
 
       res.status(200).json({

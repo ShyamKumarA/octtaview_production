@@ -33,7 +33,6 @@ export const fetchAddFundHistory = createAsyncThunk('fetchAddFundHistory', async
 
     const response = await axios.get(`${URL}/api/user/addfundHistory`, config);
 
-    console.log(response.data);
 
     return response.data;
 });
@@ -157,7 +156,6 @@ export const fetchCapitalWithdrawHistory = createAsyncThunk('fetchCapitalWithdra
 
     const response = await axios.get(`${URL}/api/user/capital-Withdraw-Report`, config);
 
-    console.log(response.data);
 
     return response.data;
 });
@@ -218,7 +216,6 @@ export const fetchROIincome = createAsyncThunk('fetchROIincome', async () => {
 
     const response = await axios.get(`${URL}/api/user/ROI-History`, config);
 
-    console.log(response.data);
 
     return response.data;
 });

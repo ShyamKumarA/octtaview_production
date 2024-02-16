@@ -33,7 +33,7 @@ const ColumnChooser = () => {
     useEffect(() => {
         setPage(1);
     }, [pageSize]);
-    
+
     useEffect(() => {
         if (Array.isArray(initialRecords)) {
             const from = (page - 1) * pageSize;
@@ -67,30 +67,34 @@ const ColumnChooser = () => {
         }
     }, [rowData]);
 
+    console.log(rowData,"rowdata member")
+
     return (
         <div className="inline-block w-full">
             <Header />
-            <ul className="mb-5 grid grid-cols-4 gap-2 text-center">
-                <li>
+          
+            <ul className="mb-5 grid grid-cols-4 gap-2 text-center ">
+                <li className="mt-5">
                     <div
                         className={`${activeTab === 1 ? '!bg-primary text-white' : ''}
-                block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`}
+                block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B] mb-5`}
                         onClick={() => setActiveTab(1)}
                     >
                         Level 1
                     </div>
                 </li>
-                <li>
+                <li className="mt-5">
                     <div className={`${activeTab === 2 ? '!bg-primary text-white' : ''} block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`} onClick={() => setActiveTab(2)}>
                         Level 2
                     </div>
                 </li>
-                <li>
+                <li className="mt-5">
                     <div className={`${activeTab === 3 ? '!bg-primary text-white' : ''} block rounded-full bg-[#F3F2EE] p-2.5 dark:bg-[#1B2E4B]`} onClick={() => setActiveTab(3)}>
                         Level 3
                     </div>
                 </li>
             </ul>
+          
             <div>
                 <div className="mb-5">{activeTab === 1 && <LevelTreeComponent key={childComponentKey} level={rowData && rowData.child1} />}</div>
                 <div className="mb-5">{activeTab === 2 && <LevelTreeComponent level={rowData && rowData.child2} />}</div>

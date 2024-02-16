@@ -42,7 +42,6 @@ const Depositfund = () => {
     const [amount, setAmount] = useState('');
     const [transactionid, setTransactionid] = useState('');
     const [addFundUrl,setAddFundUrl]=useState('');
-    console.log(transactionid,"id");
 
     const [currentQRIndex, setCurrentQRIndex] = useState(0);
 
@@ -133,9 +132,9 @@ const Depositfund = () => {
                     <h2 className="text-xl text-white">Deposit Fund</h2>
                 </div>
             </div>
-            <div className="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6 lg:min-h-[758px] ">
+            <div className="relative flex flex-col justify-center rounded-md bg-white/60 backdrop-blur-lg dark:bg-black/50 px-6  " >
                 <div className="flex justify-center   ">
-                    <p className="text-white font-extrabold  sm:text-3xl md:text-3xl lg:text-3xl">Make Payment To Add Funds</p>
+                    <p className="text-white font-extrabold  sm:text-3xl md:text-3xl lg:text-3xl mb-[50px] mt-[50px]">Make Payment To Add Funds</p>
                 </div>
                 {/* <p className="text-white">Amount: {amount}</p> */}
 
@@ -161,13 +160,13 @@ const Depositfund = () => {
                         </div>
                     </div>
                     {/* --------------------------------------- */}
-                    <div className="flex flex-col items-center space-y-4 mt-4 lg:mt-0">
-                    <p className="text-white">Minimum $50 is required</p>
-                    <p className="text-red-600">Depositfund only tron TRC-20.</p>
+                    <div className="flex flex-col ">
+                    <p className="text-white mt-2">Minimum $50 is required</p>
+                    <p className="text-red-600">Deposit fund only tron TRC-20.</p>
 
 
                         <div>
-                            <p className="text-white">Add Amount</p>
+                            <p className="text-white mt-3">Add Amount</p>
                             <input
                                 type="number"
                                 placeholder="Enter Amount"
@@ -176,11 +175,11 @@ const Depositfund = () => {
                                 onChange={(e) => setAmount(e.target.value)}
                                 required
                             />
-                        {amount && Number(amount) < 50 && <p className="text-red-500">Minimum deposite amount is $50.</p>}
+                        {amount && Number(amount) < 50 && <p className="text-red-500">Minimum deposit amount is $50.</p>}
 
                         </div>
 
-                        <div className="flex flex-col ">
+                        <div className="flex flex-col mt-2 ">
                             <p className="text-white">Transaction ID</p>
                             <input
                                 type="text"
