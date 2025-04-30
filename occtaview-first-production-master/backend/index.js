@@ -6,14 +6,13 @@ import cookieParser from "cookie-parser";
 import dbConnect from "./config/dbConnect.js";
 import userRoute from "./router/userRoute.js";
 import adminRouter from "./router/adminRoute.js";
+import { PORT } from "./config.js";
 
 const NODE_ENV = "production";
 
 dotenv.config();
-dbConnect();
 const app = express();
 app.use(cors());
-const port = process.env.PORT || 4001;
 
 app.use(express.json());
 app.use(cookieParser());
@@ -48,6 +47,18 @@ if (NODE_ENV == "production") {
   });
 }
 
-app.listen(port, () => {
-  console.log(`Server connected ${port}`);
-});
+console.log('11111111111');
+console.log(PORT,'PORT 11111111111 yy');
+
+const startServer = async () => {
+  await dbConnect();
+
+  // const PORT = process.env.PORT || 4010; 
+  console.log(PORT,'PORT 11111111111');
+
+  app.listen(PORT, () => {
+    console.log(`app listening on port ${PORT} 🚀🚀🚀`);
+  });
+};
+
+startServer();

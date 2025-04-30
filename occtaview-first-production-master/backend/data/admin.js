@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 const admin = {
   sponser: null,
   userStatus: "pending",
-  username: "Super Admin",
+  name: "Super Admin",
   email: "seclobclt@gmail.com",
   address: "seclob-cyber",
   password: bcrypt.hashSync("123456", 10),

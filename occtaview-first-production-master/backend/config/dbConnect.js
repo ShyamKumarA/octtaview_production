@@ -1,11 +1,15 @@
 import mongoose from "mongoose";
+import { DATABASE_URL } from "../config.js";
 
-const dbConnect = () => {
+const dbConnect = async () => {
   try {
-    const conn = mongoose.connect("mongodb://localhost:27017/octaview");
-    console.log("Database connected successfully");
+    const conn = await mongoose.connect(
+      DATABASE_URL
+    );
+    console.log(`MongoDB connected`);
   } catch (error) {
-    console.log("Database error");
+    console.log(`Error: ${error.message}`);
+    process.exit(1);
   }
 };
 

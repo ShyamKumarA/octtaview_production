@@ -75,14 +75,14 @@ export const dashboardData = async (req, res, next) => {
 //add admin Api
 
 export const addAdmin = async (req, res, next) => {
-  const { password, username, email, address, phone, isSuperAdmin } = req.body;
+  const { password, name, email, address, phone, isSuperAdmin } = req.body;
   try {
     const adminData = await User.findOne({ email: email });
     const ownSponserId = generateRandomString();
     const hashedPassword = bcryptjs.hashSync(password, 10);
     const newUser = new User({
       password: hashedPassword,
-      username,
+      name,
       email,
       address,
       ownSponserId,
@@ -120,7 +120,7 @@ export const adminLogin = async (req, res, next) => {
 
       res.status(200).json({
         id: validAdmin._id,
-        firstName: validAdmin.username,
+        firstName: validAdmin.name,
         email: validAdmin.email,
         token_type: "Bearer",
         access_token: token,
@@ -169,7 +169,7 @@ export const viewAllUsers = async (req, res, next) => {
   try {
     const user = await User.findById(userId);
     const userData = await User.find({ isSuperAdmin: { $ne: true } }).select(
-      "username ownSponserId phone address email userStatus packageAmount sponserName packageName"
+      "name ownSponserId phone address email userStatus packageAmount sponserName packageName"
     );
     if (user) {
       return res.status(201).json({
@@ -205,7 +205,7 @@ export const viewUserDetails = async (req, res, next) => {
       userData.level1ROI + userData.level2ROI + userData.level3ROI;
 
     // .select(
-    //   "username ownSponserId email phone userStatus packageAmount"
+    //   "name ownSponserId email phone userStatus packageAmount"
     // );
     if (userData) {
       res.status(200).json({
@@ -213,7 +213,7 @@ export const viewUserDetails = async (req, res, next) => {
         userStatus: userData.userStatus,
         ownSponserId: userData.ownSponserId,
         packageName: packageName,
-        name: userData.username,
+        name: userData.name,
         email: userData.email,
         phone: userData.phone,
         address: userData.address,
@@ -246,7 +246,7 @@ export const getApprovedUsers = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.find({
         userStatus: { $eq: "approved" },
-      }).select("username email phone userStatus");
+      }).select("name email phone userStatus");
       res.status(200).json({
         userData,
         sts: "01",
@@ -270,7 +270,7 @@ export const getReadyToApproveUsers = async (req, res, next) => {
       const userData = await User.find({
         userStatus: { $eq: "readyToApprove" },
       }).select(
-        "username email phone userStatus aadhaar sponserName createdAt"
+        "name email phone userStatus aadhaar sponserName createdAt"
       );
       res.status(200).json({
         userData,
@@ -357,7 +357,7 @@ export const viewAddFundPending = async (req, res, next) => {
         addFundStatus: { $eq: "pending" },
         isSuperAdmin: { $ne: true },
       }).select(
-        "username email phone userStatus addFundUrl createdAt topUpAmount transactionCode"
+        "name email phone userStatus addFundUrl createdAt topUpAmount transactionCode"
       );
       res.status(200).json({
         userData,
@@ -383,7 +383,7 @@ export const viewAddPackageFundPending = async (req, res, next) => {
         addPackageStatus: { $eq: "pending" },
         isSuperAdmin: { $ne: true },
       }).select(
-        "username email phone addFundUrl  userStatus createdAt topUpAmount transactionCode"
+        "name email phone addFundUrl  userStatus createdAt topUpAmount transactionCode"
       );
       res.status(200).json({
         userData,
@@ -435,7 +435,7 @@ export const approveFundAdd = async (req, res, next) => {
           reportName: "addFund",
           topUpAmount: amountToAdd,
           status: "approved",
-          name: userData.username,
+          name: userData.name,
           addFundUrl: addFundUrl,
           transactionCode: transactionCode,
         });
@@ -486,7 +486,7 @@ export const approveCapitalwithdrawal = async (req, res, next) => {
         userData.transactionCode = "";
         userData.transactionID = "";
         userData.capitalWithdrawHistory.push({
-          name: userData.username,
+          name: userData.name,
           reportName: "capitalWithdrawReport",
           ownID: userData.ownSponserId,
           packageName: userData.packageName,
@@ -537,7 +537,7 @@ export const approveWalletWithdrawal = async (req, res, next) => {
         userData.transactionID = "";
         userData.walletWithdrawHistory.push({
           reportName: "walletWithdrawReport",
-          name: userData.username,
+          name: userData.name,
           ownID: userData.ownSponserId,
           packageName: userData.packageName,
           tnxID: tnxID,
@@ -584,7 +584,7 @@ export const rejectWalletWithdrawal = async (req, res, next) => {
         userData.transactionID = "";
         userData.walletWithdrawHistory.push({
           reportName: "walletwithdrawReject",
-          name: userData.username,
+          name: userData.name,
           tnxID: tnxID,
           withdrawAmount: withdrawAmount,
           walletUrl: walletWithdrawUrl,
@@ -620,7 +620,7 @@ export const viewWithdrawPending = async (req, res, next) => {
       const userData = await User.find({
         withdrawStatus: { $eq: "pending" },
       }).select(
-        "username email phone withdrawStatus capitalWithdrawUrl createdAt withdrawAmount"
+        "name email phone withdrawStatus capitalWithdrawUrl createdAt withdrawAmount"
       );
       res.status(200).json({
         userData,
@@ -645,7 +645,7 @@ export const viewWalletWithdrawPending = async (req, res, next) => {
       const userData = await User.find({
         walletWithdrawStatus: { $eq: "pending" },
       }).select(
-        "username email phone walletWithdrawStatus walletWithdrawUrl createdAt walletWithdrawAmount"
+        "name email phone walletWithdrawStatus walletWithdrawUrl createdAt walletWithdrawAmount"
       );
       res.status(200).json({
         userData,
@@ -678,7 +678,7 @@ export const rejectCapitalwithdrawal = async (req, res, next) => {
         userData.capitalWithdrawUrl = "";
         userData.transactionID = "";
         userData.capitalWithdrawHistory.push({
-          name: userData.username,
+          name: userData.name,
           reportName: "rejectCapitalwithdraw",
           tnxID: tnxID,
           withdrawAmount: withdrawAmount,
@@ -750,7 +750,7 @@ export const userPackageApproval = async (req, res, next) => {
         userData.addFundHistory.push({
           topUpAmount: amountToAdd,
           status: "approved",
-          name: userData.username,
+          name: userData.name,
           addFundUrl: addFundUrl,
           transactionCode: transactionCode,
         });
@@ -826,7 +826,7 @@ export const userPackageReject = async (req, res, next) => {
         userData.addFundHistory.push({
           topUpAmount: amountToAdd,
           status: "Rejected",
-          name: userData.username,
+          name: userData.name,
           addFundUrl: addFundUrl,
           transactionCode: transactionCode,
         });
@@ -1008,9 +1008,9 @@ export const editProfileByAdmin = async (req, res, next) => {
     if (adminData.isSuperAdmin) {
       const userData = await User.findById(id);
       if (userData) {
-        const { username, email, password, txnPassword, phone, address } =
+        const { name, email, password, txnPassword, phone, address } =
           req.body;
-        userData.username = username || userData.username;
+        userData.name = name || userData.name;
         userData.address = address || userData.address;
         userData.phone = phone || userData.phone;
         userData.email = email || userData.email;

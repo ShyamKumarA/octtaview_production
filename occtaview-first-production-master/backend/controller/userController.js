@@ -26,7 +26,7 @@ export const userLogin = async (req, res, next) => {
     //const {password:hashedPassword,...rest}=validUser._doc
     res.cookie("access_token", token, { httpOnly: true }).status(200).json({
       id: validUser._id,
-      firstName: validUser.username,
+      firstName: validUser.name,
       status: validUser.userStatus,
       email: validUser.email,
       token_type: "Bearer",
@@ -87,7 +87,7 @@ export const generateReferalIncome = async (
       sponserData.referalHistory.push({
         reportName: "DirectIncome",
         userID: userData.ownSponserId,
-        name: userData.username,
+        name: userData.name,
         amountCredited: referalIncome,
         transactionCode: transactionCode,
         status: "Approved",
@@ -153,10 +153,10 @@ export const addUser = async (req, res, next) => {
     const userStatus = "pending";
 
     const sponserData = await User.findById(sponser);
-    const sponserName = sponserData.username;
+    const sponserName = sponserData.name;
     const ownSponserId = generateRandomString();
 
-    const { username, email, phone, address, transactionPassword, password } =
+    const { name, email, phone, address, transactionPassword, password } =
       req.body;
     // const packageChosen = findPackage(packageAmount);
     // const packageData = await Package.findOne({ name: packageChosen });
@@ -173,7 +173,7 @@ export const addUser = async (req, res, next) => {
     const user = await User.create({
       sponser,
       sponserName,
-      username,
+      name,
       email,
       phone,
       address,
@@ -187,7 +187,7 @@ export const addUser = async (req, res, next) => {
         user.email,
         // packageChosen,
         // packageAmount,
-        user.username,
+        user.name,
         user.ownSponserId,
         transactionPassword,
         password
@@ -197,7 +197,7 @@ export const addUser = async (req, res, next) => {
         _id: user._id,
         sponser: user.sponser,
         sponserName: user.sponserName,
-        name: user.username,
+        name: user.name,
         email: user.email,
         phone: user.phone,
         address: user.address,
@@ -223,7 +223,7 @@ export const addReferalUser = async (req, res, next) => {
 
     const {
       userId,
-      username,
+      name,
       email,
       phone,
       address,
@@ -234,7 +234,7 @@ export const addReferalUser = async (req, res, next) => {
     const sponser = userId;
 
     const sponserData = await User.findById(sponser);
-    const sponserName = sponserData.username;
+    const sponserName = sponserData.name;
 
     // const packageChosen = findPackage(packageAmount);
     // const packageData = await Package.findOne({ name: packageChosen });
@@ -251,7 +251,7 @@ export const addReferalUser = async (req, res, next) => {
     const user = await User.create({
       sponser,
       sponserName,
-      username,
+      name,
       email,
       phone,
       address,
@@ -265,7 +265,7 @@ export const addReferalUser = async (req, res, next) => {
     if (user) {
       await sendMail(
         user.email,
-        user.username,
+        user.name,
         user.ownSponserId,
         transactionPassword,
         password
@@ -275,7 +275,7 @@ export const addReferalUser = async (req, res, next) => {
         _id: user._id,
         sponser: user.sponser,
         sponserName: user.sponserName,
-        name: user.username,
+        name: user.name,
         email: user.email,
         phone: user.phone,
         address: user.address,
@@ -388,7 +388,7 @@ export const viewUserProfile = async (req, res, next) => {
     ).toFixed(2);
 
     // .select(
-    //   "username ownSponserId email phone userStatus packageAmount"
+    //   "name ownSponserId email phone userStatus packageAmount"
     // );
     if (userData) {
       res.status(200).json({
@@ -396,7 +396,7 @@ export const viewUserProfile = async (req, res, next) => {
         userStatus: userData.userStatus,
         ownSponserId: userData.ownSponserId,
         packageName: packageName,
-        name: userData.username,
+        name: userData.name,
         email: userData.email,
         phone: userData.phone,
         address: userData.address,
@@ -426,9 +426,9 @@ export const editProfile = async (req, res, next) => {
   try {
     const userData = await User.findById(userId);
     if (userData) {
-      const { username, phone, address } = req.body;
+      const { name, phone, address } = req.body;
 
-      userData.username = username || userData.username;
+      userData.name = name || userData.name;
       userData.address = address || userData.address;
       userData.phone = phone || userData.phone;
 
@@ -513,17 +513,17 @@ export const viewChilds = async (req, res, next) => {
         {
           path: "childLevel1",
           select:
-            "username ownSponserId phone address email sponserName userStatus packageAmount packageName",
+            "name ownSponserId phone address email sponserName userStatus packageAmount packageName",
         },
         {
           path: "childLevel2",
           select:
-            "username ownSponserId phone address email sponserName userStatus packageAmount packageName",
+            "name ownSponserId phone address email sponserName userStatus packageAmount packageName",
         },
         {
           path: "childLevel3",
           select:
-            "username ownSponserId phone address email sponserName userStatus packageAmount packageName",
+            "name ownSponserId phone address email sponserName userStatus packageAmount packageName",
         },
       ]);
 

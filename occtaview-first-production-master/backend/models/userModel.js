@@ -93,7 +93,7 @@ const userSchema = new mongoose.Schema(
     sponserName: {
       type: String,
     },
-    username: {
+    name: {
       type: String,
       required: true,
       unique: true,
@@ -274,7 +274,7 @@ userSchema.methods.calculateLevel1ROI = async function () {
               this.level1ROIHistory.push({
                 reportName: "level1ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level1ROI,
@@ -303,7 +303,7 @@ userSchema.methods.calculateLevel1ROI = async function () {
               this.level1ROIHistory.push({
                 reportName: "level1ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level1ROI,
@@ -332,7 +332,7 @@ userSchema.methods.calculateLevel1ROI = async function () {
             this.level1ROIHistory.push({
               reportName: "level1ROIReport",
               userID: user.ownSponserId,
-              name: user.username,
+              name: user.name,
               dayROI: user.dailyROI,
               capitalAmount: user.packageAmount,
               LevelAmountCredited: level1ROI,
@@ -376,7 +376,7 @@ userSchema.methods.calculateLevel2ROI = async function () {
               this.level2ROIHistory.push({
                 reportName: "level2ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level2ROI,
@@ -405,7 +405,7 @@ userSchema.methods.calculateLevel2ROI = async function () {
               this.level2ROIHistory.push({
                 reportName: "level2ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level2ROI,
@@ -434,7 +434,7 @@ userSchema.methods.calculateLevel2ROI = async function () {
             this.level2ROIHistory.push({
               reportName: "level2ROIReport",
               userID: user.ownSponserId,
-              name: user.username,
+              name: user.name,
               dayROI: user.dailyROI,
               capitalAmount: user.packageAmount,
               LevelAmountCredited: level2ROI,
@@ -477,7 +477,7 @@ userSchema.methods.calculateLevel3ROI = async function () {
               this.level3ROIHistory.push({
                 reportName: "level3ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level3ROI,
@@ -506,7 +506,7 @@ userSchema.methods.calculateLevel3ROI = async function () {
               this.level3ROIHistory.push({
                 reportName: "level3ROIReport",
                 userID: user.ownSponserId,
-                name: user.username,
+                name: user.name,
                 dayROI: user.dailyROI,
                 capitalAmount: user.packageAmount,
                 LevelAmountCredited: level3ROI,
@@ -535,7 +535,7 @@ userSchema.methods.calculateLevel3ROI = async function () {
             this.level3ROIHistory.push({
               reportName: "level3ROIReport",
               userID: user.ownSponserId,
-              name: user.username,
+              name: user.name,
               dayROI: user.dailyROI,
               capitalAmount: user.packageAmount,
               LevelAmountCredited: level3ROI,

@@ -1,24 +1,28 @@
 import nodemailer from "nodemailer";
+import { NODEMAILER_HOST, NODEMAILER_PASS, NODEMAILER_PORT, NODEMAILER_USER } from "../constants/index.js";
 
 const sendMail = (mailId, name, sponserid, transactionPassword, password) => {
   const recipient = mailId;
 
+
+
   const transporter = nodemailer.createTransport({
-    host: "smtp.gmail.com",
-    port: 587,
+    host: NODEMAILER_HOST,
+    port: NODEMAILER_PORT,
     secure: false,
     requireTLS: true,
     auth: {
-      user: "octtaview@gmail.com",
-      pass: "iang hqul swgd xedk",
-    },
-  });
+        user: NODEMAILER_USER,
+        pass: NODEMAILER_PASS,
+    }
+});
+
   const mailOptions = {
-    from: `OCTTAVIEW GROUP <octtaview@gmail.com>`,
+    from: `VOULTIZO GROUP <${NODEMAILER_USER}>`,
     to: `${recipient}`,
     subject: `Hi ${name}, Registration successful.`,
-    text: `Hi ${name}, Welcome to OCTTAVIEW`,
-    html: `<h4>Congrats! You have joined the OCTTAVIEW Group.</h4><p>Your sponserID is <strong>${sponserid}</strong><br/>Username: ${recipient}<br />Transaction Password: ${transactionPassword}<br />Password: ${password}</p>`,
+    text: `Hi ${name}, Welcome to VOULTIZO`,
+    html: `<h4>Congrats! You have joined the VOULTIZO Group.</h4><p>Your sponserID is <strong>${sponserid}</strong><br/>name: ${recipient}<br />Transaction Password: ${transactionPassword}<br />Password: ${password}</p>`,
   };
   transporter.sendMail(mailOptions, (error, info) => {
     if (error) {

@@ -9,7 +9,7 @@ export const directIncomeReport = async (req, res, next) => {
     if (userData) {
       const userStatus = userData.userStatus;
       const directIncome = userData.referalHistory;
-      //.select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      //.select("name email phone walletWithdrawStatus walletWithdrawAmount");
       res.status(200).json({
         directIncome,
         userStatus,
@@ -31,7 +31,7 @@ export const level1IncomeReport = async (req, res, next) => {
     if (userData) {
       const userStatus = userData.userStatus;
       const level1Income = userData.level1ROIHistory;
-      //.select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      //.select("name email phone walletWithdrawStatus walletWithdrawAmount");
       res.status(200).json({
         level1Income,
         userStatus,
@@ -54,7 +54,7 @@ export const level2IncomeReport = async (req, res, next) => {
       const userStatus = userData.userStatus;
 
       const level2Income = userData.level2ROIHistory;
-      //.select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      //.select("name email phone walletWithdrawStatus walletWithdrawAmount");
       res.status(200).json({
         level2Income,
         userStatus,
@@ -78,7 +78,7 @@ export const level3IncomeReport = async (req, res, next) => {
       const userStatus = userData.userStatus;
 
       const level3Income = userData.level3ROIHistory;
-      //.select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      //.select("name email phone walletWithdrawStatus walletWithdrawAmount");
       res.status(200).json({
         level3Income,
         userStatus,
@@ -108,17 +108,17 @@ export const viewAllLevelReport = async (req, res, next) => {
         {
           path: "level1ROIHistory",
           select:
-            "username ownSponserId phone address email userStatus packageAmount packageName",
+            "name ownSponserId phone address email userStatus packageAmount packageName",
         },
         {
           path: "level2ROIHistory",
           select:
-            "username ownSponserId phone address email userStatus packageAmount packageName",
+            "name ownSponserId phone address email userStatus packageAmount packageName",
         },
         {
           path: "level3ROIHistory",
           select:
-            "username ownSponserId phone address email userStatus packageAmount packageName",
+            "name ownSponserId phone address email userStatus packageAmount packageName",
         },
       ]);
 
@@ -160,7 +160,7 @@ export const dailyROIReport = async (req, res, next) => {
     if (userData) {
       const userStatus = userData.userStatus;
       const dailyROIHistory = userData.dailyROIHistory;
-      //.select("username email phone walletWithdrawStatus walletWithdrawAmount");
+      //.select("name email phone walletWithdrawStatus walletWithdrawAmount");
       res.status(200).json({
         dailyROIHistory,
         userStatus,
@@ -186,7 +186,7 @@ export const walletWithdrawReport = async (req, res, next) => {
 
     const arrayOfWithdraw = [];
     const newWithdrawData = {
-      name: userData.username,
+      name: userData.name,
       reportName: "walletWithdrawReport",
       ownID: userData.ownSponserId,
       packageName: userData.packageName,
@@ -244,7 +244,7 @@ export const addFundHistory = async (req, res, next) => {
     const userData = await User.findById(userId).populate("addFundHistory");
     const arrayOfUsers = [];
     const newUserData = {
-      name: userData.username,
+      name: userData.name,
       topUpAmount: userData.topUpAmount,
       transactionCode: userData.transactionCode,
       status: "Pending",
@@ -325,7 +325,7 @@ export const capitalWithdrawReport = async (req, res, next) => {
     );
     const arrayOfWithdraw = [];
     const newWithdrawData = {
-      name: userData.username,
+      name: userData.name,
       reportName: "capitalWithdrawReport",
       ownID: userData.ownSponserId,
       packageName: userData.packageName,

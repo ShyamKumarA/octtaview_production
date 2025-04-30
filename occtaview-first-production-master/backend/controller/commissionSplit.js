@@ -13,7 +13,7 @@ export const allUserCommissionSplit = async (req, res, next) => {
         user.dailyROI = dailyROI;
         user.dailyROIHistory.push({
           reportName: "ROIIncome",
-          name: user.username,
+          name: user.name,
           capitalAmount: user.capitalAmount,
           percentage: percentage,
           creditedAmount: dailyROI,

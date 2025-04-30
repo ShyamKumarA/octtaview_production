@@ -3,7 +3,7 @@ const users = [
   {
     sponser: null,
     userStatus: "pending",
-    username: "Super Admin",
+    name: "Super Admin",
     email: "octtaview@gmail.com",
     address: "octtaview-cyber",
     packageAmount: 10000,

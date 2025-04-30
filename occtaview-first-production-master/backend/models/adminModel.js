@@ -14,7 +14,7 @@ const addFundSchema = new mongoose.Schema(
 
 const adminSchema = new mongoose.Schema(
   {
-    username: {
+    name: {
       type: String,
       required: true,
       unique: true,
